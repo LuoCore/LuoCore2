@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.SystemBase.Request
+namespace ViewModels.User.Request
 {
     public class UserLoginVm
     {
         public string UserName { get; set; }
         public string Password { get; set; }
         public string VerifiCode { get; set; }
+        public string SecurityCode { get; set; }
     }
 }

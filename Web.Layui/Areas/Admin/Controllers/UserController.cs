@@ -1,4 +1,5 @@
 ﻿
+using IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,14 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ViewModels.Request.User;
+using ViewModels.User.Request;
 
 namespace Web.Layui.Areas.Admin.Controllers
 {
-    public class UserController : BaseController
+    public class UserController : BaseController<IUserService>
     {
-       
-        
+        public UserController(IUserService service) : base(service)
+        {
+        }
 
         public IActionResult Login()
         {
@@ -47,8 +49,8 @@ namespace Web.Layui.Areas.Admin.Controllers
         public async Task<IActionResult> LoginAsync(UserLoginVm req)
         {
 
-            req.VerifiCode = HttpContext.Session.GetString("SecurityCode");
-            var result = await _SERVICE.Login(req);
+            req.SecurityCode = HttpContext.Session.GetString("SecurityCode");
+            var result = await _SERVICE.UserLogin(req);
 
             if (result == null || !result.Status || result.Data == null)
             {

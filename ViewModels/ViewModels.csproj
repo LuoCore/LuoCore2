@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="SystemBase\Response\" />
+    <Folder Include="User\Response\" />
   </ItemGroup>
 
 </Project>

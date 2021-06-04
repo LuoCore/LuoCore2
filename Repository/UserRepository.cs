@@ -16,7 +16,7 @@ namespace Repository
     /// 
     /// create/read/update/delate
     /// </summary>
-    public class UserRepository : BaseBasisRepository, IUserRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
         protected UserRepository(ISqlSugarFactory factory, ISystemLogsRepository logsRepository) : base(factory, logsRepository)
         {

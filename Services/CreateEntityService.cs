@@ -1,9 +1,10 @@
-﻿using IRepository;
+﻿using DataTransferModels.CreateEntity.Request;
+using IRepository;
 using IServices;
 using System;
 using System.Threading.Tasks;
 using Utility.Factory;
-using ViewModels.Request;
+using ViewModels.SystemBase.Request;
 
 namespace Services
 {
@@ -13,14 +14,14 @@ namespace Services
         {
         }
 
-        public Task<bool> CreateDefaultValue(CreateEntityVm.CreateDefaultValue req) 
+        public Task<bool> CreateDefaultValue(CreateEntityVm req) 
         {
-            return Task.FromResult(DbRepository.CreateDefaultValue(new DataTransferModels.Request.CreateEntityDto.CreateDefaultValue() { DirectoryPath = req.DirectoryPath, NnameSpace = req.NameSpace }));
+            return Task.FromResult(DbRepository.CreateDefaultValue(new CreateEntityDto() { DirectoryPath = req.DirectoryPath, NameSpace = req.NameSpace }));
         }
 
-        public Task<bool> CreateAttribute(CreateEntityVm.CreateDefaultValue req)
+        public Task<bool> CreateAttribute(CreateEntityVm req)
         {
-            return Task.FromResult(DbRepository.CreateAttribute(new DataTransferModels.Request.CreateEntityDto.CreateDefaultValue() { DirectoryPath = req.DirectoryPath, NnameSpace = req.NameSpace }));
+            return Task.FromResult(DbRepository.CreateAttribute(new CreateEntityDto() { DirectoryPath = req.DirectoryPath, NameSpace = req.NameSpace }));
         }
     }
 }

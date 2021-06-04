@@ -9,10 +9,10 @@ using Utility.Repository;
 
 namespace Repository
 {
-   public class BaseBasisRepository : SqlSugarRepository<ISqlSugarFactory>
+   public class BaseRepository : SqlSugarRepository<ISqlSugarFactory>
     {
         protected readonly ISystemLogsRepository _LOGS_REPOSITORY;
-        protected BaseBasisRepository(ISqlSugarFactory factory, ISystemLogsRepository logsRepository) : base(factory)
+        protected BaseRepository(ISqlSugarFactory factory, ISystemLogsRepository logsRepository) : base(factory)
         {
             _LOGS_REPOSITORY = logsRepository;
         }

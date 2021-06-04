@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ViewModels.Request;
+using ViewModels.SystemBase.Request;
 
 namespace IServices
 {
     public interface ICreateEntityService
     {
-        public Task<bool> CreateDefaultValue(CreateEntityVm.CreateDefaultValue req);
-        public Task<bool> CreateAttribute(CreateEntityVm.CreateDefaultValue req);
+        public Task<bool> CreateDefaultValue(CreateEntityVm req);
+        public Task<bool> CreateAttribute(CreateEntityVm req);
     }
 }

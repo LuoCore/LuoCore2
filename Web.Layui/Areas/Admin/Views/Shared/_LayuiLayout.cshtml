@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>@ViewData["Title"]</title>
+    <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/lib/layuiadmin/style/admin-right.css" rel="stylesheet" />
+    <link href="~/lib/layui/css/modules/laydate/default/laydate.css" rel="stylesheet" />
+    <link href="~/lib/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <link href="~/lib/layui/css/modules/code.css" rel="stylesheet" />
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="layui-layout-body">
+    @RenderBody()
+    <script src="~/lib/layui/layui.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

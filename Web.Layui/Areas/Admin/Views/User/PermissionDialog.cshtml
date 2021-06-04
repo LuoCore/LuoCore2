@@ -1,0 +1,148 @@
+﻿@{
+    ViewData["Title"] = "权限管理表单";
+    Layout = "~/Areas/Admin/Views/Shared/_LayuiLayout.cshtml";
+}
+
+
+
+<div class="layui-form layui-container" lay-filter="form-Permission" id="form-Permission">
+    <div class="layui-form-item">
+        <label class="layui-form-label">上级菜单</label>
+        <div class="layui-input-inline">
+            <div id="PermissionParentId" class="xm-select-demo"></div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="PermissionName" lay-verify="required" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限动作</label>
+        <div class="layui-input-inline">
+            <input name="PermissionAction" type="text" placeholder="权限动作" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限类型</label>
+        <div class="layui-input-inline">
+            <select name="PermissionType" lay-verify="required" lay-search="">
+                @{
+                    @*Type enumType = typeof(EnumHelper.PermissionTypeEnum);
+                    Array values = Enum.GetValues(enumType);
+                    if (values.Length > 0)
+                    {
+                        foreach (int item in values)
+                        {
+                            <option value="@item.ToString()">@Enum.GetName(enumType, item)</option>
+                        }
+                    }*@
+                }
+
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否有效</label>
+        <div class="layui-input-inline">
+            <input name="IsValid" value="true" type="checkbox" lay-filter="switch" lay-skin="switch" lay-text="是|否" checked />
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="luo-submit" id="luo-submit">提交</button>
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script>
+
+        layui.config({
+            base: '/lib/layuiExtend/' //假设这是你存放拓展模块的根目录
+        }).extend({ //设定模块别名
+            xmSelect: 'xm-select/xm-select' //如果 mymod.js 是在根目录，也可以不用设定别名
+        });
+        function FormShow_Load(formobj) {
+
+
+            layui.use(['jquery', 'form', 'xmSelect'], function () {
+                var $ = layui.$,
+                    form = layui.form,
+                    xmSelect = layui.xmSelect;
+
+
+                //选择父级权限
+                $.ajax({
+                    type: "get",
+                    url: "/Admin/User/PermissionSelect",
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+
+                        var PermissionParentId = xmSelect.render({
+                            el: '#PermissionParentId',
+                            name: "PermissionParentId",
+                            model: { label: { type: 'text' } },
+                            tree: {
+                                //是否显示树状结构
+                                show: true,
+                                //是否展示三角图标
+                                showFolderIcon: true,
+                                //是否显示虚线
+                                showLine: true,
+                                //间距
+                                indent: 10,
+                                //默认展开节点的数组, 为 true 时, 展开所有节点
+                                expandedKeys: true,
+                                //是否严格遵守父子模式
+                                strict: false,
+                                //是否开启极简模式
+                                simple: false,
+                                //点击节点是否展开
+                                clickExpand: true,
+                                //点击节点是否选中
+                                clickCheck: true
+                            },
+                            data: data,
+                            on: function (data) {
+                                if (data.isAdd) {
+                                    return data.change.slice(0, 1)
+                                }
+                            },
+                            height: 'auto'
+                        });
+                       
+                        if (formobj != null && formobj != undefined && formobj != "") {
+
+                            //给表单赋值
+                            form.val("form-Permission", {
+                                "PermissionParentId": formobj.permissionParentId,
+                                "PermissionName": formobj.permissionName,
+                                "PermissionAction": formobj.permissionAction,
+                                "PermissionType": formobj.permissionType,
+                                "IsValid": formobj.isValid
+                            });
+                            PermissionParentId.setValue([formobj.permissionParentId], null, true);
+                        }
+                    },
+                    error: function (jqXHR) {
+                        alert("发生错误：" + jqXHR.status);
+                    }
+                });
+
+            });
+
+        }
+
+
+    </script>
+}

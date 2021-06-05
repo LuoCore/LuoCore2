@@ -21,14 +21,14 @@ namespace Web.Layui.Areas.Admin.Controllers
 
         public async Task<IActionResult> PermissionSelectBoxAsync()
         {
-            ResultVm<List<ViewModels.Layui.SelectBoxVm>> res = new ResultVm<List<ViewModels.Layui.SelectBoxVm>>();
+            List<ViewModels.Layui.SelectBoxVm> res = new List<ViewModels.Layui.SelectBoxVm>();
             ViewModels.Layui.SelectBoxVm selectbox = new ViewModels.Layui.SelectBoxVm() { Name = "顶级", value = "",selected = true };
             var result = await _SERVICE.GetPermissionSelectBoxAsync(selectbox.value);
             if (result.Status && !Equals(null, result.Data))
             {
                 selectbox.children = result.Data;
             }
-            res.Data.Add(selectbox);
+            res.Add(selectbox);
             return Json(res);
         }
     }

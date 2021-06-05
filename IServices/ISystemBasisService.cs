@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels;
-using ViewModels.User.Request;
 
 namespace IServices
 {
-    public interface IUserService
+    public interface ISystemBasisService
     {
-        public Task<ResultVm> UserLogin(UserLoginVm req);
+        public  Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetPermissionSelectBoxAsync(string parentId);
     }
 }

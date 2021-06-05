@@ -10,12 +10,11 @@ using EntitysModels;
 
 namespace Repository
 {
-    public class SystemLogsRepository : SqlSugarRepository<ISqlSugarFactory>, ISystemLogsRepository
+    public class SystemLogsRepository : SqlSugarRepository, ISystemLogsRepository
     {
         public SystemLogsRepository(ISqlSugarFactory factory) : base(factory)
         {
         }
-
 
         public  SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, string typeValue, dynamic nowData, dynamic oldData=null) 
             where T : class, new()

@@ -7,33 +7,83 @@ using System.Threading.Tasks;
 using Utility.Factory;
 using Utility.Repository;
 using EntitysModels;
-using DataTransferModels;
 using DataTransferModels.BaseUser.Request;
+using DataTransferModels;
+using Common;
 
 namespace Repository
 {
-    /// <summary>
-    /// 
-    /// create/read/update/delate
-    /// </summary>
-    public class UserRepository : BaseRepository, IUserRepository
+    public class UserRepository : SqlSugarRepository<ISystemLogsRepository>, IUserRepository
     {
-        protected UserRepository(ISqlSugarFactory factory, ISystemLogsRepository logsRepository) : base(factory, logsRepository)
+        public UserRepository(ISqlSugarFactory factory, ISystemLogsRepository repository) : base(factory, repository)
         {
-        }
 
-        public ResultDto ReadFirstByLogin(LoginDto req)
+        }
+        /// <summary>
+        /// 读取用户登录信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public ResultDto ReadUserByLogin(LoginDto req)
         {
             ResultDto res = new ResultDto();
-            Factory.GetDbContext((db) =>
+            try
             {
-                res.Data = db.Queryable<Base_User>()
-               .Where(x => x.UserName.Equals(req.UserName))
-               .Where(x => x.Password.Equals(req.Password))
-                .First();
-                res.Status = true;
-            });
+                _FACTORY.GetDbContext((db) =>
+                {
+                    res.Status = true;
+                    res.Data = db.Queryable<Base_User>()
+                    .Where(x => x.UserName.Equals(req.UserName) && x.Password.Equals(req.Password))
+                    .First();
+                });
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
             return res;
         }
+
+
+        /// <summary>
+        /// 创建用户
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public ResultDto CreateUser(RegisteredUserDto req)
+        {
+            ResultDto res = new ResultDto();
+            try
+            {
+                _FACTORY.GetDbContextTran((db) =>
+                {
+                    var userData = new
+                    {
+                        UserId = req.UserId,
+                        UserName = req.UserName,
+                        UserRealName = req.UserRealName,
+                        Password = req.Password,
+                        Phone = req.Phone,
+                        Email = req.Email,
+                        Sex = req.Sex,
+                        CreateName = req.CreateName,
+                        CreateTime = req.CreateTime,
+                        IsValid = req.IsValid
+                    };
+                    db.Insertable<Base_User>(userData).IgnoreColumns(ignoreNullColumn: true).ExecuteCommandIdentityIntoEntity();
+                    _REPOSITORY.LogSave<Base_User>(db, CURD_TypeEnum.创建.EnumToString(), userData).ExecuteCommand();
+                });
+                res.Status = true;
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+        }
+
+
     }
 }

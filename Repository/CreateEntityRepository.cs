@@ -6,7 +6,7 @@ using DataTransferModels.CreateEntity.Request;
 
 namespace Repository
 {
-    public class CreateEntityRepository : SqlSugarRepository<ISqlSugarFactory>, ICreateEntityRepository
+    public class CreateEntityRepository : SqlSugarRepository, ICreateEntityRepository
     {
         public CreateEntityRepository(ISqlSugarFactory factory) : base(factory)
         {
@@ -16,7 +16,7 @@ namespace Repository
         /// </summary>
         public bool CreateDefaultValue(CreateEntityDto req)
         {
-            return Factory.GetDbContext((db) =>
+            return _FACTORY.GetDbContext((db) =>
              {
                  try
                  {
@@ -38,7 +38,7 @@ namespace Repository
         /// </summary>
         public bool CreateAttribute(CreateEntityDto req)
         {
-            return Factory.GetDbContext((db) =>
+            return _FACTORY.GetDbContext((db) =>
             {
                 try
                 {

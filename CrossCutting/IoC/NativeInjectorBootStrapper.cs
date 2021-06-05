@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -54,12 +55,12 @@ namespace CrossCutting.IoC
                 return cache;
             });
 
-
-
+           //注入 仓储层
+            BatchRegisterService(services, "Repository");
+            // 注入 服务层
             BatchRegisterService(services, "Services");
 
-            // 注入 服务层
-            BatchRegisterService(services, "Repository");
+            
 
         }
         // <summary>
@@ -133,6 +134,7 @@ namespace CrossCutting.IoC
                     var interfaceType = item.GetInterfaces().Where(o => o.Name.Contains(item.Name)).FirstOrDefault();
                     if (interfaceType != null)
                     {
+                        Debug.WriteLine("类名称：" + item.Name + "，接口：" + interfaceType.Name);
                         //把当前类和继承接口加入Dictionary
                         result.Add(item, interfaceType);
                     }

@@ -11,6 +11,17 @@ namespace IRepository
 {
     public interface IUserRepository : ISqlSugarRepository
     {
-        public ResultDto ReadFirstByLogin(LoginDto req);
+        /// <summary>
+        /// 读取用户登录信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public ResultDto ReadUserByLogin(LoginDto req);
+        /// <summary>
+        /// 创建用户
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public ResultDto CreateUser(RegisteredUserDto req);
     }
 }

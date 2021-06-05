@@ -124,7 +124,7 @@
                     <input type="text" name="verifiCode" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input verity">
                 </div>
                 <div class="captcha-img">
-                    <img src="/Admin/User/ValidateCode" onclick="this.src+='?new Date()'">
+                    <img src="/Admin/User/LoginValidateCode" onclick="this.src+='?new Date()'">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -177,19 +177,17 @@
                     data: {
                         UserName: data.field.username,
                         Password: data.field.password,
-                        UserVerifiCode: data.field.verifiCode
+                        VerifiCode: data.field.verifiCode
                     },
                     dataType: "json",
                     success: function (data) {
                         layer.close(index);
                         if (data.status) {
-
-                            layer.alert(data.msg, { icon: 1 }, function (index) {
+                            layer.alert(data.messages, { icon: 1 }, function (index) {
                                 window.location.replace("/Admin");
                             });
-
                         } else {
-                            layer.alert('登录失败，' + data.msg, { icon: 2 });
+                            layer.alert(data.messages, { icon: 2 });
                         }
                     },
                     error: function (jqXHR) {

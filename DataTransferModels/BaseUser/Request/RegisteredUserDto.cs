@@ -1,28 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace EntitysModels
+namespace DataTransferModels.BaseUser.Request
 {
-    ///<summary>
-    ///
-    ///</summary>
-    public partial class Base_User
+   public class RegisteredUserDto
     {
+        public RegisteredUserDto(Guid userId, string userName, string userRealName, string password, string email, string phone, int sex, DateTime createTime, string createName, bool isValid)
+        {
+            UserId = userId;
+            UserName = userName;
+            UserRealName = userRealName;
+            Password = password;
+            Email = email;
+            Phone = phone;
+            Sex = sex;
+            CreateTime = createTime;
+            CreateName = createName;
+            IsValid = isValid;
+        }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public int ID { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:False
-        /// </summary>           
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// Desc:
@@ -84,6 +89,5 @@ namespace EntitysModels
         /// Nullable:False
         /// </summary>           
         public bool IsValid { get; set; }
-
     }
 }

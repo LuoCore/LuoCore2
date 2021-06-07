@@ -1,4 +1,6 @@
 ﻿using DataTransferModels;
+using DataTransferModels.BasePermission.Request;
+using DataTransferModels.BasePermission.Response;
 using EntitysModels;
 using System;
 using System.Collections.Generic;
@@ -17,5 +19,7 @@ namespace IRepository
         /// <param name="parentId"></param>
         /// <returns></returns>
         public ResultDto<List<Base_Permission>> ReadPermissionByParentId(string parentId);
+
+        public ResultDto<ResponsePermissionListDto> ReadPermissionTableData(RequestPermissionDto req);
     }
 }

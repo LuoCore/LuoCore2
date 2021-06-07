@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataTransferModels.BaseUser.Request
 {
-    public class LoginDto
+    public class RequsetLoginDto
     {
-        public LoginDto(string userName, string password)
+        public RequsetLoginDto(string userName, string password)
         {
             UserName = userName;
             Password = password;

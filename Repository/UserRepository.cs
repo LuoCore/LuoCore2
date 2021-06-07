@@ -24,7 +24,7 @@ namespace Repository
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public ResultDto ReadUserByLogin(LoginDto req)
+        public ResultDto ReadUserByLogin(RequsetLoginDto req)
         {
             ResultDto res = new ResultDto();
             try
@@ -51,7 +51,7 @@ namespace Repository
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public ResultDto CreateUser(RegisteredUserDto req)
+        public ResultDto CreateUser(RequsetRegisteredUserDto req)
         {
             ResultDto res = new ResultDto();
             try

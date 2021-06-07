@@ -53,7 +53,7 @@
 
 		const [SelectBoxURL, TableURL, DeleteURL, CreateURL, UpdateURL,ShowDialogURL]= [
 			"/Admin/SystemBasis/PermissionSelectBox",
-			'/Admin/User/PermissionTable',
+			'/Admin/SystemBasis/PermissionTable',
 			'/Admin/Permission/DeleteByIds',
 			"/Admin/User/PermissionCreate",
 			"/Admin/Permission/Update",
@@ -170,7 +170,7 @@
 		//事件
 		let active = {
 			query: () => {
-				let selectArr = PermissionParent.getValue('valueStr');
+				let selectArr = PermissionSelectBox.getValue('valueStr');
 				treeTable.reload('table-permission', {
 					url: TableURL,
 					where: {

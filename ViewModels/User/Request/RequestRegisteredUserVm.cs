@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ViewModels.User.Request
 {
-    public class RegisteredUserVm
+    public class RequestRegisteredUserVm
     {
         public string UserName { get; set; }
         public string Phone { get; set; }

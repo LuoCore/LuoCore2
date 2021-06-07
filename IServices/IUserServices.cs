@@ -13,12 +13,12 @@ namespace IServices
         /// <summary>
         /// 用户登录
         /// </summary>
-        public Task<ResultVm> LoginUser(UserLoginVm req);
+        public Task<ResultVm> LoginUser(RequestUserLoginVm req);
         /// <summary>
         /// 注册用户
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public Task<ResultVm> RegisteredUser(RegisteredUserVm req);
+        public Task<ResultVm> RegisteredUser(RequestRegisteredUserVm req);
     }
 }

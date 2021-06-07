@@ -22,7 +22,7 @@ namespace Services
         /// <summary>
         /// 用户登录
         /// </summary>
-        public Task<ResultVm> LoginUser(UserLoginVm req) 
+        public Task<ResultVm> LoginUser(RequestUserLoginVm req) 
         {
             ResultVm res = new ResultVm();
             if (!req.SecurityCode.Equals(req.VerifiCode)) 
@@ -31,7 +31,7 @@ namespace Services
                 res.Status = false;
                 return Task.FromResult(res);
             }
-            var result= _REPOSITORY2.ReadUserByLogin(new DataTransferModels.BaseUser.Request.LoginDto(req.UserName,req.Password));
+            var result= _REPOSITORY2.ReadUserByLogin(new DataTransferModels.BaseUser.Request.RequsetLoginDto(req.UserName,req.Password));
             res.Data = result.Data;
             if (Equals(null, res.Data)) 
             {
@@ -48,7 +48,7 @@ namespace Services
         /// <summary>
         /// 用户注册
         /// </summary>
-        public Task<ResultVm> RegisteredUser(RegisteredUserVm req)
+        public Task<ResultVm> RegisteredUser(RequestRegisteredUserVm req)
         {
             ResultVm res = new ResultVm();
             if (!req.SecurityCode.Equals(req.Vercode))
@@ -64,7 +64,7 @@ namespace Services
                 return Task.FromResult(res);
             }
             
-            var result = _REPOSITORY2.CreateUser(new DataTransferModels.BaseUser.Request.RegisteredUserDto(Guid.NewGuid(),req.UserName,req.RealName,req.Password,req.Email,req.Phone,req.Sex,_REPOSITORY.GetNowDateTime(),req.CreateName,true));
+            var result = _REPOSITORY2.CreateUser(new DataTransferModels.BaseUser.Request.RequsetRegisteredUserDto(Guid.NewGuid(),req.UserName,req.RealName,req.Password,req.Email,req.Phone,req.Sex,_REPOSITORY.GetNowDateTime(),req.CreateName,true));
             res.Messages = result.Messages;
             res.Status = result.Status;
             return Task.FromResult(res);

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.SystemBase.Request
+namespace ViewModels.SystemBasis.Request
 {
-    public class CreateEntityVm
+    public class RequestCreateEntityVm
     {
         public string DirectoryPath { get; set; }
         public string NameSpace { get; set; }

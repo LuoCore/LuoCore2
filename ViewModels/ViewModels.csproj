@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="SystemBasis\Response\" />
     <Folder Include="User\Response\" />
   </ItemGroup>
 

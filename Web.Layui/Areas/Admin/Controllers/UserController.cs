@@ -45,7 +45,7 @@ namespace Web.Layui.Areas.Admin.Controllers
         /// <param name="vm"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(UserLoginVm req)
+        public async Task<IActionResult> LoginAsync(RequestUserLoginVm req)
         {
 
             req.SecurityCode = HttpContext.Session.GetString("LoginSecurityCode");
@@ -83,7 +83,7 @@ namespace Web.Layui.Areas.Admin.Controllers
         /// <param name="req"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> RegisterAsync(RegisteredUserVm req)
+        public async Task<IActionResult> RegisterAsync(RequestRegisteredUserVm req)
         {
             req.CreateName = Environment.UserName;
             req.SecurityCode = HttpContext.Session.GetString("RegisterSecurityCode");

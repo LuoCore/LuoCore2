@@ -4,78 +4,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransferModels.BaseUser.Request
+namespace ViewModels.SystemBasis.Response
 {
-   public class RegisteredUserDto
+    public class ResponsePermissionVm
     {
-        public RegisteredUserDto(Guid userId, string userName, string userRealName, string password, string email, string phone, int sex, DateTime createTime, string createName, bool isValid)
-        {
-            UserId = userId;
-            UserName = userName;
-            UserRealName = userRealName;
-            Password = password;
-            Email = email;
-            Phone = phone;
-            Sex = sex;
-            CreateTime = createTime;
-            CreateName = createName;
-            IsValid = isValid;
-        }
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:False
+        /// </summary>           
+        public string PermissionId { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public Guid UserId { get; set; }
+        public string PermissionName { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public string UserName { get; set; }
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:False
-        /// </summary>           
-        public string UserRealName { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:False
-        /// </summary>           
-        public string Password { get; set; }
+        public int? PermissionType { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string Email { get; set; }
+        public string PermissionAction { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
-        /// Nullable:False
+        /// Nullable:True
         /// </summary>           
-        public string Phone { get; set; }
+        public string PermissionParentId { get; set; }
+
         /// <summary>
         /// Desc:
         /// Default:
-        /// Nullable:False
+        /// Nullable:True
         /// </summary>           
-        public int Sex { get; set; }
-
+        public string PermissionParentName { get; set; }
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
         public DateTime CreateTime { get; set; }
-
         /// <summary>
         /// Desc:
         /// Default:
@@ -88,6 +67,6 @@ namespace DataTransferModels.BaseUser.Request
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public bool IsValid { get; set; }
+        public bool? IsValid { get; set; }
     }
 }

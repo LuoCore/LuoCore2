@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Utility.Factory;
 using Utility.Repository;
-using ViewModels.SystemBase.Request;
+using ViewModels.SystemBasis.Request;
 
 namespace Services
 {
@@ -15,12 +15,12 @@ namespace Services
         {
         }
 
-        public Task<bool> CreateDefaultValue(CreateEntityVm req) 
+        public Task<bool> CreateDefaultValue(RequestCreateEntityVm req) 
         {
             return Task.FromResult(_REPOSITORY.CreateDefaultValue(new CreateEntityDto() { DirectoryPath = req.DirectoryPath, NameSpace = req.NameSpace }));
         }
 
-        public Task<bool> CreateAttribute(CreateEntityVm req)
+        public Task<bool> CreateAttribute(RequestCreateEntityVm req)
         {
             return Task.FromResult(_REPOSITORY.CreateAttribute(new CreateEntityDto() { DirectoryPath = req.DirectoryPath, NameSpace = req.NameSpace }));
         }

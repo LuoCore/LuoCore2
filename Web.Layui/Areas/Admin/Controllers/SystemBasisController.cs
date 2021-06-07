@@ -31,5 +31,12 @@ namespace Web.Layui.Areas.Admin.Controllers
             res.Add(selectbox);
             return Json(res);
         }
+
+        public async Task<IActionResult> PermissionTable(ViewModels.SystemBasis.Request.RequestPermissionVm req)
+        {
+            ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
+            res = await _SERVICE.GetPermissionTable(req);
+            return Json(res);
+        }
     }
 }

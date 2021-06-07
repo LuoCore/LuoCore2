@@ -16,12 +16,12 @@ namespace IRepository
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public ResultDto ReadUserByLogin(LoginDto req);
+        public ResultDto ReadUserByLogin(RequsetLoginDto req);
         /// <summary>
         /// 创建用户
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public ResultDto CreateUser(RegisteredUserDto req);
+        public ResultDto CreateUser(RequsetRegisteredUserDto req);
     }
 }

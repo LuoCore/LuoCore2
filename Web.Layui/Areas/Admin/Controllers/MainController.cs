@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IServices;
 using ViewModels;
-using ViewModels.SystemBase.Request;
+using ViewModels.SystemBasis.Request;
 
 namespace Web.Layui.Areas.Admin.Controllers
 {
@@ -28,14 +28,14 @@ namespace Web.Layui.Areas.Admin.Controllers
 
       
 
-        public async Task<IActionResult> CreateEntityDefaultValueAsync(CreateEntityVm req)
+        public async Task<IActionResult> CreateEntityDefaultValueAsync(RequestCreateEntityVm req)
         {
             ResultVm res = new ResultVm();
             res.Status=await _SERVICE.CreateDefaultValue(req);
             return Json(res);
         }
 
-        public async Task<IActionResult> CreateEntityAttributeAsync(CreateEntityVm req)
+        public async Task<IActionResult> CreateEntityAttributeAsync(RequestCreateEntityVm req)
         {
             ResultVm res = new ResultVm();
             res.Status = await _SERVICE.CreateDefaultValue(req);

@@ -20,6 +20,8 @@ namespace IRepository
         /// <returns></returns>
         public ResultDto<List<Base_Permission>> ReadPermissionByParentId(string parentId);
 
-        public ResultDto<ResponsePermissionListDto> ReadPermissionTableData(RequestPermissionDto req);
+        public ResultDto<ResponsePermissionListDto> ReadPermissionTableData(RequestWherePermissionDto req);
+        public ResultDto CreatePermission(RequestCreatePermissionDto req);
+        public ResultDto UpdatePermission(RequesUpdatePermissionDto req);
     }
 }

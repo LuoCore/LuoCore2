@@ -11,6 +11,6 @@ namespace IServices
     public interface ISystemBasisService
     {
         public  Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetPermissionSelectBoxAsync(string parentId);
-        public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestPermissionVm req);
+        public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestGetPermissionVm req);
     }
 }

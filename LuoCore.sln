@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31320.298
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSugar", "SqlSugar\SqlSugar.csproj", "{6BFDB4DF-BB03-4F98-A327-429E5C07D2AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlSugar", "SqlSugar\SqlSugar.csproj", "{6BFDB4DF-BB03-4F98-A327-429E5C07D2AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Infrastructure", "4.Infrastructure", "{EC4FCB17-EA9F-4BF3-ABC3-1CD44093DFFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{55062415-94F8-4BFD-856F-29D36DA57BB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{55062415-94F8-4BFD-856F-29D36DA57BB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting", "CrossCutting\CrossCutting.csproj", "{375644CE-23E1-4DB5-B645-30DB79E831ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting", "CrossCutting\CrossCutting.csproj", "{375644CE-23E1-4DB5-B645-30DB79E831ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{51F6B08F-AB92-4CAC-8775-E4A9C4DBABBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{51F6B08F-AB92-4CAC-8775-E4A9C4DBABBF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Presentation", "1.Presentation", "{7256132C-52A1-4B6B-B3E7-7B8D8D4D7E51}"
 EndProject
@@ -19,21 +19,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Repository", "3.Repositor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Services", "2.Services", "{D9031AD7-A4FE-4DDD-B310-8C2598947F0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{9AC04C9D-C87D-46A7-8F13-E2DF3B602D09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{9AC04C9D-C87D-46A7-8F13-E2DF3B602D09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntitysModels", "EntitysModels\EntitysModels.csproj", "{FDE6CAB4-9E0B-47C9-812D-297026F4FF95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitysModels", "EntitysModels\EntitysModels.csproj", "{FDE6CAB4-9E0B-47C9-812D-297026F4FF95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransferModels", "DataTransferModels\DataTransferModels.csproj", "{64C7BA4B-11C1-4E71-B666-C6EC9B737706}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTransferModels", "DataTransferModels\DataTransferModels.csproj", "{64C7BA4B-11C1-4E71-B666-C6EC9B737706}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRepository", "IRepository\IRepository.csproj", "{B403B25C-1576-4F13-BBDE-72D8CD4CE042}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRepository", "IRepository\IRepository.csproj", "{B403B25C-1576-4F13-BBDE-72D8CD4CE042}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IServices", "IServices\IServices.csproj", "{BA3973BB-1A6F-4C3C-902E-411AC2453812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IServices", "IServices\IServices.csproj", "{BA3973BB-1A6F-4C3C-902E-411AC2453812}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{6E66B0F4-62F1-4B6F-A15D-17F3A476993C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{6E66B0F4-62F1-4B6F-A15D-17F3A476993C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "ViewModels\ViewModels.csproj", "{7C35A023-035C-42E3-87CE-C561190873A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "ViewModels\ViewModels.csproj", "{7C35A023-035C-42E3-87CE-C561190873A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Layui", "Web.Layui\Web.Layui.csproj", "{24E1A68B-4BD2-43DD-8FB1-6A7B90D37D9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Layui", "Web.Layui\Web.Layui.csproj", "{24E1A68B-4BD2-43DD-8FB1-6A7B90D37D9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumHelper", "EnumHelper\EnumHelper.csproj", "{CE41BEC4-C926-42A5-BC51-A632FE291A9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,10 @@ Global
 		{24E1A68B-4BD2-43DD-8FB1-6A7B90D37D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24E1A68B-4BD2-43DD-8FB1-6A7B90D37D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24E1A68B-4BD2-43DD-8FB1-6A7B90D37D9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE41BEC4-C926-42A5-BC51-A632FE291A9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE41BEC4-C926-42A5-BC51-A632FE291A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE41BEC4-C926-42A5-BC51-A632FE291A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE41BEC4-C926-42A5-BC51-A632FE291A9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +112,7 @@ Global
 		{6E66B0F4-62F1-4B6F-A15D-17F3A476993C} = {D9031AD7-A4FE-4DDD-B310-8C2598947F0D}
 		{7C35A023-035C-42E3-87CE-C561190873A4} = {D9031AD7-A4FE-4DDD-B310-8C2598947F0D}
 		{24E1A68B-4BD2-43DD-8FB1-6A7B90D37D9D} = {7256132C-52A1-4B6B-B3E7-7B8D8D4D7E51}
+		{CE41BEC4-C926-42A5-BC51-A632FE291A9D} = {EC4FCB17-EA9F-4BF3-ABC3-1CD44093DFFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C573D12-DA43-4EF9-B638-98808AB7B2B3}

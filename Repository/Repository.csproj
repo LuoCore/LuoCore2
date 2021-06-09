@@ -8,6 +8,7 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\DataTransferModels\DataTransferModels.csproj" />
     <ProjectReference Include="..\EntitysModels\EntitysModels.csproj" />
+    <ProjectReference Include="..\EnumHelper\EnumHelper.csproj" />
     <ProjectReference Include="..\IRepository\IRepository.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>

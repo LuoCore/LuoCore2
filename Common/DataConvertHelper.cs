@@ -59,7 +59,7 @@ namespace Common
 
         }
 
-        public static int EnumToInt<T>(this T value) where T : Enum
+        public static int EnumToInt<T>(this T value) 
         {
             try
             {

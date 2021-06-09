@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ViewModels.SystemBasis.Response
 {
-    public class ResponsePermissionVm
+    public class ResponsePermissionTableVm
     {
         /// <summary>
         /// Desc:
@@ -27,7 +27,13 @@ namespace ViewModels.SystemBasis.Response
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public int? PermissionType { get; set; }
+        public int PermissionType { get; set; }
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:False
+        /// </summary>           
+        public string PermissionTypeName { get; set; }
 
         /// <summary>
         /// Desc:
@@ -36,13 +42,13 @@ namespace ViewModels.SystemBasis.Response
         /// </summary>           
         public string PermissionAction { get; set; }
 
+
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
         public string PermissionParentId { get; set; }
-
         /// <summary>
         /// Desc:
         /// Default:

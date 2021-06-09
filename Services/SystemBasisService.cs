@@ -9,6 +9,8 @@ using Utility.Factory;
 using Utility.Repository;
 using ViewModels;
 using ViewModels.SystemBasis.Request;
+using Common;
+using EnumHelper;
 
 namespace Services
 {
@@ -48,28 +50,36 @@ namespace Services
         }
 
 
-        public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestPermissionVm req)
+        public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestGetPermissionVm req)
         {
             ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
 
-            var result = _REPOSITORY3.ReadPermissionTableData(new DataTransferModels.BasePermission.Request.RequestPermissionDto(req.PermissionId, req.PermissionName, req.PermissionType, req.PermissionAction, req.PermissionParentId, req.StartTime, req.EndTime, req.CreateName, req.IsValid));
+          
+            var result = _REPOSITORY3.ReadPermissionTableData(new DataTransferModels.BasePermission.Request.RequestWherePermissionDto(req.PermissionId, req.PermissionName, req.PermissionType.EnumToInt(), req.PermissionAction, req.PermissionParentId, req.StartTime, req.EndTime, req.CreateName, req.IsValid));
             if (!result.Status || Equals(null, result.Data))
             {
                 res.code = -1;
                 res.msg = "无数据！";
                 return Task.FromResult(res);
             }
-            List<ViewModels.SystemBasis.Response.ResponsePermissionVm> resData = new List<ViewModels.SystemBasis.Response.ResponsePermissionVm>();
+            List<ViewModels.SystemBasis.Response.ResponsePermissionTableVm> resData = new List<ViewModels.SystemBasis.Response.ResponsePermissionTableVm>();
             foreach (var item in result.Data.TableData)
             {
-                resData.Add(new ViewModels.SystemBasis.Response.ResponsePermissionVm()
+                string ParentName = item.PermissionParentName;
+                if (string.IsNullOrWhiteSpace(item.PermissionParentName)) 
+                {
+                    ParentName = "顶级";
+                }
+                var permissionTypeEnum = item.PermissionType.ObjToInt().IntToEnum<PermissionTypeEnum>();
+                resData.Add(new ViewModels.SystemBasis.Response.ResponsePermissionTableVm()
                 {
                     PermissionId=item.PermissionId,
                     PermissionName=item.PermissionName,
                     PermissionAction=item.PermissionAction,
-                    PermissionParentId=item.PermissionParentId,
-                    PermissionParentName=item.PermissionParentName,
-                    PermissionType=item.PermissionType,
+                    PermissionParentId= item.PermissionParentId,
+                    PermissionParentName = ParentName,
+                    PermissionType=item.PermissionType.ObjToInt(),
+                    PermissionTypeName= permissionTypeEnum.EnumToString(),
                     CreateName=item.CreateName,
                     CreateTime=item.CreateTime,
                     IsValid=item.IsValid
@@ -81,6 +91,11 @@ namespace Services
              return Task.FromResult(res);
         }
 
+        public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req)
+        {
+           _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(Guid.NewGuid(),req.PermissionName,req.PermissionType))
+            return Task.FromResult(res);
+        }
 
     }
 }

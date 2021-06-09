@@ -8,4 +8,8 @@
     <Folder Include="User\Response\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EnumHelper\EnumHelper.csproj" />
+  </ItemGroup>
+
 </Project>

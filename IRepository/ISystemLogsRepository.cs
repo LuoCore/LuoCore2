@@ -10,7 +10,7 @@ namespace IRepository
 {
     public interface ISystemLogsRepository : ISqlSugarRepository
     {
-        public SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, string typeValue, dynamic nowData, dynamic oldData = null)
+        public SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, EnumHelper.CURDEnum typeValue, dynamic nowData, dynamic oldData = null)
            where T : class, new();
         public DateTime GetNowDateTime();
     }

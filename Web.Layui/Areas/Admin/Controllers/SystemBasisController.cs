@@ -32,9 +32,21 @@ namespace Web.Layui.Areas.Admin.Controllers
             return Json(res);
         }
 
-        public async Task<IActionResult> PermissionTable(ViewModels.SystemBasis.Request.RequestPermissionVm req)
+        public async Task<IActionResult> PermissionTableAsync(ViewModels.SystemBasis.Request.RequestGetPermissionVm req)
         {
             ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
+            res = await _SERVICE.GetPermissionTable(req);
+            return Json(res);
+        }
+
+        public IActionResult PermissionDialog()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> PermissionCreateAsync(ViewModels.SystemBasis.Request.RequestGetPermissionVm req)
+        {
+            
             res = await _SERVICE.GetPermissionTable(req);
             return Json(res);
         }

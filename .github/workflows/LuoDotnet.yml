@@ -26,5 +26,4 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Run
-      env:
-        run: dotnet run -p Web.Layui
+      run: dotnet run -p Web.Layui

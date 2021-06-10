@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Utility.Factory;
 using Utility.Repository;
 using EntitysModels;
+using Common;
 
 namespace Repository
 {
@@ -16,8 +17,8 @@ namespace Repository
         {
         }
 
-        public  SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, string typeValue, dynamic nowData, dynamic oldData=null) 
-            where T : class, new()
+        public SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, EnumHelper.CURDEnum typeValue, dynamic nowData, dynamic oldData = null)
+          where T : class, new()
         {
             DateTime dateTime = GetNowDateTime();
             var tableName = typeof(T);
@@ -25,7 +26,7 @@ namespace Repository
             {
                 LogId = Guid.NewGuid().ToString(),
                 LogName = tableName.Name,
-                LogType = typeValue,
+                LogType = typeValue.EnumToString(),
                 CreateTime = dateTime,
                 CreateName = System.Environment.UserDomainName,
                 IsValid = true

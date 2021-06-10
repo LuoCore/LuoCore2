@@ -44,10 +44,9 @@ namespace Web.Layui.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> PermissionCreateAsync(ViewModels.SystemBasis.Request.RequestGetPermissionVm req)
+        public async Task<IActionResult> PermissionCreateAsync(ViewModels.SystemBasis.Request.RequestAddPermissionVm req)
         {
-            
-            res = await _SERVICE.GetPermissionTable(req);
+            ResultVm res = await _SERVICE.AddPermission(req);
             return Json(res);
         }
     }

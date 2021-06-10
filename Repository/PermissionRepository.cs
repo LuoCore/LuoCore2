@@ -1,4 +1,5 @@
-﻿using DataTransferModels;
+﻿using Common;
+using DataTransferModels;
 using DataTransferModels.BasePermission.Request;
 using DataTransferModels.BasePermission.Response;
 using EntitysModels;
@@ -136,11 +137,12 @@ namespace Repository
                         PermissionAction = req.PermissionAction,
                         IsValid = req.IsValid,
                     };
+                    _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.更新, data.ToJson());
                     res.Status = db.Updateable(data)
                     .Where(x=>x.PermissionId.Equals(req.WherePermission.PermissionId))
                     .IgnoreColumns(true)
                     .ExecuteCommandHasChange();
-                    _REPOSITORY.LogSave(db, EnumHelper.CURDEnum)
+                   
                 });
             }
             catch (Exception ex)

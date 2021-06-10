@@ -93,7 +93,10 @@ namespace Services
 
         public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req)
         {
-           _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(Guid.NewGuid(),req.PermissionName,req.PermissionType))
+           
+            var result= _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(Guid.NewGuid(), req.PermissionName, req.PermissionType.EnumToInt(), req.PermissionAction, req.PermissionParentId, req.CreateName, req.IsValid));
+
+            ResultVm res = new ResultVm() { Status=result.Status,Messages=result.Messages};
             return Task.FromResult(res);
         }
 

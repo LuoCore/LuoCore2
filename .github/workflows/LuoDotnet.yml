@@ -22,7 +22,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: run
-      run: dotnet run --no-run
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Run
+      env:
+        run: dotnet run -p Web.Layui

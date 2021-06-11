@@ -8,6 +8,8 @@ using Utility.Factory;
 using Utility.Repository;
 using EntitysModels;
 using Common;
+using SqlSugar;
+using EnumHelper;
 
 namespace Repository
 {
@@ -16,36 +18,37 @@ namespace Repository
         public SystemLogsRepository(ISqlSugarFactory factory) : base(factory)
         {
         }
-
-        public SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, EnumHelper.CURDEnum typeValue, dynamic nowData, dynamic oldData = null)
+ 
+        public SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, EnumHelper.CURDEnum typeValue, dynamic nowData, dynamic oldData, string username, string userinfoJson)
           where T : class, new()
         {
             DateTime dateTime = GetNowDateTime();
             var tableName = typeof(T);
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                username = System.Environment.UserName;
+            }
             System_Logs _Logs = new System_Logs()
             {
                 LogId = Guid.NewGuid().ToString(),
                 LogName = tableName.Name,
                 LogType = typeValue.EnumToString(),
+                LogNewData = Newtonsoft.Json.JsonConvert.SerializeObject(nowData),
+                LogOldData = Newtonsoft.Json.JsonConvert.SerializeObject(oldData),
+                OperationUserInfo = userinfoJson,
                 CreateTime = dateTime,
-                CreateName = System.Environment.UserDomainName,
+                CreateName = username,
                 IsValid = true
             };
-
-            _Logs.LogNewData = Newtonsoft.Json.JsonConvert.SerializeObject(nowData);
-
-            if (!Equals(null, oldData)) 
-            {
-                _Logs.LogOldData = Newtonsoft.Json.JsonConvert.SerializeObject(oldData);
-            }
-
             SqlSugar.IInsertable<System_Logs> inserLogs = dbclient.Insertable<System_Logs>(_Logs).IgnoreColumns(ignoreNullColumn: true);
-
             return inserLogs;
         }
         public DateTime GetNowDateTime()
         {
             return DbContext.GetDate();
         }
+
+
     }
 }

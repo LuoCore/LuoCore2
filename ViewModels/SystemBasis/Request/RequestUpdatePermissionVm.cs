@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ViewModels.SystemBasis.Request
 {
-    public class RequestAddPermissionVm: RequestBaseVm
+    public class RequestUpdatePermissionVm : RequestBaseVm
     {
-        public string PermissionName { get;  set; }
-        public EnumHelper.PermissionTypeEnum PermissionType { get;  set; }
+        public string PermissionId { get; set; }
+        public string PermissionName { get; set; }
+        public int PermissionType { get;  set; }
         public string PermissionAction { get;  set; }
         public string PermissionParentId { get;  set; }
         public bool IsValid { get;  set; }

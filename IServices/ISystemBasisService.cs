@@ -13,5 +13,6 @@ namespace IServices
         public  Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetPermissionSelectBoxAsync(string parentId);
         public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestGetPermissionVm req);
         public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req);
+        public Task<ViewModels.ResultVm> UpdatePermissionById(RequestUpdatePermissionVm req);
     }
 }

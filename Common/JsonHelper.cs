@@ -18,15 +18,17 @@ namespace Common
         /// </summary>
         /// <param name="o">对象</param>
         /// <returns>JSON字符串</returns>
-        public static string ToJson(this object o)
+        public static string ToJson(this object data)
         {
             try
             {
-                if (o == null)
+                if (data == null)
                 {
                     return null;
                 }
-                return JsonConvert.SerializeObject(o);
+                var jsonSetting = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+                var json = JsonConvert.SerializeObject(data, jsonSetting);
+                return json;
             }
             catch (Exception)
             {

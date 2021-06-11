@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CrossCutting.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using Web.Layui.Models;
 
 namespace Web.Layui.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,7 +20,7 @@ namespace Web.Layui.Controllers
         {
             _logger = logger;
         }
-
+        [CustomerAuthorize]
         public IActionResult Index()
         {
             return View();

@@ -73,7 +73,7 @@ namespace Repository
                         IsValid = req.IsValid
                     };
                     db.Insertable<Base_User>(userData).IgnoreColumns(ignoreNullColumn: true).ExecuteCommandIdentityIntoEntity();
-                    _REPOSITORY.LogSave<Base_User>(db, CURDEnum.创建, userData).ExecuteCommand();
+                    _REPOSITORY.LogSave<Base_User>(db,CURDEnum.创建, userData,null,Environment.UserName,string.Empty).ExecuteCommand();
                 });
                 res.Status = true;
             }

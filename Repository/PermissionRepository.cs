@@ -99,7 +99,7 @@ namespace Repository
             {
                 _FACTORY.GetDbContext((db) =>
                 {
-                    res.Status= db.Insertable(new Base_Permission()
+                    var insertData = new Base_Permission()
                     {
                         PermissionId = req.PermissionId.ToString(),
                         PermissionName = req.PermissionName,
@@ -107,11 +107,11 @@ namespace Repository
                         PermissionType = req.PermissionType,
                         PermissionAction = req.PermissionAction,
                         IsValid = req.IsValid,
-                        CreateName = req.CreateName,
-                        CreateTime =_REPOSITORY.GetNowDateTime()
-                    })
-                    .IgnoreColumns(true)
-                    .ExecuteCommandIdentityIntoEntity();
+                        CreateName = req.UserName,
+                        CreateTime = _REPOSITORY.GetNowDateTime()
+                    };
+                    res.Status = db.Insertable(insertData).IgnoreColumns(true).ExecuteCommandIdentityIntoEntity();
+                    _REPOSITORY.LogSave<Base_Permission>(db,EnumHelper.CURDEnum.创建, insertData.ToJson(),null,req.UserName,req.UserInfo).ExecuteCommand();
                 });
             }
             catch (Exception ex)
@@ -122,13 +122,14 @@ namespace Repository
             return res;
         }
 
-        public ResultDto UpdatePermission(RequesUpdatePermissionDto req)
+        public ResultDto UpdatePermissionById(RequestUpdatePermissionByIdDto req, string permissionId)
         {
             ResultDto res = new ResultDto();
             try
             {
                 _FACTORY.GetDbContextTran((db) =>
                 {
+                    var udpateData = db.Queryable<Base_Permission>().Where(x => x.PermissionId.Equals(permissionId)).First();
                     Base_Permission data = new Base_Permission()
                     {
                         PermissionName = req.PermissionName,
@@ -137,12 +138,31 @@ namespace Repository
                         PermissionAction = req.PermissionAction,
                         IsValid = req.IsValid,
                     };
-                    _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.更新, data.ToJson());
-                    res.Status = db.Updateable(data)
-                    .Where(x=>x.PermissionId.Equals(req.WherePermission.PermissionId))
-                    .IgnoreColumns(true)
-                    .ExecuteCommandHasChange();
-                   
+                    res.Status = db.Updateable(data).Where(x => x.PermissionId.Equals(permissionId)).IgnoreColumns(true).ExecuteCommandHasChange();
+                    _REPOSITORY.LogSave<Base_Permission>(db,EnumHelper.CURDEnum.更新, data.ToJson(), udpateData.ToJson(),req.UserName,req.UserInfo).ExecuteCommand();
+                });
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+        }
+
+        public ResultDto DeletePermissionByIds(RequestDeletePermissionByIdsDto req)
+        {
+            ResultDto res = new ResultDto();
+            try
+            {
+                _FACTORY.GetDbContextTran((db) =>
+                {
+                    foreach (string permissionId in req.PermissionIds)
+                    {
+                        var deleteData = db.Queryable<Base_Permission>().Where(x => x.PermissionId.Equals(permissionId)).First();
+                        db.Deleteable<Base_Permission>().Where(x => x.PermissionId.Equals(permissionId)).ExecuteCommand();
+                        _REPOSITORY.LogSave<Base_Permission>(db,EnumHelper.CURDEnum.删除, deleteData.ToJson(),null,req.UserName,req.UserInfo).ExecuteCommand();
+                    }
                 });
             }
             catch (Exception ex)

@@ -1,6 +1,10 @@
+using Common;
 using CrossCutting;
+using CrossCutting.Filters;
 using CrossCutting.IoC;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -53,18 +57,44 @@ namespace Web.Layui
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddAuthorization();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+
+            services.AddAuthentication(CustomerAuthorizeAttribute.CustomerAuthenticationScheme)
+                    .AddCookie(CustomerAuthorizeAttribute.CustomerAuthenticationScheme, options =>
                     {
-                        o.LoginPath = new PathString("/Admin/User/Login");
-                        o.ForwardSignOut = new PathString("/");
-                        //o.AccessDeniedPath = new PathString("/Error/Forbidden");
+                        
+                        options.LoginPath = new PathString("/Admin");
+                        options.AccessDeniedPath = new PathString("/Home/Error");
                     });
+                   
+               
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddScheme<AuthenticationSchemeOptions, ApiAuthHandler>("Api", o => { })
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                    {
+                        // 将任何以/api开头的请求转发到该方案
+                        //Foward any requests that start with /api to that scheme
+                        options.ForwardDefaultSelector = ctx =>
+                        {
+                            return ctx.Request.Path.StartsWithSegments("/api") ? "Api" : null;
+                        };
+                        options.LoginPath = new PathString("/Admin/User/Login");
+                        options.AccessDeniedPath = new PathString("/Home/Error");
+                    });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                ;
+
+
+
+
             // .NET Core 原生依赖注入
             // 单写一层用来添加依赖项，从展示层 Presentation 中隔离
             NativeInjectorBootStrapper.RegisterServices(services);
         }
+
+
+       
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

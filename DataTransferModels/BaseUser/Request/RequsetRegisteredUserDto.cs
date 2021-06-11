@@ -27,67 +27,67 @@ namespace DataTransferModels.BaseUser.Request
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public Guid UserId { get; set; }
+        public Guid UserId { get;protected set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public string UserName { get; set; }
+        public string UserName { get; protected set; }
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public string UserRealName { get; set; }
+        public string UserRealName { get; protected set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public string Password { get; set; }
+        public string Password { get; protected set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string Email { get; set; }
+        public string Email { get; protected set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public string Phone { get; set; }
+        public string Phone { get; protected set; }
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public int Sex { get; set; }
+        public int Sex { get; protected set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public DateTime CreateTime { get; set; }
+        public DateTime CreateTime { get; protected set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public string CreateName { get; set; }
+        public string CreateName { get; protected set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public bool IsValid { get; set; }
+        public bool IsValid { get; protected set; }
     }
 }

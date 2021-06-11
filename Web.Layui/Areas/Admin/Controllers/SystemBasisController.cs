@@ -1,4 +1,5 @@
-﻿using IServices;
+﻿using Common;
+using IServices;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -43,10 +44,20 @@ namespace Web.Layui.Areas.Admin.Controllers
         {
             return View();
         }
-
+        [HttpPost]
         public async Task<IActionResult> PermissionCreateAsync(ViewModels.SystemBasis.Request.RequestAddPermissionVm req)
         {
+            req.UserInfo = User.FindFirst("UserDataInfo").Value;
+            req.UserName = User.Identity.Name;
             ResultVm res = await _SERVICE.AddPermission(req);
+            return Json(res);
+        }
+        [HttpPut]
+        public async Task<IActionResult> PermissionUpdateByIdAsync(ViewModels.SystemBasis.Request.RequestUpdatePermissionVm req)
+        {
+            req.UserInfo = User.FindFirst("UserDataInfo").Value;
+            req.UserName = User.Identity.Name;
+            ResultVm res = await _SERVICE.UpdatePermissionById(req);
             return Json(res);
         }
     }

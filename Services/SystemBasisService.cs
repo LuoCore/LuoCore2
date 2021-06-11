@@ -94,9 +94,17 @@ namespace Services
         public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req)
         {
            
-            var result= _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(Guid.NewGuid(), req.PermissionName, req.PermissionType.EnumToInt(), req.PermissionAction, req.PermissionParentId, req.CreateName, req.IsValid));
+            var result= _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(req.UserName,req.UserInfo,Guid.NewGuid(), req.PermissionName, req.PermissionType.EnumToInt(), req.PermissionAction, req.PermissionParentId, req.IsValid));
 
             ResultVm res = new ResultVm() { Status=result.Status,Messages=result.Messages};
+            return Task.FromResult(res);
+        }
+
+        public Task<ViewModels.ResultVm> UpdatePermissionById(RequestUpdatePermissionVm req)
+        {
+            var result = _REPOSITORY3.UpdatePermissionById(new DataTransferModels.BasePermission.Request.RequestUpdatePermissionByIdDto(req.UserName,req.UserInfo,req.PermissionName, req.PermissionType, req.PermissionAction,req.PermissionParentId,req.IsValid),req.PermissionId);
+
+            ResultVm res = new ResultVm() { Status = result.Status, Messages = result.Messages };
             return Task.FromResult(res);
         }
 

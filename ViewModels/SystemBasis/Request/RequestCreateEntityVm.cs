@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ViewModels.SystemBasis.Request
 {
-    public class RequestCreateEntityVm
+    public class RequestCreateEntityVm : RequestBaseVm
     {
         public string DirectoryPath { get; set; }
         public string NameSpace { get; set; }

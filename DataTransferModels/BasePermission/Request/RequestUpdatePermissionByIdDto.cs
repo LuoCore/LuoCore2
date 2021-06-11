@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 
 namespace DataTransferModels.BasePermission.Request
 {
-    public class RequesUpdatePermissionDto
+    public class RequestUpdatePermissionByIdDto:RequestBaseDto
     {
-        public RequesUpdatePermissionDto(string permissionName, int permissionType, string permissionAction, string permissionParentId, bool isValid, RequestWherePermissionDto where)
+        public RequestUpdatePermissionByIdDto(string userName,string userInfo, string permissionName, int permissionType, string permissionAction, string permissionParentId, bool isValid)
         {
+            UserName = userName;
+            UserInfo = userInfo;
             PermissionName = permissionName;
             PermissionType = permissionType;
             PermissionAction = permissionAction;
             PermissionParentId = permissionParentId;
             IsValid = isValid;
-            WherePermission = where;
 
         }
-
-        public RequestWherePermissionDto WherePermission { get; protected set; }
-
+     
         public string PermissionName { get; protected set; }
         public int PermissionType { get; protected set; }
         public string PermissionAction { get; protected set; }

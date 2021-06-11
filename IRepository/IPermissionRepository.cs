@@ -22,6 +22,6 @@ namespace IRepository
 
         public ResultDto<ResponsePermissionListDto> ReadPermissionTableData(RequestWherePermissionDto req);
         public ResultDto CreatePermission(RequestCreatePermissionDto req);
-        public ResultDto UpdatePermission(RequesUpdatePermissionDto req);
+        public ResultDto UpdatePermissionById(RequestUpdatePermissionByIdDto req, string permissionId);
     }
 }

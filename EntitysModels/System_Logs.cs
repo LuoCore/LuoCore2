@@ -52,12 +52,14 @@ namespace EntitysModels
            /// </summary>           
            public string LogOldData {get;set;}
 
-           /// <summary>
-           /// Desc:
-           /// Default:
-           /// Nullable:False
-           /// </summary>           
-           public DateTime CreateTime {get;set;}
+        public string OperationUserInfo { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:False
+        /// </summary>           
+        public DateTime CreateTime {get;set;}
 
            /// <summary>
            /// Desc:

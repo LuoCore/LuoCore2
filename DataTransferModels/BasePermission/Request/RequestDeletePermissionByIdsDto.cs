@@ -13,6 +13,7 @@ namespace DataTransferModels.BasePermission.Request
             this.UserName = username;
             this.UserInfo = userInfo;
             PermissionIds = permissionIds;
+
         }
         public List<string> PermissionIds { get;protected set; }
     }

@@ -10,6 +10,7 @@ using EntitysModels;
 using Common;
 using SqlSugar;
 using EnumHelper;
+using System.Diagnostics;
 
 namespace Repository
 {
@@ -18,7 +19,7 @@ namespace Repository
         public SystemLogsRepository(ISqlSugarFactory factory) : base(factory)
         {
         }
- 
+
         public SqlSugar.IInsertable<System_Logs> LogSave<T>(SqlSugar.SqlSugarClient dbclient, EnumHelper.CURDEnum typeValue, dynamic nowData, dynamic oldData, string username, string userinfoJson)
           where T : class, new()
         {
@@ -29,7 +30,7 @@ namespace Repository
             {
                 username = System.Environment.UserName;
             }
-            System_Logs _Logs = new System_Logs()
+            var InstanceData = new
             {
                 LogId = Guid.NewGuid().ToString(),
                 LogName = tableName.Name,
@@ -41,7 +42,8 @@ namespace Repository
                 CreateName = username,
                 IsValid = true
             };
-            SqlSugar.IInsertable<System_Logs> inserLogs = dbclient.Insertable<System_Logs>(_Logs).IgnoreColumns(ignoreNullColumn: true);
+
+            SqlSugar.IInsertable<System_Logs> inserLogs = dbclient.Insertable<System_Logs>(InstanceData).IgnoreColumns(ignoreNullColumn: true);
             return inserLogs;
         }
         public DateTime GetNowDateTime()

@@ -29,7 +29,7 @@ namespace Services
             {
                 return resSelects;
             }
-
+            resSelects.Data = new List<ViewModels.Layui.SelectBoxVm>();
             foreach (var item in result.Data)
             {
                 var resData = new ViewModels.Layui.SelectBoxVm()
@@ -39,10 +39,11 @@ namespace Services
                     value = item.PermissionId
                 };
                 var resultChildren = await GetPermissionSelectBoxAsync(item.PermissionId);
-                if (result.Status && !Equals(null, result.Data))
+                if (resultChildren.Status && !Equals(null, resultChildren.Data))
                 {
                     resData.children = resultChildren.Data;
                 }
+               
                 resSelects.Data.Add(resData);
             }
             resSelects.Status = true;
@@ -93,20 +94,69 @@ namespace Services
 
         public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req)
         {
-           
+            ResultVm res = new ResultVm();
             var result= _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(req.UserName,req.UserInfo,Guid.NewGuid(), req.PermissionName, req.PermissionType.EnumToInt(), req.PermissionAction, req.PermissionParentId, req.IsValid));
-
-            ResultVm res = new ResultVm() { Status=result.Status,Messages=result.Messages};
+            if (Equals(null, result))
+            {
+                res.Messages = "失败！未知异常。";
+                res.Status = false;
+                return Task.FromResult(res);
+            }
+            if (!result.Status)
+            {
+                res.Status = true;
+                res.Messages = result.Messages;
+                return Task.FromResult(res);
+            }
+            res.Status = true;
+            res.Messages = "成功！";
             return Task.FromResult(res);
+
         }
 
         public Task<ViewModels.ResultVm> UpdatePermissionById(RequestUpdatePermissionVm req)
         {
+            ResultVm res = new ResultVm();
             var result = _REPOSITORY3.UpdatePermissionById(new DataTransferModels.BasePermission.Request.RequestUpdatePermissionByIdDto(req.UserName,req.UserInfo,req.PermissionName, req.PermissionType, req.PermissionAction,req.PermissionParentId,req.IsValid),req.PermissionId);
 
-            ResultVm res = new ResultVm() { Status = result.Status, Messages = result.Messages };
+            if (Equals(null, result))
+            {
+                res.Messages = "失败！未知异常。";
+                res.Status = false;
+                return Task.FromResult(res);
+            }
+            if (!result.Status)
+            {
+                res.Status = true;
+                res.Messages = result.Messages;
+                return Task.FromResult(res);
+            }
+            res.Status = true;
+            res.Messages = "成功！";
             return Task.FromResult(res);
         }
 
+
+        public Task<ViewModels.ResultVm> DeletePermissionByIds(RequestDeletePermissionVm req)
+        {
+            ResultVm res = new ResultVm();
+            var result = _REPOSITORY3.DeletePermissionByIds(new DataTransferModels.BasePermission.Request.RequestDeletePermissionByIdsDto(req.UserName, req.UserInfo, req.PermissionIds));
+
+            if (Equals(null, result))
+            {
+                res.Messages = "失败！未知异常。";
+                res.Status = false;
+                return Task.FromResult(res);
+            }
+            if (!result.Status)
+            {
+                res.Status = true;
+                res.Messages = result.Messages;
+                return Task.FromResult(res);
+            }
+            res.Status = true;
+            res.Messages = "成功！";
+            return Task.FromResult(res);
+        }
     }
 }

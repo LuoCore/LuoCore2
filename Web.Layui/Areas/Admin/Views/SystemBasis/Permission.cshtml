@@ -26,6 +26,9 @@
 
    <table id="table-permission" lay-filter="table-permission"></table>
 
+   <script type="text/html" id="switchIsValid">
+	<input type="checkbox" name="isValid" value="{{d.isValid}}" lay-skin="switch" lay-text="是|否" lay-filter="isValid" {{ d.isValid == true ? 'checked' : '' }}>
+   </script>
 
    <script type="text/html" id="table-action">
 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
@@ -60,7 +63,7 @@
 			'/Admin/SystemBasis/PermissionDialog',
 			"/Admin/SystemBasis/PermissionCreate",
 			"/Admin/SystemBasis/PermissionUpdateById",
-			'/Admin/SystemBasis/PermissionDeleteById'
+			'/Admin/SystemBasis/PermissionDeleteByIds'
 		];
 
 
@@ -121,8 +124,8 @@
 			{ field: 'permissionName', title: '权限名称' },
 			{ field: 'permissionTypeName', title: '权限类型' },
 			{ field: 'permissionAction', title: '权限动作' },
-			{ field: 'PermissionParentName', title: '权限父级' },
-			{ field: 'isValid', title: '是否有效' },
+			{ field: 'permissionParentName', title: '权限父级' },
+			{ field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
 			{ title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-action' }
 		]];
 
@@ -147,12 +150,11 @@
 
 			switch (obj.event) {
 				case 'edit':
-
 					ShowDialogAction(obj.data);
 					break;
 				case 'del':
-					let permissionIds = new Array([obj.data.permissionId]);
-					ajaxDeleteAction(permissionIds);
+					let Ids = new Array([obj.data.permissionId]);
+					DeleteAction(Ids);
 					break;
 			};
 		});
@@ -189,9 +191,9 @@
 		});
 
 
-		const DeleteAction = (permissionIds) => {
+		const DeleteAction = (ids) => {
 
-			if (permissionIds.length === 0) {
+			if (ids.length === 0) {
 				return layer.msg('请选择数据');
 			}
 			layer.confirm('确定删除吗？', function (index) {
@@ -200,7 +202,7 @@
 					type: 'Delete',
 					url: DeleteURL,
 					/* contentType: 'application/json',*/
-					data: { Ids: permissionIds },
+					data: { PermissionIds: ids },
 					dataType: 'json',
 					headers: {},
 					success: function (result) {
@@ -250,21 +252,26 @@
 
 					//监听提交
 					iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+						
 						let field = data.field; //获取提交的字段
-						//提交 Ajax 成功后，静态更新表格中的数据
-						$.ajax({
-							type: actionType,
-							url: ActionUrl,
-							data: {
+
+						let requestData={
 								PermissionId: identification,
 								PermissionName: field.PermissionName,
 								PermissionType: field.PermissionType,
 								PermissionAction: field.PermissionAction,
 								PermissionParentId: field.PermissionParentId,
 								IsValid: field.IsValid,
-							},
+							};
+							console.log("请求字段;"+requestData);
+						//提交 Ajax 成功后，静态更新表格中的数据
+						$.ajax({
+							type: actionType,
+							url: ActionUrl,
+							data: requestData,
 							dataType: "json",
 							success: function (result) {
+								console.log(result);
 								if (result.status) {
 									treeTable.reload('table-permission');
 									layer.close(index); //关闭弹层

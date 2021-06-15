@@ -1,5 +1,6 @@
 ﻿using Common;
 using IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ using ViewModels;
 
 namespace Web.Layui.Areas.Admin.Controllers
 {
+
+    [Authorize]
     public class SystemBasisController : BaseController<ISystemBasisService>
     {
         public SystemBasisController(ISystemBasisService service) : base(service)
@@ -47,6 +50,7 @@ namespace Web.Layui.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> PermissionCreateAsync(ViewModels.SystemBasis.Request.RequestAddPermissionVm req)
         {
+            
             req.UserInfo = User.FindFirst("UserDataInfo").Value;
             req.UserName = User.Identity.Name;
             ResultVm res = await _SERVICE.AddPermission(req);
@@ -60,5 +64,15 @@ namespace Web.Layui.Areas.Admin.Controllers
             ResultVm res = await _SERVICE.UpdatePermissionById(req);
             return Json(res);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> PermissionDeleteByIdsAsync(ViewModels.SystemBasis.Request.RequestDeletePermissionVm req)
+        {
+            req.UserInfo = User.FindFirst("UserDataInfo").Value;
+            req.UserName = User.Identity.Name;
+            ResultVm res = await _SERVICE.DeletePermissionByIds(req);
+            return Json(res);
+        }
+
     }
 }

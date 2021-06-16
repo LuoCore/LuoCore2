@@ -76,7 +76,7 @@ namespace Web.Layui
                         //Foward any requests that start with /api to that scheme
                         options.ForwardDefaultSelector = ctx =>
                         {
-                            return ctx.Request.Path.StartsWithSegments("/api") ? "Api" : null;
+                            return ctx.Request.Path.StartsWithSegments("/api") ? "Api" : CookieAuthenticationDefaults.AuthenticationScheme;
                         };
                         options.LoginPath = new PathString("/Admin/User/Login");
                         options.AccessDeniedPath = new PathString("/Home/Error");

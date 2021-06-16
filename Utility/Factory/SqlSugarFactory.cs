@@ -68,18 +68,19 @@ namespace Utility.Factory
 
                     db.Aop.OnLogExecuting = (sql, pars) =>//每次Sql执行前事件
                     {
-                        Debug.WriteLine("Sql执行前:" + sql);
+                        
+                        Debug.WriteLine("Sql执行前:" + sql+"，参数："+ string.Join(",", pars.Select(s => string.Format("{0}={1}", s.ParameterName, s.Value)).ToList()));
                         //我可以在这里面写逻辑
                     };
 
                     db.Aop.OnExecutingChangeSql = (sql, pars) => //可以修改SQL和参数的值
                     {
-                        Debug.WriteLine("修改SQL和参数的值:" + sql);
+                        Debug.WriteLine("修改SQL和参数的值:" + sql+"参数："+ string.Join(",", pars.Select(s => string.Format("{0}={1}", s.ParameterName, s.Value)).ToList()));
                         return new KeyValuePair<string, SugarParameter[]>(sql, pars);
                     };
                     db.Aop.OnLogExecuted = (sql, pars) => //SQL执行完
                     {
-                        Debug.Write("time:" + db.Ado.SqlExecutionTime.ToString());//输出SQL执行时间
+                        Debug.Write("SQL执行完time:" + db.Ado.SqlExecutionTime.ToString());//输出SQL执行时间
 
                         if (db.Ado.SqlExecutionTime.TotalSeconds > 1)//执行时间超过1秒
                         {
@@ -89,8 +90,9 @@ namespace Utility.Factory
                             var fileLine = db.Ado.SqlStackTrace.FirstLine;
                             //方法名
                             var FirstMethodName = db.Ado.SqlStackTrace.FirstMethodName;
-                            //db.Ado.SqlStackTrace.MyStackTraceList[1].xxx 获取上层方法的信息
+                            Debug.WriteLine("SQL执行完,执行时间超过1秒:" + "【代码CS文件名："+ fileName + "】" + "【代码行数：" + fileLine + "】" + "【方法名：" + FirstMethodName + "】,获取上层方法的信息:" + string.Join(",", db.Ado.SqlStackTrace.MyStackTraceList));
                         }
+                        Debug.WriteLine("SQL执行完:" + sql + "参数：" + string.Join(",", pars.Select(s => string.Format("{0}={1}", s.ParameterName, s.Value)).ToList()));
                     };
 
                     Func(db);

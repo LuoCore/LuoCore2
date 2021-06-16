@@ -1,17 +1,19 @@
 ﻿using Common;
+using CrossCutting.Filters;
 using IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ViewModels;
 
 namespace Web.Layui.Areas.Admin.Controllers
 {
 
-    [Authorize]
+    [TypeFilter(typeof(AdminLoginAuthorizationFilter))]
     public class SystemBasisController : BaseController<ISystemBasisService>
     {
         public SystemBasisController(ISystemBasisService service) : base(service)
@@ -71,6 +73,18 @@ namespace Web.Layui.Areas.Admin.Controllers
             req.UserInfo = User.FindFirst("UserDataInfo").Value;
             req.UserName = User.Identity.Name;
             ResultVm res = await _SERVICE.DeletePermissionByIds(req);
+            return Json(res);
+        }
+
+        public IActionResult Role()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> RoleTableAsync(ViewModels.SystemBasis.Request.RequestGetRoleVm req)
+        {
+            ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
+            res = await _SERVICE.GetRoleTable(req);
             return Json(res);
         }
 

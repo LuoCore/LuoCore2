@@ -11,12 +11,13 @@ using ViewModels;
 using ViewModels.SystemBasis.Request;
 using Common;
 using EnumHelper;
+using DataTransferModels.BsaeRole.Request;
 
 namespace Services
 {
-    public class SystemBasisService : SqlSugarRepository<ISystemLogsRepository, IUserRepository, IPermissionRepository>, ISystemBasisService
+    public class SystemBasisService : SqlSugarRepository<ISystemLogsRepository, IUserRepository, IPermissionRepository,IRoleRepository>, ISystemBasisService
     {
-        public SystemBasisService(ISqlSugarFactory factory, ISystemLogsRepository repository, IUserRepository repository2, IPermissionRepository repository3) : base(factory, repository, repository2, repository3)
+        public SystemBasisService(ISqlSugarFactory factory, ISystemLogsRepository repository, IUserRepository repository2, IPermissionRepository repository3,IRoleRepository repository4) : base(factory, repository, repository2, repository3, repository4)
         {
         }
 
@@ -49,7 +50,6 @@ namespace Services
             resSelects.Status = true;
             return resSelects;
         }
-
 
         public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestGetPermissionVm req)
         {
@@ -136,7 +136,6 @@ namespace Services
             return Task.FromResult(res);
         }
 
-
         public Task<ViewModels.ResultVm> DeletePermissionByIds(RequestDeletePermissionVm req)
         {
             ResultVm res = new ResultVm();
@@ -156,6 +155,22 @@ namespace Services
             }
             res.Status = true;
             res.Messages = "成功！";
+            return Task.FromResult(res);
+        }
+
+        public Task<ViewModels.Layui.TableVm> GetRoleTable(RequestGetRoleVm req) 
+        {
+            ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
+            var result = _REPOSITORY4.ReadRolePageList(new RequestQueryRoleDto(req.RoleId,req.RoleName,req.IsValid,req.StartTime,req.EndTime,req.PageIndex,req.PageSize));
+            if (!result.Status || Equals(null, result.Data))
+            {
+                res.code = -1;
+                res.msg = "无数据！";
+                return Task.FromResult(res);
+            }
+            res.code = 0;
+            res.data = result.Data.PageList;
+            res.count = result.Data.PageCount;
             return Task.FromResult(res);
         }
     }

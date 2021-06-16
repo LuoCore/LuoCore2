@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CrossCutting.Filters
@@ -18,12 +19,26 @@ namespace CrossCutting.Filters
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            //也可以这样获取Session，就不需要注入了。
-            var testData = context.HttpContext.Request.Cookies.TryGetValue("User", out string value);
-            if (!testData || string.IsNullOrWhiteSpace(value))
+            try
             {
+                System.Security.Claims.ClaimsIdentity claimsIdentity = (System.Security.Claims.ClaimsIdentity)context.HttpContext.User.Identity;
+                if (Equals(null, claimsIdentity) || !claimsIdentity.IsAuthenticated || Equals(null, claimsIdentity.Claims) || claimsIdentity.Claims.Count() < 1) 
+                {
+                    ContentResult Content = new ContentResult();
+                    Content.Content = "<script type='text/javascript'>parent.window.location.href='/Admin/User/Login'</script>";
+                    Content.ContentType = "text/html";
+                    //截断请求
+                    context.Result = Content;
+                }
+            }
+            catch (Exception)
+            {
+
+                ContentResult Content = new ContentResult();
+                Content.Content = "<script type='text/javascript'>parent.window.location.href='/Admin/User/Login'</script>";
+                Content.ContentType = "text/html";
                 //截断请求
-                context.Result = new RedirectResult("/Admin/User/Login");
+                context.Result = Content;
             }
         }
     }

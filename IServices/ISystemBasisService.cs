@@ -15,5 +15,6 @@ namespace IServices
         public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req);
         public Task<ViewModels.ResultVm> UpdatePermissionById(RequestUpdatePermissionVm req);
         public Task<ViewModels.ResultVm> DeletePermissionByIds(RequestDeletePermissionVm req);
+        public Task<ViewModels.Layui.TableVm> GetRoleTable(RequestGetRoleVm req);
     }
 }

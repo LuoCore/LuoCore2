@@ -1125,13 +1125,23 @@ layui.define(['laytpl', 'form', 'util'], function (exports) {
 
             checkNum(d[options.tree.childName]);
         }
+        console.log("联动父级复选框状态:" + ckNum + ":" + unCkNum);
         var $cb = $tr.children('td').find('input[lay-filter="' + components.checkboxFilter + '"]');
         if (ckNum > 0 && unCkNum === 0) {  // 全选
+            //$cb.prop('checked', true);
+            //$cb.removeClass('ew-form-indeterminate');
+            //$cb.next('.layui-form-checkbox').addClass('layui-form-checked');
+            //d.LAY_CHECKED = true;  // 同步更新数据
+            //d.LAY_INDETERMINATE = false;
+
             $cb.prop('checked', true);
-            $cb.removeClass('ew-form-indeterminate');
+            $cb.data('indeterminate', 'true');
+            $cb.addClass('ew-form-indeterminate');
             $cb.next('.layui-form-checkbox').addClass('layui-form-checked');
             d.LAY_CHECKED = true;  // 同步更新数据
-            d.LAY_INDETERMINATE = false;
+            d.LAY_INDETERMINATE = true;
+
+
         } else if (ckNum === 0 && unCkNum > 0) {  // 全不选
             $cb.prop('checked', false);
             $cb.removeClass('ew-form-indeterminate');
@@ -1163,8 +1173,9 @@ layui.define(['laytpl', 'form', 'util'], function (exports) {
         }
 
         checkNum(options.data);
-
+      
         var $cb = components.$view.find('input[lay-filter="' + components.chooseAllFilter + '"]');
+        console.log("联动全选复选框:" + ckNum + ":" + unCkNum);
         if (ckNum > 0 && unCkNum === 0) {  // 全选
             $cb.prop('checked', true);
             $cb.removeClass('ew-form-indeterminate');
@@ -1542,6 +1553,7 @@ layui.define(['laytpl', 'form', 'util'], function (exports) {
                 $(this).removeClass('ew-tree-table-filter-hide');
             });
             if ($tr.hasClass('ew-tree-table-open')) toggleRow($tr);
+            debugger;
             // 联动父级
             $tr.prevAll('tr').each(function () {
                 var tInd = parseInt($(this).data('indent'));

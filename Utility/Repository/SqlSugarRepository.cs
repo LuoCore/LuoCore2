@@ -88,15 +88,47 @@ namespace Utility.Repository
         protected readonly TIRepository _REPOSITORY;
         protected readonly TIRepository2 _REPOSITORY2;
         protected readonly TIRepository3 _REPOSITORY3;
-        protected readonly TIRepository3 _REPOSITORY4;
+        protected readonly TIRepository4 _REPOSITORY4;
         protected SqlSugarClient DbContext => this._FACTORY.GetDbContext();
-        public SqlSugarRepository(ISqlSugarFactory factory, TIRepository repository, TIRepository2 repository2, TIRepository3 repository3, TIRepository3 repository4)
+        public SqlSugarRepository(ISqlSugarFactory factory, TIRepository repository, TIRepository2 repository2, TIRepository3 repository3, TIRepository4 repository4)
         {
             _FACTORY = factory;
             _REPOSITORY = repository;
             _REPOSITORY2 = repository2;
             _REPOSITORY3 = repository3;
             _REPOSITORY4 = repository4;
+        }
+        public void Dispose()
+        {
+            DbContext.Dispose();
+            GC.SuppressFinalize(this);
+        }
+    }
+
+
+    public class SqlSugarRepository<TIRepository, TIRepository2, TIRepository3, TIRepository4, TIRepository5> : ISqlSugarRepository
+      where TIRepository : ISqlSugarRepository
+      where TIRepository2 : ISqlSugarRepository
+      where TIRepository3 : ISqlSugarRepository
+      where TIRepository4 : ISqlSugarRepository
+        where TIRepository5 : ISqlSugarRepository
+    {
+
+        protected readonly ISqlSugarFactory _FACTORY;
+        protected readonly TIRepository _REPOSITORY;
+        protected readonly TIRepository2 _REPOSITORY2;
+        protected readonly TIRepository3 _REPOSITORY3;
+        protected readonly TIRepository4 _REPOSITORY4;
+        protected readonly TIRepository5 _REPOSITORY5;
+        protected SqlSugarClient DbContext => this._FACTORY.GetDbContext();
+        public SqlSugarRepository(ISqlSugarFactory factory, TIRepository repository, TIRepository2 repository2, TIRepository3 repository3, TIRepository4 repository4, TIRepository5 repository5)
+        {
+            _FACTORY = factory;
+            _REPOSITORY = repository;
+            _REPOSITORY2 = repository2;
+            _REPOSITORY3 = repository3;
+            _REPOSITORY4 = repository4;
+            _REPOSITORY5 = repository5;
         }
         public void Dispose()
         {

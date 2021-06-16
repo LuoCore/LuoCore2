@@ -162,7 +162,7 @@ namespace Services
         {
             ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
             var result = _REPOSITORY4.ReadRolePageList(new RequestQueryRoleDto(req.RoleId,req.RoleName,req.IsValid,req.StartTime,req.EndTime,req.PageIndex,req.PageSize));
-            if (!result.Status || Equals(null, result.Data))
+            if (!result.Status || Equals(null, result.Data)|| result.Data.PageList.Count<1)
             {
                 res.code = -1;
                 res.msg = "无数据！";

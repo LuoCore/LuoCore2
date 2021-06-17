@@ -79,15 +79,8 @@
                     xmSelect = layui.xmSelect;
 
 
-                //选择父级权限
-                $.ajax({
-                    type: "get",
-                    url: "/Admin/SystemBasis/PermissionSelectBox",
-                    dataType: "json",
-                    async: false,
-                    success: function (data) {
 
-                        var PermissionParentId = xmSelect.render({
+                    var PermissionParentId = xmSelect.render({
                             el: '#PermissionParentId',
                             name: "PermissionParentId",
                             model: { label: { type: 'text' } },
@@ -111,7 +104,7 @@
                                 //点击节点是否选中
                                 clickCheck: true
                             },
-                            data: data,
+                            
                             on: function (data) {
                                 if (data.isAdd) {
                                     return data.change.slice(0, 1)
@@ -119,6 +112,20 @@
                             },
                             height: 'auto'
                         });
+
+
+                //选择父级权限
+                $.ajax({
+                    type: "get",
+                    url: "/Admin/SystemBasis/PermissionSelectBox",
+                    dataType: "json",
+                    async: false,
+                    success: function (resultData) {
+
+                        PermissionParentId.update({
+					    	data:resultData
+					    })
+                        PermissionParentId.setValue([{name:"顶级", value: ""}]);
                        
                         if (formobj != null && formobj != undefined && formobj != "") {
 

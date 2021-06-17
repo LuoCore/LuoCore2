@@ -31,7 +31,7 @@ namespace Repository
                 _FACTORY.GetDbContext((db) =>
                 {
                     int pageCount = 0;
-                    result.PageList=db.Queryable<Bsae_Role>()
+                    result.PageList=db.Queryable<Base_Role>()
                     .WhereIF(!string.IsNullOrWhiteSpace(req.RoleId), x => x.RoleId.Equals(req.RoleId))
                     .WhereIF(!string.IsNullOrWhiteSpace(req.RoleName), x => x.RoleId.Equals(req.RoleName))
                     .WhereIF(!Equals(req.IsValid), x => x.IsValid.Equals(req.IsValid))
@@ -57,6 +57,53 @@ namespace Repository
             }
             return res;
             
+        }
+
+        public ResultDto CreateRole(RequestCreateRoleDto req) 
+        {
+            ResultDto res = new ResultDto();
+            try
+            {
+                _FACTORY.GetDbContextTran((db) =>
+                {
+                    var insetData = new
+                    {
+                        RoleId = req.RoleId,
+                        RoleName = req.RoleName,
+                        RoleDescription = req.RoleDescription,
+                        CreateTime = req.CreateTime,
+                        CreateName = req.UserName,
+                        IsValid = req.IsValid
+                    };
+                    Base_Role roleData = db.Insertable<Base_Role>(insetData).ExecuteReturnEntity();
+                    _REPOSITORY.LogSave<Base_Role>(db, EnumHelper.CURDEnum.创建, insetData, null, req.UserName, req.UserInfo).ExecuteCommand();
+                });
+                res.Status = true;
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages=ex.Message;
+            }
+            return res;
+        }
+
+
+        public Base_Role ReadRoleById(string roleId)
+        {
+            Base_Role res = new Base_Role();
+            try
+            {
+                _FACTORY.GetDbContextTran((db) =>
+                {
+                    res = db.Queryable<Base_Role>().Where(x=>x.RoleId.Equals(roleId)).First();
+                });
+            }
+            catch (Exception ex)
+            {
+                res = null;
+            }
+            return res;
         }
     }
 }

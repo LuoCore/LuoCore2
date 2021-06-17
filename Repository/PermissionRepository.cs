@@ -47,6 +47,9 @@ namespace Repository
             return res;
         }
 
+   
+
+
 
         public ResultDto<ResponsePermissionListDto> ReadPermissionTableData(RequestWherePermissionDto req)
         {

@@ -8,7 +8,6 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
 
             <div class="layui-form-item">
-
             </div>
         </div>
 
@@ -17,6 +16,7 @@
                 <button class="layui-btn layuiadmin-btn-event" data-type="query">查询</button>
                 <button class="layui-btn layuiadmin-btn-event layui-btn-danger" data-type="delete">删除</button>
                 <button class="layui-btn layuiadmin-btn-event" data-type="add">添加</button>
+                <button class="layui-btn layuiadmin-btn-event" data-type="editRolePermission">权限编辑</button>
             </div>
 
             <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
@@ -43,6 +43,17 @@
         layui.use(['jquery', 'table'], function () {
             let $ = layui.jquery,
                 table = layui.table;
+
+
+            const [SelectBoxURL, TableURL, ShowDialogURL, ShowRolePermissionDialogURL, CreateURL, UpdateURL, DeleteURL] = [
+                "/Admin/SystemBasis/PermissionSelectBox",
+                '/Admin/SystemBasis/RoleTable',
+                '/Admin/SystemBasis/RoleDialog',
+                '/Admin/SystemBasis/RolePermissionDialog',
+                "/Admin/SystemBasis/RoleCreate",
+                "/Admin/SystemBasis/RoleUpdateById",
+                '/Admin/SystemBasis/RoleDeleteByIds'
+            ];
 
             // 字段配置
             const tableCols = [[
@@ -73,7 +84,7 @@
             let active = {
                 query: () => {
                     table.reload('dataTable', {
-                        url: '/Admin/SystemBasis/RoleTable',
+                        url: TableURL,
                         method: "get",
                         request: {
                             pageName: 'PageIndex', //页码的参数名称，默认：page
@@ -97,9 +108,149 @@
                     //执行 Ajax 后重载
                     DeleteAction(permissionIds);
                 },
-                add: () => ShowDialogAction()
+                add: () => ShowDialogAction(),
+                editRolePermission: function () { ShowDialogRolePermissionAction(); }
             }
-            
+            //显示弹出框
+            const ShowDialogAction = (formObj) => {
+
+                let ActionUrl = CreateURL;
+                let formTitle = "添加权限";
+                let actionType = "POST"
+                let identification = "";
+                if (formObj != null && formObj != undefined) {
+                    ActionUrl = UpdateURL;
+                    formTitle = "编辑权限"
+                    actionType = "Put"
+                    identification = formObj.permissionId;
+                }
+
+                let index = layer.open({
+                    type: 2,
+                    title: formTitle,
+                    area: ['auto'],
+                    offset: '10%',
+                    content: ShowDialogURL,
+                    btn: ['确定', '取消'],
+                    success: (layero, index) => {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.ShowDialog_Load(formObj);
+                        //对加载后的iframe进行宽高度自适应
+                        layer.iframeAuto(index);
+                    },
+                    yes: function (index, layero) {
+                        let iframeWindow = window['layui-layer-iframe' + index]
+                            , submit = layero.find('iframe').contents().find("#luo-submit");
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+                            let field = data.field; //获取提交的字段
+
+                            let requestData = {
+                                RoleId: identification,
+                                RoleName: field.RoleName,
+                                RoleDescription: field.RoleDescription,
+                                IsValid: field.IsValid,
+                            };
+                            console.log("请求字段;" + requestData);
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                type: actionType,
+                                url: ActionUrl,
+                                data: requestData,
+                                dataType: "json",
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.status) {
+                                        table.reload('dataTable');
+                                        layer.close(index); //关闭弹层
+                                    }
+                                    else {
+                                        layer.alert(result.messages);
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert("发生错误：" + jqXHR.status);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+                layer.iframeAuto(index);
+            };
+
+
+            const ShowDialogRolePermissionAction = (formObj) => {
+
+                let ActionUrl = CreateURL;
+                let formTitle = "添加权限";
+                let actionType = "POST"
+                let identification = "";
+                if (formObj != null && formObj != undefined) {
+                    ActionUrl = UpdateURL;
+                    formTitle = "编辑权限"
+                    actionType = "Put"
+                    identification = formObj.permissionId;
+                }
+
+                let index = layer.open({
+                    type: 2,
+                    title: formTitle,
+                    area: ['auto','60%'],
+                    offset: '10%',
+                    content: ShowRolePermissionDialogURL,
+                    btn: ['确定', '取消'],
+                    success: (layero, index) => {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.ShowDialog_Load(formObj);
+                       
+                    },
+                    yes: function (index, layero) {
+                        let iframeWindow = window['layui-layer-iframe' + index]
+                            , submit = layero.find('iframe').contents().find("#luo-submit");
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+                            let field = data.field; //获取提交的字段
+
+                            let requestData = {
+                                RoleId: identification,
+                                RoleName: field.RoleName,
+                                RoleDescription: field.RoleDescription,
+                                IsValid: field.IsValid,
+                            };
+                            console.log("请求字段;" + requestData);
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                type: actionType,
+                                url: ActionUrl,
+                                data: requestData,
+                                dataType: "json",
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.status) {
+                                        table.reload('dataTable');
+                                        layer.close(index); //关闭弹层
+                                    }
+                                    else {
+                                        layer.alert(result.messages);
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert("发生错误：" + jqXHR.status);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+                layer.iframeAuto(index);
+            };
+
+
         })
     </script>
 }

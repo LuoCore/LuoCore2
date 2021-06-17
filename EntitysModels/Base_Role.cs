@@ -7,7 +7,7 @@ namespace EntitysModels
     ///<summary>
     ///
     ///</summary>
-    public partial class Bsae_Role
+    public partial class Base_Role
     {
           
            /// <summary>

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="BaseRolePermission\Response\" />
     <Folder Include="BaseUser\Response\" />
     <Folder Include="CreateEntity\Response\" />
   </ItemGroup>

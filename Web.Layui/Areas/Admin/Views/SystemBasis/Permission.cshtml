@@ -238,13 +238,15 @@
 			let index = layer.open({
 				type: 2,
 				title: formTitle,
-				area: ['auto', '80%'],
+				area: ['auto'],
 				content: ShowDialogURL,
 				btn: ['确定', '取消'],
 				success: (layero, index)=> {
 
 					var iframe = window['layui-layer-iframe' + index];
 					iframe.ShowDialog_Load(formObj);
+					 //对加载后的iframe进行宽高度自适应
+						layer.iframeAuto(index);
 				},
 				yes: function (index, layero) {
 					let iframeWindow = window['layui-layer-iframe' + index]
@@ -252,7 +254,7 @@
 
 					//监听提交
 					iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
-						
+
 						let field = data.field; //获取提交的字段
 
 						let requestData={

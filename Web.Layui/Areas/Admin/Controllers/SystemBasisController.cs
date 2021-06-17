@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.SystemBasis.Request;
 
 namespace Web.Layui.Areas.Admin.Controllers
 {
@@ -28,7 +29,7 @@ namespace Web.Layui.Areas.Admin.Controllers
         public async Task<IActionResult> PermissionSelectBoxAsync()
         {
             List<ViewModels.Layui.SelectBoxVm> res = new List<ViewModels.Layui.SelectBoxVm>();
-            ViewModels.Layui.SelectBoxVm selectbox = new ViewModels.Layui.SelectBoxVm() { Name = "顶级", value = "",selected = true };
+            ViewModels.Layui.SelectBoxVm selectbox = new ViewModels.Layui.SelectBoxVm() { Name = "顶级", value = "" };
             var result = await _SERVICE.GetPermissionSelectBoxAsync(selectbox.value);
             if (result.Status && !Equals(null, result.Data))
             {
@@ -52,7 +53,7 @@ namespace Web.Layui.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> PermissionCreateAsync(ViewModels.SystemBasis.Request.RequestAddPermissionVm req)
         {
-            
+
             req.UserInfo = User.FindFirst("UserDataInfo").Value;
             req.UserName = User.Identity.Name;
             ResultVm res = await _SERVICE.AddPermission(req);
@@ -88,5 +89,46 @@ namespace Web.Layui.Areas.Admin.Controllers
             return Json(res);
         }
 
+
+        public IActionResult RoleDialog()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> RoleCreate(RequestAddRoleVm req)
+        {
+            req.UserInfo = User.FindFirst("UserDataInfo").Value;
+            req.UserName = User.Identity.Name;
+            ResultVm res = await _SERVICE.AddRole(req);
+            return Json(res);
+        }
+
+        public IActionResult RolePermissionDialog() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RolePermissionCreate(RequestAddRolePermissionVm req)
+        {
+            req.UserInfo = User.FindFirst("UserDataInfo").Value;
+            req.UserName = User.Identity.Name;
+            ResultVm res = await _SERVICE.AddRolePermission(req);
+            return Json(res);
+        }
+
+
+        public async Task<IActionResult> PermissionTreeAsync(string userId)
+        {
+            List<ViewModels.Layui.TreeVm> res = new List<ViewModels.Layui.TreeVm>();
+            ViewModels.Layui.TreeVm treeData = new ViewModels.Layui.TreeVm() { title = "顶级", id = "" };
+            var result = await _SERVICE.GetPermissionTreeBoxAsync("");
+            if (result.Status && !Equals(null, result.Data))
+            {
+                treeData.children = result.Data;
+            }
+            res.Add(treeData);
+            return Json(res);
+        }
     }
 }

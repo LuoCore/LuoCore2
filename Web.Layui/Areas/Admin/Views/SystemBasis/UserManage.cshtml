@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "用户管理";
+    Layout = "~/Areas/Admin/Views/Shared/_LayuiLayout.cshtml";
+}
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+
+            <div class="layui-form-item">
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-event" data-type="query">查询</button>
+                <button class="layui-btn layuiadmin-btn-event layui-btn-danger" data-type="delete">删除</button>
+                <button class="layui-btn layuiadmin-btn-event" data-type="add">添加</button>
+                <button class="layui-btn layuiadmin-btn-event" data-type="editRole">角色</button>
+            </div>
+
+            <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
+
+            <script type="text/html" id="switchIsValid">
+                <input type="checkbox" name="isValid" value="{{d.isValid}}" lay-skin="switch" lay-text="是|否" lay-filter="isValid" {{ d.isValid == true ? 'checked' : '' }}>
+            </script>
+            <script type="text/html" id="switchSex">
+                {{#  if(d.sex === 1){ }}
+                <span style="">男</span>
+                {{#  } else { }}
+                <span style="color: #F581B1;">女</span>
+                {{#  } }}
+            </script>
+
+            <script type="text/html" id="table-action">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="editRole"><i class="layui-icon layui-icon-edit"></i>角色</a>
+            </script>
+        </div>
+
+
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        layui.use(['jquery', 'table'], function () {
+            let $ = layui.jquery,
+                table = layui.table;
+
+
+            let GetUserInfoTableURL = "/Admin/SystemBasis/GetUserInfo";
+
+            // 字段配置
+            const tableCols = [[
+                { type: 'checkbox', fixed: 'left' },
+                { field: 'userName', title: '用户名称' },
+                { field: 'userRealName', title: '用户真实名称' },
+                { field: 'email', title: '邮箱' },
+                { field: 'phone', title: '电话号码' },
+                { field: 'sex', title: '性别', templet: '#switchSex' },
+                { field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
+                { title: '操作', width: 'auto', align: 'center', fixed: 'right', toolbar: '#table-action' }
+            ]];
+            table.render({
+                elem: '#dataTable',
+                title: '用户数据表',
+                totalRow: true,
+                height: 'full-200',
+                cellMinWidth: 80,
+                cols: tableCols,
+                loading: false,
+                page: true
+            });
+
+
+
+            //顶部按钮事件 Start
+            $('.layui-btn.layuiadmin-btn-event').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+            let active = {
+                query: function () {
+                    table.reload('dataTable', {
+                        url: GetUserInfoTableURL,
+                        method: "get",
+                        request: {
+                            pageName: 'PageIndex', //页码的参数名称，默认：page
+                            limitName: 'PageSize' //每页数据量的参数名，默认：limit
+                        },
+                        where: {
+                            RoleId: "",
+                            RoleName: "",
+                            IsValid: null,
+                            StartTime: null,
+                            EndTime: null,
+                        }
+                    });
+                },
+                delete: function () {
+                    let checkData = permissionTable.checkStatus(false);
+                    let permissionIds = new Array()
+                    for (var i = 0; i < checkData.length; i++) {
+                        permissionIds.push(checkData[i].permissionId);
+                    }
+                    //执行 Ajax 后重载
+                    DeleteAction(permissionIds);
+                },
+                add: function () {
+                    ShowDialogAction();
+                },
+                editRolePermission: function () {
+                    var checkStatus = table.checkStatus('dataTable')
+                        , checkDatas = checkStatus.data;
+                    let roleIdCheckArray = new Array();
+                    for (var index in checkDatas) {
+                        roleIdCheckArray.push(checkDatas[index].roleId);
+                    }
+
+                    ShowDialogRolePermissionAction(roleIdCheckArray);
+                }
+            }
+            //顶部按钮事件 End
+
+        });
+    </script>
+
+}

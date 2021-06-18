@@ -11,6 +11,7 @@ using DataTransferModels.BaseUser.Request;
 using DataTransferModels;
 using Common;
 using EnumHelper;
+using DataTransferModels.BaseUser.Response;
 
 namespace Repository
 {
@@ -80,6 +81,38 @@ namespace Repository
                     _REPOSITORY.LogSave<Base_User>(db,CURDEnum.创建, userData,null,Environment.UserName,string.Empty).ExecuteCommand();
                 });
                 res.Status = true;
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+        }
+
+
+        public ResultDto<ResponseUserPageDto> ReadUserPageList(RequestQueryUserDto req)
+        {
+            ResultDto<ResponseUserPageDto> res = new ResultDto<ResponseUserPageDto>();
+            try
+            {
+                _FACTORY.GetDbContext((db) =>
+                {
+                    var selectSql = db.Queryable<Base_User>();
+                    selectSql.WhereIF(!string.IsNullOrWhiteSpace(req.UserId), x => x.UserId.Equals(req.UserId));
+                    selectSql.WhereIF(!string.IsNullOrWhiteSpace(req.UserName), x => x.UserId.Equals(req.UserName));
+                    selectSql.WhereIF(!string.IsNullOrWhiteSpace(req.UserRealName), x => x.UserId.Equals(req.UserRealName));
+                    selectSql.WhereIF(!string.IsNullOrWhiteSpace(req.Email), x => x.UserId.Equals(req.Email));
+                    selectSql.WhereIF(!string.IsNullOrWhiteSpace(req.Phone), x => x.UserId.Equals(req.Phone));
+                    selectSql.WhereIF(!Equals(null, req.IsValid), x => x.IsValid.Equals(req.IsValid));
+                    selectSql.WhereIF(!Equals(null,req.Sex)&& req.Sex>0, x => x.Sex.Equals(req.Sex));
+                    selectSql.WhereIF(!Equals(null,req.StartTime)&& !Equals(null, req.EndTime), x => SqlSugar.SqlFunc.Between(x.CreateTime,req.StartTime,req.EndTime));
+                    int pageCount = 0;
+                    var resultData= selectSql.ToPageList(req.PageIndex, req.PageSize, ref pageCount);
+                    res.Data = new ResponseUserPageDto(resultData,pageCount);
+                    res.Status = true;
+                });
+                
             }
             catch (Exception ex)
             {

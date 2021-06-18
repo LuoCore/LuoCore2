@@ -1,5 +1,6 @@
 ﻿using DataTransferModels;
 using DataTransferModels.BaseUser.Request;
+using DataTransferModels.BaseUser.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,7 @@ namespace IRepository
         /// <param name="req"></param>
         /// <returns></returns>
         public ResultDto CreateUser(RequsetRegisteredUserDto req);
+
+        public ResultDto<ResponseUserPageDto> ReadUserPageList(RequestQueryUserDto req);
     }
 }

@@ -30,69 +30,56 @@
 
         function ShowDialog_Load(formobj) {
 
-            layui.use(['tree', 'util'], function () {
+            layui.use(['tree', 'util','jquery'], function () {
                 var tree = layui.tree,
                     layer = layui.layer,
+                    $=layui.jquery,
                     util = layui.util;
                 console.log("进来了开始加载");
-
-               
-
-
-
-
-                let data = [{
-                    title: '一级1'
-                    , id: 1
-                    , field: 'name1'
-                    , checked: true
-                    , spread: true
-                    , children: [{
-                        title: '二级1-1 可允许跳转'
-                        , id: 3
-                        , field: 'name11'
-                        , href: 'https://www.layui.com/'
-                        , children: [{
-                            title: '三级1-1-3'
-                            , id: 23
-                            , field: ''
-                        }]
-                    }, {
-                        title: '三级1-1-1'
-                        , id: 7
-                        , field: ''
-                        , children: [{
-                            title: '四级1-1-1-1 可允许跳转'
-                            , id: 15
-                            , field: ''
-                            , href: 'https://www.layui.com/doc/'
-                        }]
-                    }, {
-                        title: '三级1-1-2'
-                        , id: 8
-                        , field: ''
-                        , children: [{
-                            title: '四级1-1-2-1'
-                            , id: 32
-                            , field: ''
-                        }]
-                    }]
-                }];
 
 
 
                 //基本演示
                 tree.render({
                     elem: '#test12',
-                    data: data,
                     showCheckbox: true,  //是否显示复选框
-                    id: 'demoId1',
+                    id: 'demoId',
                     isJump: true, //是否允许点击节点时弹出新窗口跳转
                     click: function (obj) {
                         var data = obj.data;  //获取当前点击的节点数据
                         layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
                     }
                 });
+                debugger;
+                let roleIdData = "";
+                if (formobj.length == 1)
+                {
+                    roleIdData = formobj[0];
+                }
+
+                $.ajax({
+                    type: "get",
+                    url: "/Admin/SystemBasis/PermissionTree",
+                    data: { roleId: roleIdData},
+                    dataType: "json",
+                    async: false,
+                    success: function (resultData) {
+
+                        //可以重载所有基础参数
+                        tree.reload('demoId', {
+                            data: resultData
+                        });
+                    },
+                    error: function (jqXHR) {
+                        alert("发生错误：" + jqXHR.status);
+                    }
+                });
+
+                
+
+
+
+               
 
 
             });

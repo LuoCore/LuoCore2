@@ -53,33 +53,34 @@ namespace Services
         }
 
 
-        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string roleId)
+        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string roleId,string permissionId)
         {
             ResultVm<List<ViewModels.Layui.TreeVm>> resTree = new ResultVm<List<ViewModels.Layui.TreeVm>>();
-
-            var result = _REPOSITORY4.ReadRoleById(roleId);
-            if (!result.Status || Equals(null, result.Data))
+            var result= _REPOSITORY3.ReadPermissionByParentId(permissionId);
+            if (result.Status) 
             {
-                return resTree;
-            }
-            resTree.Data = new List<ViewModels.Layui.TreeVm>();
-            foreach (var item in result.Data)
-            {
-                var resData = new ViewModels.Layui.TreeVm()
+                resTree.Data = new List<ViewModels.Layui.TreeVm>();
+                var rolePermissionList = _REPOSITORY5.ReadRolePermissionByRoleId(roleId);
+                foreach (var permission in result.Data)
                 {
-                    disabled = !item.IsValid,
-                    title = item.PermissionName,
-                    id = item.PermissionId
-                };
-                var resultChildren = await GetPermissionTreeBoxAsync(item.PermissionId);
-                if (resultChildren.Status && !Equals(null, resultChildren.Data))
-                {
-                    resData.children = resultChildren.Data;
+                    ViewModels.Layui.TreeVm treeData = new ViewModels.Layui.TreeVm();
+                    treeData.disabled = !permission.IsValid;
+                    treeData.title = permission.PermissionName;
+                    treeData.id = permission.PermissionId;
+                    if (rolePermissionList.Where(x => x.PermissionId == permission.PermissionId).Any()) 
+                    {
+                        treeData.@checked = true;
+                    }
+                    var result2 = await GetPermissionTreeBoxAsync(roleId, treeData.id);
+                    if (result2.Status)
+                    {
+                        treeData.children = result2.Data;
+                    }
+                    
+                    resTree.Data.Add(treeData);
+                    resTree.Status = true;
                 }
-
-                resTree.Data.Add(resData);
             }
-            resTree.Status = true;
             return resTree;
         }
 
@@ -219,7 +220,7 @@ namespace Services
                 res.Messages = "添加成功！";
 
             }
-            else 
+            else
             {
                 res.Status = false;
                 res.Messages = "添加失败！" + result.Messages;
@@ -231,7 +232,7 @@ namespace Services
         public Task<ResultVm> AddRolePermission(RequestAddRolePermissionVm req)
         {
             ResultVm res = new ResultVm();
-            var result = _REPOSITORY5.CreateRolePermission(new DataTransferModels.BaseRolePermission.Request.RequestCreateRolePermissionDto(req.PermissionIds,req.RoleIds,req.UserName,req.UserInfo));
+            var result = _REPOSITORY5.CreateRolePermission(new DataTransferModels.BaseRolePermission.Request.RequestCreateRolePermissionDto(req.PermissionIds, req.RoleIds, req.UserName, req.UserInfo));
 
             if (result.Status)
             {
@@ -245,6 +246,23 @@ namespace Services
                 res.Messages = "添加失败！" + result.Messages;
             }
 
+            return Task.FromResult(res);
+        }
+
+
+        public Task<ViewModels.Layui.TableVm> GetUserTable(RequestGetUserVm req)
+        {
+            ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
+            var result = _REPOSITORY2.ReadUserPageList(new DataTransferModels.BaseUser.Request.RequestQueryUserDto(req.UserId,req.UserName,req.UserRealName,req.Email,req.Phone,req.Sex,req.IsValid,req.StartTime,req.EndTime,req.PageIndex,req.PageSize));
+            if (!result.Status || Equals(null, result.Data))
+            {
+                res.code = -1;
+                res.msg = "无数据！";
+                return Task.FromResult(res);
+            }
+            res.code = 0;
+            res.data = result.Data.PageList;
+            res.count = result.Data.PageCount;
             return Task.FromResult(res);
         }
 

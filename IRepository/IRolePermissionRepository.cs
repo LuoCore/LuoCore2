@@ -1,5 +1,6 @@
 ﻿using DataTransferModels;
 using DataTransferModels.BaseRolePermission.Request;
+using EntitysModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace IRepository
     public interface IRolePermissionRepository : ISqlSugarRepository
     {
         public ResultDto CreateRolePermission(RequestCreateRolePermissionDto req);
+        public List<Base_RolePermission> ReadRolePermissionByRoleId(string roleId);
+        public List<Base_RolePermission> ReadRolePermissionAll();
     }
 }

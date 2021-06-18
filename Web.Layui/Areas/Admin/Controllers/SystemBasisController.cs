@@ -21,7 +21,7 @@ namespace Web.Layui.Areas.Admin.Controllers
         {
         }
 
-        public IActionResult Permission()
+        public IActionResult PermissionManage()
         {
             return View();
         }
@@ -77,7 +77,7 @@ namespace Web.Layui.Areas.Admin.Controllers
             return Json(res);
         }
 
-        public IActionResult Role()
+        public IActionResult RoleManage()
         {
             return View();
         }
@@ -103,7 +103,7 @@ namespace Web.Layui.Areas.Admin.Controllers
             return Json(res);
         }
 
-        public IActionResult RolePermissionDialog() 
+        public IActionResult RolePermissionDialog()
         {
             return View();
         }
@@ -118,17 +118,42 @@ namespace Web.Layui.Areas.Admin.Controllers
         }
 
 
-        public async Task<IActionResult> PermissionTreeAsync(string userId)
+        public async Task<IActionResult> PermissionTreeAsync(string roleId)
         {
-            List<ViewModels.Layui.TreeVm> res = new List<ViewModels.Layui.TreeVm>();
-            ViewModels.Layui.TreeVm treeData = new ViewModels.Layui.TreeVm() { title = "顶级", id = "" };
-            var result = await _SERVICE.GetPermissionTreeBoxAsync("");
+            List<ViewModels.Layui.TreeVm> treeDatas = new List<ViewModels.Layui.TreeVm>();
+
+            var tree = new ViewModels.Layui.TreeVm() { title = "顶级", id = "" };
+            var result = await _SERVICE.GetPermissionTreeBoxAsync(roleId, tree.id);
             if (result.Status && !Equals(null, result.Data))
             {
-                treeData.children = result.Data;
+                tree.children = new List<ViewModels.Layui.TreeVm>();
+                tree.children = result.Data;
             }
-            res.Add(treeData);
+            treeDatas.Add(tree);
+            return Json(treeDatas);
+        }
+
+        public async Task<IActionResult> AddRolePermissionAsync(RequestAddRolePermissionVm req)
+        {
+            req.UserInfo = User.FindFirst("UserDataInfo").Value;
+            req.UserName = User.Identity.Name;
+            var result = await _SERVICE.AddRolePermission(req);
+            return Json(result);
+        }
+
+
+        public IActionResult UserManage()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> GetUserInfoAsync(RequestGetUserVm req)
+        {
+            ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
+            res = await _SERVICE.GetUserTable(req);
             return Json(res);
         }
+
+
     }
 }

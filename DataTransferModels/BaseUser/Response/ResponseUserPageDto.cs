@@ -5,17 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransferModels.BsaeRole.Response
+
+namespace DataTransferModels.BaseUser.Response
 {
-    public class ResponseRolePageDto
+    public class ResponseUserPageDto
     {
-        public ResponseRolePageDto(List<Base_Role> pageList, int pageCount)
+        public ResponseUserPageDto(List<Base_User> pageList, int pageCount)
         {
             PageList = pageList;
             PageCount = pageCount;
         }
 
-        public List<EntitysModels.Base_Role> PageList { get;protected set; }
+        public List<EntitysModels.Base_User> PageList { get;protected set; }
         public int PageCount { get; protected set; }
     }
 }

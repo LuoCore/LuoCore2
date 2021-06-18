@@ -28,6 +28,7 @@
             <script type="text/html" id="table-action">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="editRolePermission"><i class="layui-icon layui-icon-edit"></i>编辑权限</a>
             </script>
         </div>
 
@@ -45,11 +46,12 @@
                 table = layui.table;
 
 
-            const [SelectBoxURL, TableURL, ShowDialogURL, ShowRolePermissionDialogURL, CreateURL, UpdateURL, DeleteURL] = [
+            const [SelectBoxURL, TableURL, ShowDialogURL, ShowRolePermissionDialogURL, CreateRolePermissionURL, CreateURL, UpdateURL, DeleteURL] = [
                 "/Admin/SystemBasis/PermissionSelectBox",
                 '/Admin/SystemBasis/RoleTable',
                 '/Admin/SystemBasis/RoleDialog',
                 '/Admin/SystemBasis/RolePermissionDialog',
+                '/Admin/SystemBasis/AddRolePermission',
                 "/Admin/SystemBasis/RoleCreate",
                 "/Admin/SystemBasis/RoleUpdateById",
                 '/Admin/SystemBasis/RoleDeleteByIds'
@@ -58,11 +60,10 @@
             // 字段配置
             const tableCols = [[
                 { type: 'checkbox', fixed: 'left' },
-                { field: 'roleId', title: '权限名称' },
-                { field: 'roleName', title: '权限类型' },
-                { field: 'roleDescription', title: '权限动作' },
+                { field: 'roleName', title: '角色名称' },
+                { field: 'roleDescription', title: '角色描述' },
                 { field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
-                { title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-action' }
+                { title: '操作', width: 'auto', align: 'center', fixed: 'right', toolbar: '#table-action' }
             ]];
 
             table.render({
@@ -76,13 +77,34 @@
                 page: true
             });
 
+
+            table.on('tool(dataTable)', function (obj) {
+
+                switch (obj.event) {
+                    case 'edit':
+                        ShowDialogAction(obj.data);
+                        break;
+                    case 'del':
+                        let Ids = new Array([obj.data.roleId]);
+                        DeleteAction(Ids);
+                        break;
+                    case 'editRolePermission':
+                        debugger;
+                        let rolepermissionIds = new Array(obj.data.roleId);
+                        ShowDialogRolePermissionAction(rolepermissionIds);
+                        break;
+                };
+            });
+
+
+
+            //顶部按钮事件 Start
             $('.layui-btn.layuiadmin-btn-event').on('click', function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
-            //按钮事件
             let active = {
-                query: () => {
+                query: function () {
                     table.reload('dataTable', {
                         url: TableURL,
                         method: "get",
@@ -99,7 +121,7 @@
                         }
                     });
                 },
-                delete: () => {
+                delete: function () {
                     let checkData = permissionTable.checkStatus(false);
                     let permissionIds = new Array()
                     for (var i = 0; i < checkData.length; i++) {
@@ -108,10 +130,23 @@
                     //执行 Ajax 后重载
                     DeleteAction(permissionIds);
                 },
-                add: () => ShowDialogAction(),
-                editRolePermission: function () { ShowDialogRolePermissionAction(); }
+                add: function () {
+                    ShowDialogAction();
+                },
+                editRolePermission: function () {
+                    var checkStatus = table.checkStatus('dataTable')
+                        , checkDatas = checkStatus.data;
+                    let roleIdCheckArray = new Array();
+                    for (var index in checkDatas) {
+                        roleIdCheckArray.push(checkDatas[index].roleId);
+                    }
+
+                    ShowDialogRolePermissionAction(roleIdCheckArray);
+                }
             }
-            //显示弹出框
+            //顶部按钮事件 End
+
+            //角色编辑弹出框
             const ShowDialogAction = (formObj) => {
 
                 let ActionUrl = CreateURL;
@@ -181,31 +216,24 @@
                 layer.iframeAuto(index);
             };
 
-
+            //权限编辑弹出框
             const ShowDialogRolePermissionAction = (formObj) => {
-
-                let ActionUrl = CreateURL;
-                let formTitle = "添加权限";
+                let ActionUrl = CreateRolePermissionURL;
+                let formTitle = "添加角色权限";
                 let actionType = "POST"
-                let identification = "";
-                if (formObj != null && formObj != undefined) {
-                    ActionUrl = UpdateURL;
-                    formTitle = "编辑权限"
-                    actionType = "Put"
-                    identification = formObj.permissionId;
-                }
+
 
                 let index = layer.open({
                     type: 2,
                     title: formTitle,
-                    area: ['auto','60%'],
+                    area: ['auto', '60%'],
                     offset: '10%',
                     content: ShowRolePermissionDialogURL,
                     btn: ['确定', '取消'],
                     success: (layero, index) => {
                         var iframe = window['layui-layer-iframe' + index];
                         iframe.ShowDialog_Load(formObj);
-                       
+
                     },
                     yes: function (index, layero) {
                         let iframeWindow = window['layui-layer-iframe' + index]
@@ -214,13 +242,33 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
 
-                            let field = data.field; //获取提交的字段
+
+
+                            function recursionPermissionId(recursDatas, trees) {
+                                for (var index in recursDatas) {
+                                    if (recursDatas[index].id != null && recursDatas[index].id != undefined && recursDatas[index].id != "") {
+                                        trees.push(recursDatas[index].id);
+                                    }
+                                    else if (recursDatas[index].children.length > 0) {
+                                        recursionPermissionId(recursDatas[index].children, trees)
+                                    }
+                                }
+                            }
+
+
+                            var checkedDatas = iframeWindow.layui.tree.getChecked('demoId');
+                            debugger;
+                            var treePermissionIds = new Array();
+
+                            recursionPermissionId(checkedDatas, treePermissionIds);
+
+
+
+
 
                             let requestData = {
-                                RoleId: identification,
-                                RoleName: field.RoleName,
-                                RoleDescription: field.RoleDescription,
-                                IsValid: field.IsValid,
+                                RoleIds: formObj,
+                                PermissionIds: treePermissionIds,
                             };
                             console.log("请求字段;" + requestData);
                             //提交 Ajax 成功后，静态更新表格中的数据

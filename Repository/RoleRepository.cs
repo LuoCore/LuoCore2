@@ -27,27 +27,17 @@ namespace Repository
             ResultDto<ResponseRolePageDto> res = new ResultDto<ResponseRolePageDto>();
             try
             {
-                ResponseRolePageDto result = new ResponseRolePageDto();
+              
                 _FACTORY.GetDbContext((db) =>
                 {
                     int pageCount = 0;
-                    result.PageList=db.Queryable<Base_Role>()
+                    var roleList=db.Queryable<Base_Role>()
                     .WhereIF(!string.IsNullOrWhiteSpace(req.RoleId), x => x.RoleId.Equals(req.RoleId))
                     .WhereIF(!string.IsNullOrWhiteSpace(req.RoleName), x => x.RoleId.Equals(req.RoleName))
-                    .WhereIF(!Equals(req.IsValid), x => x.IsValid.Equals(req.IsValid))
-                    .Select(x=>new ResponseRoleDto() 
-                    {
-                        RoleId=x.RoleId,
-                        RoleName=x.RoleName,
-                        RoleDescription=x.RoleDescription,
-                        IsValid=x.IsValid,
-                        CreateName=x.CreateName,
-                        CreateTime=x.CreateTime
-                    })
+                    .WhereIF(!Equals(null,req.IsValid), x => x.IsValid.Equals(req.IsValid))
                     .ToPageList(req.PageIndex,req.PageSize,ref pageCount);
-                    result.PageCount = pageCount;
+                    res.Data = new ResponseRolePageDto(roleList, pageCount);
                     res.Status = true;
-                    res.Data = result;
                 });
             }
             catch (Exception ex)
@@ -105,5 +95,8 @@ namespace Repository
             }
             return res;
         }
+
+
+        
     }
 }

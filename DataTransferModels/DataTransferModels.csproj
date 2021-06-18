@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Folder Include="BaseRolePermission\Response\" />
-    <Folder Include="BaseUser\Response\" />
     <Folder Include="CreateEntity\Response\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EntitysModels\EntitysModels.csproj" />
   </ItemGroup>
 
 </Project>

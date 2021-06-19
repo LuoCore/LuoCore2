@@ -10,8 +10,8 @@ namespace DataTransferModels.BasePermission.Request
     {
         public RequestDeletePermissionByIdsDto(string username,string userInfo,List<string> permissionIds)
         {
-            this.UserName = username;
-            this.UserInfo = userInfo;
+            this.ActionUserName = username;
+            this.ActionUserInfo = userInfo;
             PermissionIds = permissionIds;
 
         }

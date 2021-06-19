@@ -12,8 +12,8 @@ namespace DataTransferModels.BaseRolePermission.Request
         {
             PermissionIds = permissionIds;
             RoleIds = roleIds;
-            UserName = username;
-            UserInfo = userinfo;
+            ActionUserName = username;
+            ActionUserInfo = userinfo;
         }
 
         public List<string> PermissionIds { get; protected set; }

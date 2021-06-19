@@ -16,5 +16,6 @@ namespace IRepository
         public ResultDto<ResponseRolePageDto> ReadRolePageList(RequestQueryRoleDto req);
         public ResultDto CreateRole(RequestCreateRoleDto req);
         public Base_Role ReadRoleById(string roleId);
+        public List<Base_Role> ReadValidRoleList();
     }
 }

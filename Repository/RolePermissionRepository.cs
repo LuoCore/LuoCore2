@@ -39,7 +39,7 @@ namespace Repository
                                     RolePermissionId = Guid.NewGuid()
                                 };
                                 db.Insertable<Base_RolePermission>(insetData).ExecuteCommand();
-                                _REPOSITORY.LogSave<Base_RolePermission>(db, EnumHelper.CURDEnum.创建, insetData, null, req.UserName, req.UserInfo).ExecuteCommand();
+                                _REPOSITORY.LogSave<Base_RolePermission>(db, EnumHelper.CURDEnum.创建, insetData, null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                             }
                         }
                     }

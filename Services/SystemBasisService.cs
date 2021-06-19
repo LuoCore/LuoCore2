@@ -16,9 +16,9 @@ using EntitysModels;
 
 namespace Services
 {
-    public class SystemBasisService : SqlSugarRepository<ISystemLogsRepository, IUserRepository, IPermissionRepository, IRoleRepository, IRolePermissionRepository>, ISystemBasisService
+    public class SystemBasisService : SqlSugarRepository<ISystemLogsRepository, IUserRepository, IPermissionRepository, IRoleRepository, IRolePermissionRepository, IUserRoleRepository>, ISystemBasisService
     {
-        public SystemBasisService(ISqlSugarFactory factory, ISystemLogsRepository repository, IUserRepository repository2, IPermissionRepository repository3, IRoleRepository repository4, IRolePermissionRepository repository5) : base(factory, repository, repository2, repository3, repository4, repository5)
+        public SystemBasisService(ISqlSugarFactory factory, ISystemLogsRepository repository, IUserRepository repository2, IPermissionRepository repository3, IRoleRepository repository4, IRolePermissionRepository repository5, IUserRoleRepository repository6) : base(factory, repository, repository2, repository3, repository4, repository5, repository6)
         {
         }
 
@@ -53,11 +53,49 @@ namespace Services
         }
 
 
-        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string roleId,string permissionId)
+        public Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetRoleSelectBox(string userId)
+        {
+            ResultVm<List<ViewModels.Layui.SelectBoxVm>> resSelects = new ResultVm<List<ViewModels.Layui.SelectBoxVm>>();
+
+            var result = _REPOSITORY4.ReadValidRoleList();
+            if (Equals(null, result))
+            {
+                resSelects.Status = false;
+                resSelects.Messages = "无数据";
+                return Task.FromResult(resSelects);
+            }
+
+            var userRoleResult= _REPOSITORY6.ReadUserRoleByUserId(userId);
+            resSelects.Data = new List<ViewModels.Layui.SelectBoxVm>();
+            foreach (var item in result)
+            {
+                var resData = new ViewModels.Layui.SelectBoxVm()
+                {
+                    disabled = !item.IsValid,
+                    Name = item.RoleName,
+                    value = item.RoleId
+                };
+                if (userRoleResult.Status && !Equals(null, userRoleResult.Data)) 
+                {
+                    if (userRoleResult.Data.Where(x => x.RoleId.Equals(item.RoleId)).Any()) 
+                    {
+                        resData.selected = true;
+                    }
+                }
+                resSelects.Data.Add(resData);
+            }
+
+            resSelects.Status = true;
+            return Task.FromResult(resSelects);
+        }
+
+
+
+        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string roleId, string permissionId)
         {
             ResultVm<List<ViewModels.Layui.TreeVm>> resTree = new ResultVm<List<ViewModels.Layui.TreeVm>>();
-            var result= _REPOSITORY3.ReadPermissionByParentId(permissionId);
-            if (result.Status) 
+            var result = _REPOSITORY3.ReadPermissionByParentId(permissionId);
+            if (result.Status)
             {
                 resTree.Data = new List<ViewModels.Layui.TreeVm>();
                 var rolePermissionList = _REPOSITORY5.ReadRolePermissionByRoleId(roleId);
@@ -67,7 +105,7 @@ namespace Services
                     treeData.disabled = !permission.IsValid;
                     treeData.title = permission.PermissionName;
                     treeData.id = permission.PermissionId;
-                    if (rolePermissionList.Where(x => x.PermissionId == permission.PermissionId).Any()) 
+                    if (rolePermissionList.Where(x => x.PermissionId == permission.PermissionId).Any())
                     {
                         treeData.@checked = true;
                     }
@@ -76,7 +114,7 @@ namespace Services
                     {
                         treeData.children = result2.Data;
                     }
-                    
+
                     resTree.Data.Add(treeData);
                     resTree.Status = true;
                 }
@@ -129,7 +167,7 @@ namespace Services
         public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req)
         {
             ResultVm res = new ResultVm();
-            var result = _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(req.UserName, req.UserInfo, Guid.NewGuid(), req.PermissionName, req.PermissionType.EnumToInt(), req.PermissionAction, req.PermissionParentId, req.IsValid));
+            var result = _REPOSITORY3.CreatePermission(new DataTransferModels.BasePermission.Request.RequestCreatePermissionDto(req.ActionUserName, req.ActionUserInfo, Guid.NewGuid(), req.PermissionName, req.PermissionType.EnumToInt(), req.PermissionAction, req.PermissionParentId, req.IsValid));
             if (Equals(null, result))
             {
                 res.Messages = "失败！未知异常。";
@@ -151,7 +189,7 @@ namespace Services
         public Task<ViewModels.ResultVm> UpdatePermissionById(RequestUpdatePermissionVm req)
         {
             ResultVm res = new ResultVm();
-            var result = _REPOSITORY3.UpdatePermissionById(new DataTransferModels.BasePermission.Request.RequestUpdatePermissionByIdDto(req.UserName, req.UserInfo, req.PermissionName, req.PermissionType, req.PermissionAction, req.PermissionParentId, req.IsValid), req.PermissionId);
+            var result = _REPOSITORY3.UpdatePermissionById(new DataTransferModels.BasePermission.Request.RequestUpdatePermissionByIdDto(req.ActionUserName, req.ActionUserInfo, req.PermissionName, req.PermissionType, req.PermissionAction, req.PermissionParentId, req.IsValid), req.PermissionId);
 
             if (Equals(null, result))
             {
@@ -173,7 +211,7 @@ namespace Services
         public Task<ViewModels.ResultVm> DeletePermissionByIds(RequestDeletePermissionVm req)
         {
             ResultVm res = new ResultVm();
-            var result = _REPOSITORY3.DeletePermissionByIds(new DataTransferModels.BasePermission.Request.RequestDeletePermissionByIdsDto(req.UserName, req.UserInfo, req.PermissionIds));
+            var result = _REPOSITORY3.DeletePermissionByIds(new DataTransferModels.BasePermission.Request.RequestDeletePermissionByIdsDto(req.ActionUserName, req.ActionUserInfo, req.PermissionIds));
 
             if (Equals(null, result))
             {
@@ -212,7 +250,7 @@ namespace Services
         {
             ResultVm res = new ResultVm();
             Guid gId = Guid.NewGuid();
-            var result = _REPOSITORY4.CreateRole(new RequestCreateRoleDto(gId, req.RoleName, req.RoleDescription, req.IsValid, _REPOSITORY.GetNowDateTime(), req.UserName, req.UserInfo));
+            var result = _REPOSITORY4.CreateRole(new RequestCreateRoleDto(gId, req.RoleName, req.RoleDescription, req.IsValid, _REPOSITORY.GetNowDateTime(), req.ActionUserName, req.ActionUserInfo));
 
             if (result.Status)
             {
@@ -232,7 +270,7 @@ namespace Services
         public Task<ResultVm> AddRolePermission(RequestAddRolePermissionVm req)
         {
             ResultVm res = new ResultVm();
-            var result = _REPOSITORY5.CreateRolePermission(new DataTransferModels.BaseRolePermission.Request.RequestCreateRolePermissionDto(req.PermissionIds, req.RoleIds, req.UserName, req.UserInfo));
+            var result = _REPOSITORY5.CreateRolePermission(new DataTransferModels.BaseRolePermission.Request.RequestCreateRolePermissionDto(req.PermissionIds, req.RoleIds, req.ActionUserName, req.ActionUserInfo));
 
             if (result.Status)
             {
@@ -253,7 +291,7 @@ namespace Services
         public Task<ViewModels.Layui.TableVm> GetUserTable(RequestGetUserVm req)
         {
             ViewModels.Layui.TableVm res = new ViewModels.Layui.TableVm();
-            var result = _REPOSITORY2.ReadUserPageList(new DataTransferModels.BaseUser.Request.RequestQueryUserDto(req.UserId,req.UserName,req.UserRealName,req.Email,req.Phone,req.Sex,req.IsValid,req.StartTime,req.EndTime,req.PageIndex,req.PageSize));
+            var result = _REPOSITORY2.ReadUserPageList(new DataTransferModels.BaseUser.Request.RequestQueryUserDto(req.UserId, req.UserName, req.UserRealName, req.Email, req.Phone, req.Sex, req.IsValid, req.StartTime, req.EndTime, req.PageIndex, req.PageSize));
             if (!result.Status || Equals(null, result.Data))
             {
                 res.code = -1;
@@ -263,6 +301,47 @@ namespace Services
             res.code = 0;
             res.data = result.Data.PageList;
             res.count = result.Data.PageCount;
+            return Task.FromResult(res);
+        }
+
+        public Task<ResultVm> UserCreate(RequestAddUserVm req)
+        {
+            ResultVm res = new ResultVm();
+            if (req.Password.Equals(req.PasswordVerify))
+            {
+                Guid gId = Guid.NewGuid();
+                var result = _REPOSITORY2.CreateUser(new DataTransferModels.BaseUser.Request.RequsetRegisteredUserDto(gId, req.UserName, req.UserRealName, req.Password, req.Email, req.Phone, req.Sex, _REPOSITORY.GetNowDateTime(), req.IsValid, req.ActionUserName, req.ActionUserInfo));
+                res.Status = result.Status;
+                if (res.Status)
+                {
+                    if (!string.IsNullOrWhiteSpace(req.RoleSelect))
+                    {
+                        string[] roleIds = req.RoleSelect.Split(new String[] { " ", "    ", ",", "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (roleIds.Length > 0)
+                        {
+                            List<string> listRoleId = new List<string>(roleIds);
+                            var roleResult = _REPOSITORY6.CreateUserRole(new DataTransferModels.BaseUserRole.Request.RequestCreateUserRoleDto(gId.ToString(), listRoleId, req.ActionUserName, req.ActionUserInfo));
+                            if (!roleResult.Status)
+                            {
+                                res.Messages += "角色添加失败！" + roleResult.Messages;
+                            }
+                        }
+                    }
+                }
+                else 
+                {
+                    res.Status = result.Status;
+                    res.Messages = result.Messages;
+                }
+                
+                
+            }
+            else
+            {
+                res.Status = false;
+                res.Messages = "两次密码不一致，请确认";
+            }
+
             return Task.FromResult(res);
         }
 

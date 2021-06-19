@@ -10,8 +10,8 @@ namespace DataTransferModels.BasePermission.Request
     {
         public RequestCreatePermissionDto(string username,string userInfo,Guid permissionId, string permissionName, int permissionType, string permissionAction, string permissionParentId, bool isValid)
         {
-            this.UserName = username;
-            UserInfo = userInfo;
+            this.ActionUserName = username;
+            ActionUserInfo = userInfo;
             PermissionId = permissionId;
             PermissionName = permissionName;
             PermissionType = permissionType;

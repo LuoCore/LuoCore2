@@ -110,11 +110,11 @@ namespace Repository
                         PermissionType = req.PermissionType,
                         PermissionAction = req.PermissionAction,
                         IsValid = req.IsValid,
-                        CreateName = req.UserName,
+                        CreateName = req.ActionUserName,
                         CreateTime = _REPOSITORY.GetNowDateTime()
                     };
                     res.Status = db.Insertable<Base_Permission>(insertData).ExecuteCommandIdentityIntoEntity();
-                    _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.创建, insertData.ToJson(), null, req.UserName, req.UserInfo).ExecuteCommand();
+                    _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.创建, insertData.ToJson(), null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                 });
             }
             catch (Exception ex)
@@ -142,7 +142,7 @@ namespace Repository
                         IsValid = req.IsValid,
                     };
                     res.Status = db.Updateable<Base_Permission>(data).Where(x => x.PermissionId.Equals(permissionId)).ExecuteCommandHasChange();
-                    _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.更新, data.ToJson(), udpateData.ToJson(), req.UserName, req.UserInfo).ExecuteCommand();
+                    _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.更新, data.ToJson(), udpateData.ToJson(), req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                 });
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace Repository
                     {
                         var deleteData = db.Queryable<Base_Permission>().Where(x => x.PermissionId.Equals(permissionId)).First();
                         db.Deleteable<Base_Permission>().Where(x => x.PermissionId.Equals(permissionId)).ExecuteCommand();
-                        _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.删除, deleteData.ToJson(), null, req.UserName, req.UserInfo).ExecuteCommand();
+                        _REPOSITORY.LogSave<Base_Permission>(db, EnumHelper.CURDEnum.删除, deleteData.ToJson(), null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                     }
                 });
                 res.Status = true;

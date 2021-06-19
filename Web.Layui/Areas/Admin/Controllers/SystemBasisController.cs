@@ -54,16 +54,16 @@ namespace Web.Layui.Areas.Admin.Controllers
         public async Task<IActionResult> PermissionCreateAsync(ViewModels.SystemBasis.Request.RequestAddPermissionVm req)
         {
 
-            req.UserInfo = User.FindFirst("UserDataInfo").Value;
-            req.UserName = User.Identity.Name;
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
             ResultVm res = await _SERVICE.AddPermission(req);
             return Json(res);
         }
         [HttpPut]
         public async Task<IActionResult> PermissionUpdateByIdAsync(ViewModels.SystemBasis.Request.RequestUpdatePermissionVm req)
         {
-            req.UserInfo = User.FindFirst("UserDataInfo").Value;
-            req.UserName = User.Identity.Name;
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
             ResultVm res = await _SERVICE.UpdatePermissionById(req);
             return Json(res);
         }
@@ -71,8 +71,8 @@ namespace Web.Layui.Areas.Admin.Controllers
         [HttpDelete]
         public async Task<IActionResult> PermissionDeleteByIdsAsync(ViewModels.SystemBasis.Request.RequestDeletePermissionVm req)
         {
-            req.UserInfo = User.FindFirst("UserDataInfo").Value;
-            req.UserName = User.Identity.Name;
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
             ResultVm res = await _SERVICE.DeletePermissionByIds(req);
             return Json(res);
         }
@@ -97,8 +97,8 @@ namespace Web.Layui.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> RoleCreate(RequestAddRoleVm req)
         {
-            req.UserInfo = User.FindFirst("UserDataInfo").Value;
-            req.UserName = User.Identity.Name;
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
             ResultVm res = await _SERVICE.AddRole(req);
             return Json(res);
         }
@@ -111,8 +111,8 @@ namespace Web.Layui.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> RolePermissionCreate(RequestAddRolePermissionVm req)
         {
-            req.UserInfo = User.FindFirst("UserDataInfo").Value;
-            req.UserName = User.Identity.Name;
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
             ResultVm res = await _SERVICE.AddRolePermission(req);
             return Json(res);
         }
@@ -135,8 +135,8 @@ namespace Web.Layui.Areas.Admin.Controllers
 
         public async Task<IActionResult> AddRolePermissionAsync(RequestAddRolePermissionVm req)
         {
-            req.UserInfo = User.FindFirst("UserDataInfo").Value;
-            req.UserName = User.Identity.Name;
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
             var result = await _SERVICE.AddRolePermission(req);
             return Json(result);
         }
@@ -155,5 +155,24 @@ namespace Web.Layui.Areas.Admin.Controllers
         }
 
 
+        public IActionResult UserDialog() 
+        {
+            return View();
+        }
+
+
+        public async Task<IActionResult> GetValidRoleSelectBoxAsync(string userId)
+        {
+            var res = await _SERVICE.GetRoleSelectBox(userId);
+            return Json(res);
+        }
+
+        public async Task<IActionResult> UserCreateAsync(RequestAddUserVm req)
+        {
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
+            var res = await _SERVICE.UserCreate(req);
+            return Json(res);
+        }
     }
 }

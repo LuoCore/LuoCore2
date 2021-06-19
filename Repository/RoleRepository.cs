@@ -62,11 +62,11 @@ namespace Repository
                         RoleName = req.RoleName,
                         RoleDescription = req.RoleDescription,
                         CreateTime = req.CreateTime,
-                        CreateName = req.UserName,
+                        CreateName = req.ActionUserName,
                         IsValid = req.IsValid
                     };
                     Base_Role roleData = db.Insertable<Base_Role>(insetData).ExecuteReturnEntity();
-                    _REPOSITORY.LogSave<Base_Role>(db, EnumHelper.CURDEnum.创建, insetData, null, req.UserName, req.UserInfo).ExecuteCommand();
+                    _REPOSITORY.LogSave<Base_Role>(db, EnumHelper.CURDEnum.创建, insetData, null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                 });
                 res.Status = true;
             }
@@ -97,6 +97,22 @@ namespace Repository
         }
 
 
-        
+        public List<Base_Role> ReadValidRoleList()
+        {
+            List<Base_Role> res = new List<Base_Role>();
+            try
+            {
+                _FACTORY.GetDbContextTran((db) =>
+                {
+                    res = db.Queryable<Base_Role>().Where(x => x.IsValid.Equals(true)).ToList();
+                });
+            }
+            catch (Exception ex)
+            {
+                res = null;
+            }
+            return res;
+        }
+
     }
 }

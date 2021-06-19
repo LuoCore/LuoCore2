@@ -73,12 +73,12 @@ namespace Repository
                         Phone = req.Phone,
                         Email = req.Email,
                         Sex = req.Sex,
-                        CreateName = req.CreateName,
+                        CreateName = req.ActionUserName,
                         CreateTime = req.CreateTime,
                         IsValid = req.IsValid
                     };
                     db.Insertable<Base_User>(userData).IgnoreColumns(ignoreNullColumn: true).ExecuteCommandIdentityIntoEntity();
-                    _REPOSITORY.LogSave<Base_User>(db,CURDEnum.创建, userData,null,Environment.UserName,string.Empty).ExecuteCommand();
+                    _REPOSITORY.LogSave<Base_User>(db,CURDEnum.创建, userData,null,req.ActionUserName,req.ActionUserInfo).ExecuteCommand();
                 });
                 res.Status = true;
             }

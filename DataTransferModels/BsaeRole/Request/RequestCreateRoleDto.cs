@@ -15,8 +15,8 @@ namespace DataTransferModels.BsaeRole.Request
             this.RoleDescription = roleDescription;
             IsValid = isValid;
             CreateTime = createTime;
-            UserName = username;
-            UserInfo = userinfo;
+            ActionUserName = username;
+            ActionUserInfo = userinfo;
         }
 
         public Guid RoleId { get; protected set; }

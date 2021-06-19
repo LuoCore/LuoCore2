@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="BaseRolePermission\Response\" />
+    <Folder Include="BaseUserRole\Response\" />
     <Folder Include="CreateEntity\Response\" />
   </ItemGroup>
 

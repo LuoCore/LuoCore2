@@ -19,7 +19,7 @@
   </div>
  </div>
 
- <div class="layui-form-item">
+ <div class="layui-form-item" pane>
   <label class="layui-form-label">是否有效</label>
   <div class="layui-input-inline">
    <input name="IsValid" value="true" type="checkbox" lay-filter="switch" lay-skin="switch" lay-text="是|否" checked />
@@ -39,7 +39,7 @@
 
 
 	function ShowDialog_Load(formobj) {
-		layui.use(['jquery', 'form', 'xmSelect'], function () {
+		layui.use(['jquery', 'form'], function () {
 			var $ = layui.$,
 			form = layui.form;
 			if (formobj != null && formobj != undefined && formobj != "") {

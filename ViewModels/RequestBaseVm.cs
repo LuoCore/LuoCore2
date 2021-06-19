@@ -8,7 +8,7 @@ namespace ViewModels
 {
     public class RequestBaseVm
     {
-        public string UserName { get;  set; }
-        public string UserInfo { get;  set; }
+        public string ActionUserName { get;  set; }
+        public string ActionUserInfo { get;  set; }
     }
 }

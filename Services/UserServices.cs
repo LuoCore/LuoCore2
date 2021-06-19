@@ -64,7 +64,7 @@ namespace Services
                 return Task.FromResult(res);
             }
             
-            var result = _REPOSITORY2.CreateUser(new DataTransferModels.BaseUser.Request.RequsetRegisteredUserDto(Guid.NewGuid(),req.UserName,req.RealName,req.Password,req.Email,req.Phone,req.Sex,_REPOSITORY.GetNowDateTime(),req.CreateName,true));
+            var result = _REPOSITORY2.CreateUser(new DataTransferModels.BaseUser.Request.RequsetRegisteredUserDto(Guid.NewGuid(),req.UserName,req.RealName,req.Password,req.Email,req.Phone,req.Sex,_REPOSITORY.GetNowDateTime(),true,System.Environment.UserName,""));
             res.Messages = result.Messages;
             res.Status = result.Status;
             return Task.FromResult(res);

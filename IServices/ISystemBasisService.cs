@@ -20,5 +20,7 @@ namespace IServices
         public Task<ResultVm> AddRole(RequestAddRoleVm req);
         public Task<ResultVm> AddRolePermission(RequestAddRolePermissionVm req);
         public Task<ViewModels.Layui.TableVm> GetUserTable(RequestGetUserVm req);
+        public Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetRoleSelectBox(string userId);
+        public Task<ResultVm> UserCreate(RequestAddUserVm req);
     }
 }

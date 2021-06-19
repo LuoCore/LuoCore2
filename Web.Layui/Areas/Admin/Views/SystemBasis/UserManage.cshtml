@@ -17,7 +17,6 @@
                 <button class="layui-btn layuiadmin-btn-event" data-type="query">查询</button>
                 <button class="layui-btn layuiadmin-btn-event layui-btn-danger" data-type="delete">删除</button>
                 <button class="layui-btn layuiadmin-btn-event" data-type="add">添加</button>
-                <button class="layui-btn layuiadmin-btn-event" data-type="editRole">角色</button>
             </div>
 
             <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
@@ -53,6 +52,9 @@
 
 
             let GetUserInfoTableURL = "/Admin/SystemBasis/GetUserInfo";
+            let ShowUserDialogURL = "/Admin/SystemBasis/UserDialog";
+            let CreateUserURL = "/Admin/SystemBasis/UserCreate";
+            let UpdateUserURL = "/Admin/SystemBasis/UserDialog";
 
             // 字段配置
             const tableCols = [[
@@ -76,6 +78,19 @@
                 page: true
             });
 
+            table.on('tool(dataTable)', function (obj) {
+
+                switch (obj.event) {
+                    case 'edit':
+                        ShowUserDialogAction(obj.data);
+                        break;
+                    case 'del':
+                        let Ids = new Array([obj.data.roleId]);
+                        DeleteAction(Ids);
+                        break;
+                    
+                };
+            });
 
 
             //顶部按钮事件 Start
@@ -111,20 +126,83 @@
                     DeleteAction(permissionIds);
                 },
                 add: function () {
-                    ShowDialogAction();
-                },
-                editRolePermission: function () {
-                    var checkStatus = table.checkStatus('dataTable')
-                        , checkDatas = checkStatus.data;
-                    let roleIdCheckArray = new Array();
-                    for (var index in checkDatas) {
-                        roleIdCheckArray.push(checkDatas[index].roleId);
-                    }
-
-                    ShowDialogRolePermissionAction(roleIdCheckArray);
+                    ShowUserDialogAction();
                 }
             }
             //顶部按钮事件 End
+
+
+            function ShowUserDialogAction(formObj)
+            {
+                let ActionUrl = CreateUserURL;
+                let formTitle = "添加";
+                let actionType = "POST"
+                if (formObj != null && formObj != undefined) {
+                    ActionUrl = UpdateUserURL;
+                    formTitle = "编辑"
+                    actionType = "Put"
+                }
+
+                let index = layer.open({
+                    type: 2,
+                    title: formTitle,
+                    area: ['55%','60%'],
+                    content: ShowUserDialogURL,
+                    btn: ['确定', '取消'],
+                    success: (layero, index) => {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.ShowDialog_Load(formObj);
+                    },
+                    yes: function (index, layero) {
+                        let iframeWindow = window['layui-layer-iframe' + index]
+                            , submit = layero.find('iframe').contents().find("#luo-submit");
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+                            debugger;
+                            let field = data.field; //获取提交的字段
+
+                            let requestData = {
+                                UserName: field.UserName,
+                                UserRealName: field.UserRealName,
+                                Email: field.Email,
+                                Phone: field.Phone,
+                                Sex: field.Sex,
+                                Password: field.Password,
+                                PasswordVerify: field.PasswordVerify,
+                                IsValid: field.IsValid,
+                                RoleSelect: field.RoleSelect,
+                            };
+                            console.log("请求字段;" + requestData);
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                type: actionType,
+                                url: ActionUrl,
+                                data: requestData,
+                                dataType: "json",
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.status) {
+                                        table.reload('dataTable');
+                                        layer.close(index); //关闭弹层
+                                    }
+                                    else {
+                                        layer.alert(result.messages);
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert("发生错误：" + jqXHR.status);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+
+        
+
 
         });
     </script>

@@ -15,5 +15,6 @@ namespace IRepository
         public ResultDto CreateRolePermission(RequestCreateRolePermissionDto req);
         public List<Base_RolePermission> ReadRolePermissionByRoleId(string roleId);
         public List<Base_RolePermission> ReadRolePermissionAll();
+        public List<Base_RolePermission> ReadRolePermissionByRoleIds(List<string> roleIds);
     }
 }

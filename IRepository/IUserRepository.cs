@@ -1,6 +1,7 @@
 ﻿using DataTransferModels;
 using DataTransferModels.BaseUser.Request;
 using DataTransferModels.BaseUser.Response;
+using EntitysModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace IRepository
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public ResultDto ReadUserByLogin(RequsetLoginDto req);
+        public ResultDto<Base_User> ReadUserByLogin(RequsetLoginDto req);
         /// <summary>
         /// 创建用户
         /// </summary>
@@ -26,5 +27,7 @@ namespace IRepository
         public ResultDto CreateUser(RequsetRegisteredUserDto req);
 
         public ResultDto<ResponseUserPageDto> ReadUserPageList(RequestQueryUserDto req);
+        public ResultDto UpdateUserById(RequestUpdateUserDto req);
+        public ResultDto<Base_User> ReadUserById(string userId);
     }
 }

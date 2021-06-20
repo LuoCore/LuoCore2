@@ -174,5 +174,13 @@ namespace Web.Layui.Areas.Admin.Controllers
             var res = await _SERVICE.UserCreate(req);
             return Json(res);
         }
+
+        public async Task<IActionResult> UserUpdateByIdAsync(RequestUpdateUserVm req)
+        {
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
+            var res = await _SERVICE.UserUpdateById(req);
+            return Json(res);
+        }
     }
 }

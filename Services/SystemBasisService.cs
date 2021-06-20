@@ -65,7 +65,7 @@ namespace Services
                 return Task.FromResult(resSelects);
             }
 
-            var userRoleResult= _REPOSITORY6.ReadUserRoleByUserId(userId);
+            var userRoleResult = _REPOSITORY6.ReadUserRoleByUserId(userId);
             resSelects.Data = new List<ViewModels.Layui.SelectBoxVm>();
             foreach (var item in result)
             {
@@ -75,9 +75,9 @@ namespace Services
                     Name = item.RoleName,
                     value = item.RoleId
                 };
-                if (userRoleResult.Status && !Equals(null, userRoleResult.Data)) 
+                if (userRoleResult.Status && !Equals(null, userRoleResult.Data))
                 {
-                    if (userRoleResult.Data.Where(x => x.RoleId.Equals(item.RoleId)).Any()) 
+                    if (userRoleResult.Data.Where(x => x.RoleId.Equals(item.RoleId)).Any())
                     {
                         resData.selected = true;
                     }
@@ -328,18 +328,74 @@ namespace Services
                         }
                     }
                 }
-                else 
+                else
                 {
                     res.Status = result.Status;
                     res.Messages = result.Messages;
                 }
-                
-                
+
+
             }
             else
             {
                 res.Status = false;
                 res.Messages = "两次密码不一致，请确认";
+            }
+
+            return Task.FromResult(res);
+        }
+
+
+        public Task<ResultVm> UserUpdateById(RequestUpdateUserVm req)
+        {
+            ResultVm res = new ResultVm();
+
+            var userInfoResult = _REPOSITORY2.ReadUserById(req.UserId);
+            if (!userInfoResult.Status)
+            {
+                res.Status = false;
+                res.Messages = "用户不存在无法修改，请确认";
+                return Task.FromResult(res);
+            }
+            var userInfo = userInfoResult.Data;
+            if (!string.IsNullOrWhiteSpace(req.PasswordVerify))
+            {
+                if (string.IsNullOrWhiteSpace(req.Password))
+                {
+                    res.Status = false;
+                    res.Messages = "请输入原密码！";
+                    return Task.FromResult(res);
+                }
+                if (!req.Password.Equals(userInfo.Password))
+                {
+                    res.Status = false;
+                    res.Messages = "用户原密码错误，请确认";
+                    return Task.FromResult(res);
+                }
+            }
+            var result = _REPOSITORY2.UpdateUserById(new DataTransferModels.BaseUser.Request.RequestUpdateUserDto(userInfo.UserId, req.UserName, req.UserRealName, req.PasswordVerify, req.Email, req.Phone, req.Sex, req.IsValid, req.ActionUserName, req.ActionUserInfo));
+
+            res.Status = result.Status;
+            if (res.Status)
+            {
+                if (!string.IsNullOrWhiteSpace(req.RoleSelect))
+                {
+                    string[] roleIds = req.RoleSelect.Split(new String[] { " ", "    ", ",", "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (roleIds.Length > 0)
+                    {
+                        List<string> listRoleId = new List<string>(roleIds);
+                        var roleResult = _REPOSITORY6.CreateUserRole(new DataTransferModels.BaseUserRole.Request.RequestCreateUserRoleDto(userInfo.UserId, listRoleId, req.ActionUserName, req.ActionUserInfo));
+                        if (!roleResult.Status)
+                        {
+                            res.Messages += "角色添加失败！" + roleResult.Messages;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                res.Status = result.Status;
+                res.Messages = result.Messages;
             }
 
             return Task.FromResult(res);

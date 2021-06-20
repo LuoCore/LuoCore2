@@ -55,8 +55,8 @@ namespace Web.Layui.Areas.Admin.Controllers
             {
                 return Json(result);
             }
-            EntitysModels.Base_User user = result.Data;
-            HttpContext.CookieAuthenticationUserIdentity(user.UserId, user.UserName, user.ToJson(), "");
+            EntitysModels.Base_User user = result.Data.UserInfo;
+            HttpContext.CookieAuthenticationUserIdentity(user.UserId, user.UserName, user.ToJson(), result.Data.PermissionInfo.ToJson());
             return Json(result);
         }
 

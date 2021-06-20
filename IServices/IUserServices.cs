@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ViewModels;
 using ViewModels.User.Request;
+using ViewModels.User.Response;
 
 namespace IServices
 {
@@ -13,7 +14,7 @@ namespace IServices
         /// <summary>
         /// 用户登录
         /// </summary>
-        public Task<ResultVm> LoginUser(RequestUserLoginVm req);
+        public Task<ResultVm<ResponseUserLoginVM>> LoginUser(RequestUserLoginVm req);
         /// <summary>
         /// 注册用户
         /// </summary>

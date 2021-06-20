@@ -9,12 +9,13 @@ using Utility.Factory;
 using Utility.Repository;
 using ViewModels;
 using ViewModels.User.Request;
+using ViewModels.User.Response;
 
 namespace Services
 {
-    public class UserServices : SqlSugarRepository<ISystemLogsRepository,IUserRepository>, IUserServices
+    public class UserServices : SqlSugarRepository<ISystemLogsRepository,IUserRepository,IPermissionRepository>, IUserServices
     {
-        public UserServices(ISqlSugarFactory factory, ISystemLogsRepository repository, IUserRepository repository2) : base(factory, repository, repository2)
+        public UserServices(ISqlSugarFactory factory, ISystemLogsRepository repository, IUserRepository repository2,IPermissionRepository repository3) : base(factory, repository, repository2,repository3)
         {
         }
 
@@ -22,9 +23,9 @@ namespace Services
         /// <summary>
         /// 用户登录
         /// </summary>
-        public Task<ResultVm> LoginUser(RequestUserLoginVm req) 
+        public Task<ResultVm<ResponseUserLoginVM>> LoginUser(RequestUserLoginVm req) 
         {
-            ResultVm res = new ResultVm();
+            ResultVm<ResponseUserLoginVM> res = new ResultVm<ResponseUserLoginVM>();
             if (!req.SecurityCode.Equals(req.VerifiCode)) 
             {
                 res.Messages = "验证码错误！";
@@ -32,13 +33,21 @@ namespace Services
                 return Task.FromResult(res);
             }
             var result= _REPOSITORY2.ReadUserByLogin(new DataTransferModels.BaseUser.Request.RequsetLoginDto(req.UserName,req.Password));
-            res.Data = result.Data;
-            if (Equals(null, res.Data)) 
+           
+            if (Equals(null, result.Data)) 
             {
                 res.Messages = "用户名或密码错误！";
                 res.Status = false;
                 return Task.FromResult(res);
             }
+            res.Data = new ResponseUserLoginVM();
+            res.Data.UserInfo = result.Data;
+            var userRolesPermission= _REPOSITORY3.ReadPermissionsByUserId(res.Data.UserInfo.UserId);
+            if (!Equals(null, userRolesPermission))
+            {
+                res.Data.PermissionInfo = userRolesPermission;
+            }
+
             res.Messages = "登录成功！";
             res.Status = true;
             

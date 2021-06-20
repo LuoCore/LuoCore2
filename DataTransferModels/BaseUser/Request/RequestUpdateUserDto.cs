@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataTransferModels.BaseUser.Request
 {
-   public class RequsetRegisteredUserDto:RequestBaseDto
+    public class RequestUpdateUserDto:RequestBaseDto
     {
-        public RequsetRegisteredUserDto(Guid userId, string userName, string userRealName, string password, string email, string phone, int sex, DateTime createTime, bool isValid, string actionUserName, string actionUserInfo)
+        public RequestUpdateUserDto(string userId, string userName, string userRealName, string password, string email, string phone, int sex,  bool isValid,string actionUserName,string actionUserInfo)
         {
             UserId = userId;
             UserName = userName;
@@ -17,20 +17,18 @@ namespace DataTransferModels.BaseUser.Request
             Email = email;
             Phone = phone;
             Sex = sex;
-            CreateTime = createTime;
-            ActionUserName = actionUserName;
-            ActionUserInfo = actionUserInfo;
             IsValid = isValid;
+            this.ActionUserName = actionUserName;
+            this.ActionUserInfo = actionUserInfo;
         }
-        
-        public Guid UserId { get;protected set; }
+
+        public string UserId { get; protected set; }
         public string UserName { get; protected set; }
         public string UserRealName { get; protected set; }
         public string Password { get; protected set; }
         public string Email { get; protected set; }
         public string Phone { get; protected set; }
         public int Sex { get; protected set; }
-        public DateTime CreateTime { get; protected set; }
         public bool IsValid { get; protected set; }
     }
 }

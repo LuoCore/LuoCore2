@@ -21,6 +21,9 @@ namespace Web.Layui.Areas.Admin.ViewComponents
         /// <returns></returns>
         public IViewComponentResult Invoke()
         {
+            User.
+            //var dd= User.FindFirst(User.Identity.).Value;
+            var dddd= User.Identity.Name;
             return View();
         }
     }

@@ -54,7 +54,7 @@
             let GetUserInfoTableURL = "/Admin/SystemBasis/GetUserInfo";
             let ShowUserDialogURL = "/Admin/SystemBasis/UserDialog";
             let CreateUserURL = "/Admin/SystemBasis/UserCreate";
-            let UpdateUserURL = "/Admin/SystemBasis/UserDialog";
+            let UpdateUserURL = "/Admin/SystemBasis/UserUpdateById";
 
             // 字段配置
             const tableCols = [[
@@ -134,13 +134,16 @@
 
             function ShowUserDialogAction(formObj)
             {
+                debugger;
                 let ActionUrl = CreateUserURL;
                 let formTitle = "添加";
-                let actionType = "POST"
+                let actionType = "POST";
+                let identifyId = "";
                 if (formObj != null && formObj != undefined) {
                     ActionUrl = UpdateUserURL;
-                    formTitle = "编辑"
-                    actionType = "Put"
+                    formTitle = "编辑";
+                    actionType = "Put";
+                    identifyId = formObj.userId;
                 }
 
                 let index = layer.open({
@@ -164,6 +167,7 @@
                             let field = data.field; //获取提交的字段
 
                             let requestData = {
+                                UserId: identifyId,
                                 UserName: field.UserName,
                                 UserRealName: field.UserRealName,
                                 Email: field.Email,

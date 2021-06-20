@@ -22,5 +22,6 @@ namespace IServices
         public Task<ViewModels.Layui.TableVm> GetUserTable(RequestGetUserVm req);
         public Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetRoleSelectBox(string userId);
         public Task<ResultVm> UserCreate(RequestAddUserVm req);
+        public Task<ResultVm> UserUpdateById(RequestUpdateUserVm req);
     }
 }

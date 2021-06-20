@@ -26,9 +26,9 @@ namespace Repository
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public ResultDto ReadUserByLogin(RequsetLoginDto req)
+        public ResultDto<Base_User> ReadUserByLogin(RequsetLoginDto req)
         {
-            ResultDto res = new ResultDto();
+            ResultDto<Base_User> res = new ResultDto<Base_User>();
             try
             {
                 _FACTORY.GetDbContext((db) =>
@@ -48,8 +48,27 @@ namespace Repository
         }
 
 
+        public ResultDto<Base_User> ReadUserById(string userId)
+        {
+            ResultDto<Base_User> res = new ResultDto<Base_User>();
+            try
+            {
+                _FACTORY.GetDbContext((db) =>
+                {
+                    res.Status = true;
+                    res.Data = db.Queryable<Base_User>()
+                    .Where(x => x.UserId.Equals(userId))
+                    .First();
+                });
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+        }
 
-      
 
 
         /// <summary>
@@ -90,6 +109,56 @@ namespace Repository
             return res;
         }
 
+
+        public ResultDto UpdateUserById(RequestUpdateUserDto req)
+        {
+            ResultDto res = new ResultDto();
+            try
+            {
+                _FACTORY.GetDbContextTran((db) =>
+                {
+                    var userInfo = db.Queryable<Base_User>().Where(x => x.UserId.Equals(req.UserId)).First();
+
+
+                    if (string.IsNullOrWhiteSpace(req.Password))
+                    {
+                        var updateUserData = new 
+                        {
+                            UserName = req.UserName,
+                            UserRealName = req.UserRealName,
+                            Phone = req.Phone,
+                            Email = req.Email,
+                            Sex = req.Sex,
+                            IsValid = req.IsValid
+                        };
+                        db.Updateable<Base_User>(updateUserData).Where(x => x.UserId.Equals(req.UserId)).ExecuteCommand();
+                        _REPOSITORY.LogSave<Base_User>(db, CURDEnum.更新, updateUserData, userInfo, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
+                    }
+                    else 
+                    {
+                        var updateUserData = new 
+                        {
+                            UserName = req.UserName,
+                            UserRealName = req.UserRealName,
+                            Phone = req.Phone,
+                            Email = req.Email,
+                            Sex = req.Sex,
+                            IsValid = req.IsValid,
+                            Password = req.Password
+                        };
+                        db.Updateable<Base_User>(updateUserData).Where(x => x.UserId.Equals(req.UserId)).ExecuteCommand();
+                        _REPOSITORY.LogSave<Base_User>(db, CURDEnum.更新, updateUserData, userInfo, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
+                    }
+                });
+                res.Status = true;
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+        }
 
         public ResultDto<ResponseUserPageDto> ReadUserPageList(RequestQueryUserDto req)
         {

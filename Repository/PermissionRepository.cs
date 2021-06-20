@@ -47,7 +47,27 @@ namespace Repository
             return res;
         }
 
-   
+
+        
+
+
+        public List<Base_Permission> ReadPermissionsByUserId(string userId) 
+        {
+            List<Base_Permission> res = new List<Base_Permission>();
+            _FACTORY.GetDbContext((db) =>
+            {
+                res = db.Queryable<Base_Permission,Base_RolePermission,Base_UserRole>
+                ((p,rp,ur)=> 
+                    new JoinQueryInfos(
+                        JoinType.Left, p.PermissionId == rp.PermissionId,
+                        JoinType.Left, rp.RoleId == ur.RoleId))
+                .Where((p, rp, ur) =>p.IsValid==true)
+                .Where((p, rp, ur) => ur.UserId== userId)
+                .ToList();
+            });
+            return res;
+        }
+
 
 
 

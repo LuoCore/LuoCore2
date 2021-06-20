@@ -28,19 +28,19 @@ namespace Repository
                     foreach (var roleid in req.RoleIds)
                     {
                         var rolePermissionList= db.Queryable<Base_RolePermission>().Where(x => x.RoleId.Equals(roleid)).ToList();
+                        db.Deleteable<Base_RolePermission>().Where(x => x.RoleId.Equals(roleid)).ExecuteCommand();
+                        _REPOSITORY.LogSave<Base_RolePermission>(db, EnumHelper.CURDEnum.删除, null, rolePermissionList, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
+
                         foreach (var permissionid in req.PermissionIds)
                         {
-                            if (!rolePermissionList.Where(x => x.PermissionId.Equals(permissionid)).Any()) 
+                            var insetData = new
                             {
-                                var insetData = new
-                                {
-                                    PermissionId = permissionid,
-                                    RoleId = roleid,
-                                    RolePermissionId = Guid.NewGuid()
-                                };
-                                db.Insertable<Base_RolePermission>(insetData).ExecuteCommand();
-                                _REPOSITORY.LogSave<Base_RolePermission>(db, EnumHelper.CURDEnum.创建, insetData, null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
-                            }
+                                PermissionId = permissionid,
+                                RoleId = roleid,
+                                RolePermissionId = Guid.NewGuid()
+                            };
+                            db.Insertable<Base_RolePermission>(insetData).ExecuteCommand();
+                            _REPOSITORY.LogSave<Base_RolePermission>(db, EnumHelper.CURDEnum.创建, insetData, null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                         }
                     }
                 });
@@ -94,6 +94,25 @@ namespace Repository
 
         }
 
-       
+
+        public List<Base_RolePermission> ReadRolePermissionByRoleIds(List<string> roleIds)
+        {
+            List<Base_RolePermission> res = new List<Base_RolePermission>();
+            try
+            {
+                _FACTORY.GetDbContext((db) =>
+                {
+                    res = db.Queryable<Base_RolePermission>().Where(x => roleIds.Contains(x.RoleId)).ToList();
+
+                });
+
+            }
+            catch (Exception ex)
+            {
+                res = null;
+            }
+            return res;
+        }
+
     }
 }

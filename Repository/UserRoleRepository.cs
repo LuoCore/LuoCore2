@@ -26,19 +26,18 @@ namespace Repository
                 _FACTORY.GetDbContextTran((db) =>
                 {
                     var userRoleInfos= db.Queryable<Base_UserRole>().Where(x => x.UserId.Equals(req.UserId)).ToList();
+                    db.Deleteable<Base_UserRole>().Where(x => x.UserId.Equals(req.UserId)).ExecuteCommand();
+                    _REPOSITORY.LogSave<Base_UserRole>(db, EnumHelper.CURDEnum.创建, null, userRoleInfos, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                     foreach (var roleid in req.RoleIds)
                     {
-                        if (!userRoleInfos.Where(x => x.RoleId.Equals(roleid)).Any())
+                        var insetData = new
                         {
-                            var insetData = new
-                            {
-                               UserId=req.UserId,
-                               RoleId=roleid,
-                               UserRoleId=Guid.NewGuid()
-                            };
-                            db.Insertable<Base_UserRole>(insetData).ExecuteCommand();
-                            _REPOSITORY.LogSave<Base_UserRole>(db, EnumHelper.CURDEnum.创建, insetData, null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
-                        }
+                            UserId = req.UserId,
+                            RoleId = roleid,
+                            UserRoleId = Guid.NewGuid()
+                        };
+                        db.Insertable<Base_UserRole>(insetData).ExecuteCommand();
+                        _REPOSITORY.LogSave<Base_UserRole>(db, EnumHelper.CURDEnum.创建, insetData, null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                     }
                 });
                 res.Status = true;

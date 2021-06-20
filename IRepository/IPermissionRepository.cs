@@ -24,5 +24,6 @@ namespace IRepository
         public ResultDto CreatePermission(RequestCreatePermissionDto req);
         public ResultDto UpdatePermissionById(RequestUpdatePermissionByIdDto req, string permissionId);
         public ResultDto DeletePermissionByIds(RequestDeletePermissionByIdsDto req);
+        public List<Base_Permission> ReadPermissionsByUserId(string userId);
     }
 }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CrossCutting\CrossCutting.csproj" />
+    <ProjectReference Include="..\EntitysModels\EntitysModels.csproj" />
     <ProjectReference Include="..\IServices\IServices.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />

@@ -1,4 +1,7 @@
 ﻿
+@using EntitysModels
+@model List<EntitysModels.Base_Permission>
+ 
 <div class="layui-side layui-side-menu">
     <div class="layui-side-scroll">
 
@@ -7,6 +10,41 @@
         </div>
 
         <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+
+
+    
+
+      
+            @foreach(var m in Model)
+            {
+                <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                <a href="javascript:;" lay-tips="@m.PermissionName" lay-direction="2">
+                    <i class="layui-icon layui-icon-home"></i>
+                    <cite>@m.PermissionName</cite>
+                </a>
+                @{
+                    
+                }
+                @if()
+                <dl class="layui-nav-child">
+                    <dd data-name="console" class="layui-this">
+                        <a lay-href="/Admin/Main/Welcome">欢迎页</a>
+                    </dd>
+
+                    <dd data-name="console">
+                        <a lay-href="/Admin/SystemBasis/PermissionManage">权限配置</a>
+                    </dd>
+                    <dd data-name="console">
+                        <a lay-href="/Admin/SystemBasis/RoleManage">角色管理</a>
+                    </dd>
+                    <dd data-name="console">
+                        <a lay-href="/Admin/SystemBasis/UserManage">用户管理</a>
+                    </dd>
+                </dl>
+            </li>
+
+            }
+
             <li data-name="home" class="layui-nav-item layui-nav-itemed">
                 <a href="javascript:;" lay-tips="主页" lay-direction="2">
                     <i class="layui-icon layui-icon-home"></i>

@@ -8,29 +8,7 @@
             <span>layuiAdmin</span>
         </div>
 
-        <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-            <li data-name="home" class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;" lay-tips="主页" lay-direction="2">
-                    <i class="layui-icon layui-icon-home"></i>
-                    <cite>主页</cite>
-                </a>
-                <dl class="layui-nav-child">
-                    <dd data-name="console" class="layui-this">
-                        <a lay-href="/Admin/Main/Welcome">欢迎页</a>
-                    </dd>
-
-                    <dd data-name="console">
-                        <a lay-href="/Admin/SystemBasis/PermissionManage">权限配置</a>
-                    </dd>
-                    <dd data-name="console">
-                        <a lay-href="/Admin/SystemBasis/RoleManage">角色管理</a>
-                    </dd>
-                    <dd data-name="console">
-                        <a lay-href="/Admin/SystemBasis/UserManage">用户管理</a>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+        
 
         <permission-menu permissions-list="@Model"></permission-menu>
 

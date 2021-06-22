@@ -275,6 +275,31 @@ namespace Services
 
             return Task.FromResult(res);
         }
+        public Task<ResultVm> UpdateRoleById(RequestUpdateRoleVm req)
+        {
+            ResultVm res = new ResultVm();
+            if (string.IsNullOrWhiteSpace(req.RoleId))
+            {
+                res.Status = false;
+                res.Messages = "角色编号不能为空！";
+                return Task.FromResult(res);
+            }
+            var result = _REPOSITORY4.UpdateRoleById(new RequestUpdateRoleDto(req.RoleId, req.RoleName, req.RoleDescription, req.IsValid,req.ActionUserName, req.ActionUserInfo));
+
+            if (result.Status)
+            {
+                res.Status = true;
+                res.Messages = "修改成功！";
+
+            }
+            else
+            {
+                res.Status = false;
+                res.Messages = "修改失败！" + result.Messages;
+            }
+
+            return Task.FromResult(res);
+        }
 
         public Task<ResultVm> AddRolePermission(RequestAddRolePermissionVm req)
         {

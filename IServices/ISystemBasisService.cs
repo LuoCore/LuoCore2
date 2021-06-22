@@ -19,6 +19,7 @@ namespace IServices
         public Task<ViewModels.ResultVm> DeletePermissionByIds(RequestDeletePermissionVm req);
         public Task<ViewModels.Layui.TableVm> GetRoleTable(RequestGetRoleVm req);
         public Task<ResultVm> AddRole(RequestAddRoleVm req);
+        public Task<ResultVm> UpdateRoleById(RequestUpdateRoleVm req);
         public Task<ResultVm> AddRolePermission(RequestAddRolePermissionVm req);
         public Task<ViewModels.Layui.TableVm> GetUserTable(RequestGetUserVm req);
         public Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetRoleSelectBox(string userId);

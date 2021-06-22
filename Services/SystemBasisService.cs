@@ -91,25 +91,22 @@ namespace Services
 
 
 
-        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string roleId, string permissionId)
+        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string permissionId)
         {
             ResultVm<List<ViewModels.Layui.TreeVm>> resTree = new ResultVm<List<ViewModels.Layui.TreeVm>>();
             var result = _REPOSITORY3.ReadPermissionByParentId(permissionId);
             if (result.Status)
             {
                 resTree.Data = new List<ViewModels.Layui.TreeVm>();
-                var rolePermissionList = _REPOSITORY5.ReadRolePermissionByRoleId(roleId);
+               
                 foreach (var permission in result.Data)
                 {
                     ViewModels.Layui.TreeVm treeData = new ViewModels.Layui.TreeVm();
                     treeData.disabled = !permission.IsValid;
                     treeData.title = permission.PermissionName;
                     treeData.id = permission.PermissionId;
-                    if (rolePermissionList.Where(x => x.PermissionId == permission.PermissionId).Any())
-                    {
-                        treeData.@checked = true;
-                    }
-                    var result2 = await GetPermissionTreeBoxAsync(roleId, treeData.id);
+                    
+                    var result2 = await GetPermissionTreeBoxAsync(treeData.id);
                     if (result2.Status)
                     {
                         treeData.children = result2.Data;
@@ -120,6 +117,18 @@ namespace Services
                 }
             }
             return resTree;
+        }
+
+        public  Task<ResultVm<List<EntitysModels.Base_RolePermission>>> GetRolePermissionByRoleIdAsync(string roleId)
+        {
+            ResultVm<List<EntitysModels.Base_RolePermission>> res = new ResultVm<List<EntitysModels.Base_RolePermission>>();
+            var result = _REPOSITORY5.ReadRolePermissionByRoleId(roleId);
+            if (!Equals(null, result) && result.Count > 0) 
+            {
+                res.Data = result;
+                res.Status = true;
+            }
+            return Task.FromResult(res);
         }
 
 

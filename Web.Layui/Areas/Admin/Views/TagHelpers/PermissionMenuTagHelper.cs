@@ -24,16 +24,35 @@ namespace Web.Layui.Areas.Admin.Views.TagHelpers
             output.Attributes.Add("id", "LAY-system-side-menu");
             output.Attributes.Add("lay-filter", "layadmin-system-side-menu");
             StringBuilder sbHtml = new StringBuilder();
-            StrBuilderHtml(PermissionsList, "li", sbHtml);
+
+            sbHtml.Append("<li data-name='home' class='layui-nav-item layui-nav-itemed'>");
+            sbHtml.Append("<a href='javascript:;' lay-tips='系统' lay-direction='2'>");
+            sbHtml.Append("<i class='layui-icon layui-icon-home'></i>");
+            sbHtml.Append("<cite>系统</cite>");
+            sbHtml.Append("</a>");
+            sbHtml.Append("<dl class='layui-nav-child'>");
+            sbHtml.Append("<dd data-name='console' class='layui-this'>");
+            sbHtml.Append("<a lay-href='/Admin/Main/Welcome'>欢迎页</a>");
+            sbHtml.Append("</dd>");
+            sbHtml.Append("</dl>");
+            sbHtml.Append("</li>");
+      
+
+
+
+            StrBuilderHtml(PermissionsList.Where(x=>string.IsNullOrWhiteSpace(x.PermissionParentId)).ToList(), "li", sbHtml);
             output.Content.SetHtmlContent(sbHtml.ToString());
             return base.ProcessAsync(context, output);
         }
         public List<EntitysModels.Base_Permission> PermissionsList { get; set; }
         public void StrBuilderHtml(List<EntitysModels.Base_Permission> models, string tagStr, StringBuilder sbHtml)
         {
-            if (Equals(null, models)) { return; }
+            if (Equals(null, models)|| Equals(null,PermissionsList)) { return; }
+
+            
             foreach (var m in models)
             {
+                var listModel = PermissionsList.Where(x => x.PermissionParentId == m.PermissionId).ToList();
                 if (tagStr.Contains("li"))
                 {
                     sbHtml.Append("<li data-name='home' class='layui-nav-item layui-nav-itemed'>");
@@ -41,24 +60,25 @@ namespace Web.Layui.Areas.Admin.Views.TagHelpers
                     sbHtml.Append("<i class='layui-icon layui-icon-home'></i>");
                     sbHtml.Append("<cite>" + m.PermissionName + "</cite>");
                     sbHtml.Append("</a>");
-                    var listModel = models.Where(x => x.PermissionParentId == m.PermissionId).ToList();
+                  
                     if (!Equals(null, listModel) && listModel.Count > 0)
                     {
                         sbHtml.Append("<dl class='layui-nav-child'>");
-                        StrBuilderHtml(listModel, "dl", sbHtml);
+                        StrBuilderHtml(listModel, "dd", sbHtml);
                         sbHtml.Append("</dl");
                     }
+
                     sbHtml.Append("</li>");
                 }
                 else
                 {
                     sbHtml.Append("<dd data-name='console' class='layui-this'>");
-                    sbHtml.Append("<a lay-href='/Admin/Main/Welcome'>欢迎页</a>");
-                    var listModel = models.Where(x => x.PermissionParentId == m.PermissionId).ToList();
+                    sbHtml.Append("<a lay-href='"+m.PermissionAction+"'>"+m.PermissionName+"</a>");
+
                     if (!Equals(null, listModel) && listModel.Count > 0)
                     {
                         sbHtml.Append("<dl class='layui-nav-child'>");
-                        StrBuilderHtml(listModel, "dl", sbHtml);
+                        StrBuilderHtml(listModel, "dd", sbHtml);
                         sbHtml.Append("</dl");
                     }
                     sbHtml.Append("</dd>");

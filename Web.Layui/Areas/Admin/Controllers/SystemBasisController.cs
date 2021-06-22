@@ -117,13 +117,16 @@ namespace Web.Layui.Areas.Admin.Controllers
             return Json(res);
         }
 
-
-        public async Task<IActionResult> PermissionTreeAsync(string roleId)
+        /// <summary>
+        /// 获取所有权限树形结构
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> GetPermissionTreeAsync()
         {
             List<ViewModels.Layui.TreeVm> treeDatas = new List<ViewModels.Layui.TreeVm>();
 
             var tree = new ViewModels.Layui.TreeVm() { title = "顶级", id = "" };
-            var result = await _SERVICE.GetPermissionTreeBoxAsync(roleId, tree.id);
+            var result = await _SERVICE.GetPermissionTreeBoxAsync(tree.id);
             if (result.Status && !Equals(null, result.Data))
             {
                 tree.children = new List<ViewModels.Layui.TreeVm>();
@@ -131,6 +134,12 @@ namespace Web.Layui.Areas.Admin.Controllers
             }
             treeDatas.Add(tree);
             return Json(treeDatas);
+        }
+        public async Task<IActionResult> GetRolePermissionAsync(string roleId)
+        {
+            var result = await _SERVICE.GetRolePermissionByRoleIdAsync(roleId);
+            
+            return Json(result);
         }
 
         public async Task<IActionResult> AddRolePermissionAsync(RequestAddRolePermissionVm req)

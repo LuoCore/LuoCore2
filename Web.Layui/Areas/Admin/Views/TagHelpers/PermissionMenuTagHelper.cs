@@ -32,7 +32,7 @@ namespace Web.Layui.Areas.Admin.Views.TagHelpers
             sbHtml.Append("</a>");
             sbHtml.Append("<dl class='layui-nav-child'>");
             sbHtml.Append("<dd data-name='console' class='layui-this'>");
-            sbHtml.Append("<a lay-href='/Admin/Main/Welcome'>欢迎页</a>");
+            sbHtml.Append("<a lay-href='/Admin/User/Welcome'>欢迎页</a>");
             sbHtml.Append("</dd>");
             sbHtml.Append("</dl>");
             sbHtml.Append("</li>");
@@ -55,7 +55,7 @@ namespace Web.Layui.Areas.Admin.Views.TagHelpers
                 var listModel = PermissionsList.Where(x => x.PermissionParentId == m.PermissionId).ToList();
                 if (tagStr.Contains("li"))
                 {
-                    sbHtml.Append("<li data-name='home' class='layui-nav-item layui-nav-itemed'>");
+                    sbHtml.Append("<li data-name='home' class='layui-nav-item'>");
                     sbHtml.Append("<a href='javascript:; ' lay-tips='" + m.PermissionName + "' lay-direction='2'>");
                     sbHtml.Append("<i class='layui-icon layui-icon-home'></i>");
                     sbHtml.Append("<cite>" + m.PermissionName + "</cite>");
@@ -72,7 +72,7 @@ namespace Web.Layui.Areas.Admin.Views.TagHelpers
                 }
                 else
                 {
-                    sbHtml.Append("<dd data-name='console' class='layui-this'>");
+                    sbHtml.Append("<dd data-name='console' >");
                     sbHtml.Append("<a lay-href='"+m.PermissionAction+"'>"+m.PermissionName+"</a>");
 
                     if (!Equals(null, listModel) && listModel.Count > 0)

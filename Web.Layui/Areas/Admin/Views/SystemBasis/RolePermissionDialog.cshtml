@@ -82,6 +82,7 @@
                         success: function (resultData) {
                             if (resultData.status)
                             {
+                            debugger;
                                 for (var index in resultData.data) {
                                     tree.setChecked('demoId', resultData.data[index]);
                                 }

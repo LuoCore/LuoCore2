@@ -95,11 +95,20 @@ namespace Web.Layui.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> RoleCreate(RequestAddRoleVm req)
+        public async Task<IActionResult> RoleCreateAsync(RequestAddRoleVm req)
         {
             req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
             req.ActionUserName = User.Identity.Name;
             ResultVm res = await _SERVICE.AddRole(req);
+            return Json(res);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> RoleUpdateByIdAsync(RequestUpdateRoleVm req)
+        {
+            req.ActionUserInfo = User.FindFirst("UserDataInfo").Value;
+            req.ActionUserName = User.Identity.Name;
+            ResultVm res = await _SERVICE.UpdateRoleById(req);
             return Json(res);
         }
 

@@ -65,7 +65,7 @@ namespace Repository
                         CreateName = req.ActionUserName,
                         IsValid = req.IsValid
                     };
-                    Base_Role roleData = db.Insertable<Base_Role>(insetData).ExecuteReturnEntity();
+                    db.Insertable<Base_Role>(insetData).ExecuteCommand();
                     _REPOSITORY.LogSave<Base_Role>(db, EnumHelper.CURDEnum.创建, insetData, null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
                 });
                 res.Status = true;
@@ -78,6 +78,32 @@ namespace Repository
             return res;
         }
 
+        public ResultDto UpdateRoleById(RequestUpdateRoleDto req)
+        {
+            ResultDto res = new ResultDto();
+            try
+            {
+                _FACTORY.GetDbContextTran((db) =>
+                {
+                  var roleInfo=  db.Queryable<Base_Role>().Where(x => x.RoleId.Equals(req.RoleId)).First();
+                    var updateData = new
+                    {
+                        RoleName = req.RoleName,
+                        RoleDescription = req.RoleDescription,
+                        IsValid = req.IsValid
+                    };
+                     db.Updateable<Base_Role>(updateData).Where(x=>x.RoleId.Equals(req.RoleId)).ExecuteCommand();
+                    _REPOSITORY.LogSave<Base_Role>(db, EnumHelper.CURDEnum.更新, updateData, roleInfo, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
+                });
+                res.Status = true;
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+        }
 
         public Base_Role ReadRoleById(string roleId)
         {

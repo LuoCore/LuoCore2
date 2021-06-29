@@ -19,6 +19,7 @@
                 <button class="layui-btn layuiadmin-btn-event" data-type="editRolePermission">权限编辑</button>
             </div>
 
+         
             <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
 
             <script type="text/html" id="switchIsValid">
@@ -78,26 +79,6 @@
         });
 
 
-        table.on('tool(dataTable)', function (obj) {
-
-            switch (obj.event) {
-                case 'edit':
-                    ShowDialogAction(obj.data);
-                    break;
-                case 'del':
-                    let Ids = new Array([obj.data.roleId]);
-                    DeleteAction(Ids);
-                    break;
-                case 'editRolePermission':
-                    debugger;
-                    let rolepermissionIds = new Array(obj.data.roleId);
-                    ShowDialogRolePermissionAction(rolepermissionIds);
-                    break;
-            };
-        });
-
-
-
         //顶部按钮事件 Start
         $('.layui-btn.layuiadmin-btn-event').on('click', function () {
             var type = $(this).data('type');
@@ -145,6 +126,26 @@
             }
         }
         //顶部按钮事件 End
+
+        table.on('tool(dataTable)', function (obj) {
+
+            switch (obj.event) {
+                case 'edit':
+                    ShowDialogAction(obj.data);
+                    break;
+                case 'del':
+                    let Ids = new Array([obj.data.roleId]);
+                    DeleteAction(Ids);
+                    break;
+                case 'editRolePermission':
+                    debugger;
+                    let rolepermissionIds = new Array(obj.data.roleId);
+                    ShowDialogRolePermissionAction(rolepermissionIds);
+                    break;
+            };
+        });
+
+
 
         //角色编辑弹出框
         const ShowDialogAction = (formObj) => {

@@ -51,10 +51,15 @@
                     }
                 });
 
+                let _roleId = "";
+                if (formobj.length == 1) {
+                    _roleId = formobj[0];
+                }
 
                 $.ajax({
                     type: "get",
                     url: "/Admin/SystemBasis/GetPermissionTree",
+                    data: { roleId: _roleId },
                     dataType: "json",
                     async: false,
                     success: function (resultData) {
@@ -70,29 +75,29 @@
                 });
 
                 
-                if (formobj.length == 1)
-                {
-                    debugger;
-                    $.ajax({
-                        type: "get",
-                        url: "/Admin/SystemBasis/GetRolePermission",
-                        data: { roleId: formobj[0] },
-                        dataType: "json",
-                        async: false,
-                        success: function (resultData) {
-                            if (resultData.status)
-                            {
-                            debugger;
-                                for (var index in resultData.data) {
-                                    tree.setChecked('demoId', resultData.data[index]);
-                                }
-                            }
-                        },
-                        error: function (jqXHR) {
-                            alert("发生错误：" + jqXHR.status);
-                        }
-                    });
-                }
+                //if (formobj.length == 1)
+                //{
+                //    debugger;
+                //    $.ajax({
+                //        type: "get",
+                //        url: "/Admin/SystemBasis/GetRolePermission",
+                //        data: { roleId: formobj[0] },
+                //        dataType: "json",
+                //        async: false,
+                //        success: function (resultData) {
+                //            if (resultData.status)
+                //            {
+                //            debugger;
+                //                for (var index in resultData.data) {
+                //                    tree.setChecked('demoId', resultData.data[index]);
+                //                }
+                //            }
+                //        },
+                //        error: function (jqXHR) {
+                //            alert("发生错误：" + jqXHR.status);
+                //        }
+                //    });
+                //}
 
               
 

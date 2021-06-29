@@ -11,6 +11,8 @@ namespace ViewModels.Layui
         public string id { get; set; }
         public string title { get; set; }
         public bool disabled { get; set; }
+        public bool @checked { get; set; }
+        public bool spread { get; set; }
         public List<TreeVm> children { get; set; }
     }
 }

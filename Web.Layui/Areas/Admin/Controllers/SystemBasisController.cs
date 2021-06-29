@@ -130,20 +130,24 @@ namespace Web.Layui.Areas.Admin.Controllers
         /// 获取所有权限树形结构
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> GetPermissionTreeAsync()
+        public async Task<IActionResult> GetPermissionTreeAsync(string roleId)
         {
             List<ViewModels.Layui.TreeVm> treeDatas = new List<ViewModels.Layui.TreeVm>();
 
             var tree = new ViewModels.Layui.TreeVm() { title = "顶级", id = "" };
-            var result = await _SERVICE.GetPermissionTreeBoxAsync(tree.id);
+            var result = await _SERVICE.GetPermissionTreeBoxByRoleIdAsync(tree.id, roleId);
             if (result.Status && !Equals(null, result.Data))
             {
+                tree.spread = true;
+                tree.@checked = false;
                 tree.children = new List<ViewModels.Layui.TreeVm>();
                 tree.children = result.Data;
             }
             treeDatas.Add(tree);
             return Json(treeDatas);
         }
+
+
         public async Task<IActionResult> GetRolePermissionAsync(string roleId)
         {
             var result = await _SERVICE.GetRolePermissionByRoleIdAsync(roleId);

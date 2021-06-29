@@ -1,8 +1,7 @@
-/**
 
- @Name：table 表格操作组件
- @License：MIT
-    
+/*!
+ * layui.table 
+ * 数据表格组件
  */
 
 layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
@@ -73,6 +72,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   
   //解析自定义模板数据
   ,parseTempData = function(item3, content, tplData, text){ //表头数据、原始内容、表体数据、是否只返回文本
+    var options = this.config || {};
+    
+    //是否防 xss
+    if(options.escape) content = util.escape(content);
+    
+    //获取内容
     var str = item3.templet ? function(){
       return typeof item3.templet === 'function' 
         ? item3.templet(tplData)
@@ -145,7 +150,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,'</table>'].join('')
   
   //主模板
-  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
+  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}{{# if(d.data.className){ }} {{ d.data.className }}{{# } }}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
 
     ,'{{# if(d.data.toolbar){ }}'
     ,'<div class="layui-table-tool">'
@@ -228,14 +233,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,Class = function(options){
     var that = this;
     that.index = ++table.index;
-    that.config = $.extend({}, that.config, table.config, options);;
+    that.config = $.extend({}, that.config, table.config, options);
     that.render();
   };
   
   //初始默认配置
   Class.prototype.config = {
     limit: 10 //每页显示的数量
-    ,loading: true //请求数据时，是否显示loading
+    ,loading: true //请求数据时，是否显示 loading
     ,cellMinWidth: 60 //所有单元格默认最小宽度
     ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
     ,autoSort: true //是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
@@ -643,8 +648,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     options = options || {};
     delete that.haveInit;
     
-    //如果直接传入数组 data，则移除原来的数组，以免数组发生深度拷贝
-    if(options.data && options.data.constructor === Array) delete that.config.data;
+    //防止数组深度合并
+    layui.each(options, function(key, item){
+      if(layui._typeof(item) === 'array') delete that.config[key];
+    });
     
     //对参数进行深度或浅扩展
     that.config = $.extend(deep, {}, that.config, options);
@@ -729,7 +736,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
         ,error: function(e, msg){
-          that.errorView('数据接口请求异常：'+ msg);
+          that.errorView('请求异常，错误提示：'+ msg);
 
           that.renderForm();
           that.setColsWidth();
@@ -737,7 +744,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           typeof options.error === 'function' && options.error(e, msg);
         }
       });
-    } else if(options.data && options.data.constructor === Array){ //已知数据
+    } else if(layui._typeof(options.data) === 'array'){ //已知数据
       var res = {}
       ,startLimit = curr*options.limit - options.limit
       
@@ -782,12 +789,15 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         var tds = [], tds_fixed = [], tds_fixed_r = []
         ,numbers = i1 + options.limit*(curr - 1) + 1; //序号
         
-        if(item1.length === 0) return;
+        //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
+        if(layui._typeof(item1) === 'array' && item1.length === 0) return;
         
+        //记录下标索引，用于恢复排序
         if(!sort){
           item1[table.config.indexName] = i1;
         }
         
+        //遍历表头
         that.eachCols(function(i3, item3){
           var field = item3.field || i3
           ,key = options.index + '-' + item3.key
@@ -819,6 +829,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             }() +'">' + function(){
               var tplData = $.extend(true, {
                 LAY_INDEX: numbers
+                ,LAY_COL: item3
               }, item1)
               ,checkName = table.config.checkName;
               
@@ -850,7 +861,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               if(item3.toolbar){
                 return laytpl($(item3.toolbar).html()||'').render(tplData);
               }
-              return parseTempData(item3, content, tplData);
+              return parseTempData.call(that, item3, content, tplData);
             }()
           ,'</div></td>'].join('');
           
@@ -945,7 +956,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(!options.totalRow) return;
     
     layui.each(data, function(i1, item1){
-      if(item1.length === 0) return;
+      //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
+      if(layui._typeof(item1) === 'array' && item1.length === 0) return;
       
       that.eachCols(function(i3, item3){
         var field = item3.field || i3
@@ -973,7 +985,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         tplData[field] = thisTotalNum;
         
         //获取自动计算的合并内容
-        getContent = item3.totalRow ? (parseTempData(item3, thisTotalNum, tplData) || text) : text;
+        getContent = item3.totalRow ? (parseTempData.call(that, item3, thisTotalNum, tplData) || text) : text;
         
         //如果直接传入了合计行数据，则不输出自动计算的结果
         return totalRowData ? (totalRowData[item3.field] || getContent) : getContent;
@@ -1130,7 +1142,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,options = that.config
     ,thisData = table.cache[that.key];
     if(!thisData[index]) return;
-    if(thisData[index].constructor === Array) return;
+    if(layui._typeof(thisData[index]) === 'array') return;
     thisData[index][options.checkName] = checked;
   };
   
@@ -1204,12 +1216,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(options.totalRow){
       bodyHeight = bodyHeight - (that.layTotal.outerHeight() || 40);
     }
-
+    
     //减去分页栏的高度
     if(options.page){
       bodyHeight = bodyHeight - (that.layPage.outerHeight() || 41);
     }
-
+    
     that.layMain.css('height', bodyHeight - 2);
   };
   
@@ -1519,7 +1531,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                   templet = item2.templet;
                 }
               });
-              td.children(ELEM_CELL).html(parseTempData({
+              td.children(ELEM_CELL).html(parseTempData.call(that, {
                 templet: templet
               }, value, data));
               td.data('content', value);
@@ -1632,7 +1644,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         }
       });
       othis.siblings(ELEM_CELL).html(function(value){
-        return parseTempData({
+        return parseTempData.call(that, {
           templet: templet
         }, value, data);
       }(thisElem.value));
@@ -1762,6 +1774,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   table.init = function(filter, settings){
     settings = settings || {};
     var that = this
+    ,inst = null
     ,elemTable = filter ? $('table[lay-filter="'+ filter +'"]') : $(ELEM + '[lay-data]')
     ,errorTips = 'Table element property lay-data configuration item has a syntax error: ';
 
@@ -1769,9 +1782,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     elemTable.each(function(){
       var othis = $(this), tableData = othis.attr('lay-data');
       
-      try{
+      try {
         tableData = new Function('return '+ tableData)();
-      } catch(e){
+      } catch(e) {
         hint.error(errorTips + tableData, 'error')
       }
       
@@ -1827,6 +1840,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         });
         options.data[i1] = row;
       });
+      
+      //执行渲染
       table.render(options);
     });
 
@@ -1889,7 +1904,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,data = table.cache[id] || [];
     //计算全选个数
     layui.each(data, function(i, item){
-      if(item.constructor === Array){
+      if(layui._typeof(item) === 'array'){
         invalidNum++; //无效数据，或已删除的
         return;
       }
@@ -1909,7 +1924,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var arr = []
     ,data = table.cache[id] || [];
     layui.each(data, function(i, item){
-      if(item.constructor === Array){
+      if(layui._typeof(item) === 'array'){
         return;
       };
       arr.push(table.clearCacheKey(item));
@@ -1924,7 +1939,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     data = data || table.clearCacheKey(table.cache[id]);
     type = type || 'csv';
     
-    var config = thisTable.config[id] || {}
+    var thatTable = thisTable.that[id]
+    ,config = thisTable.config[id] || {}
     ,textType = ({
       csv: 'text/csv'
       ,xls: 'application/vnd.ms-excel'
@@ -1953,7 +1969,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               if(content === undefined || content === null) content = '';
               
               i1 == 0 && dataTitle.push(item3.title || '');
-              vals.push('"'+ parseTempData(item3, content, item1, 'text') + '"');
+              vals.push('"'+ parseTempData.call(thatTable, item3, content, item1, 'text') + '"');
             }
           });
         }

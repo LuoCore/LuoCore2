@@ -63,6 +63,7 @@ namespace Repository
                         JoinType.Left, rp.RoleId == ur.RoleId))
                 .Where((p, rp, ur) =>p.IsValid==true)
                 .Where((p, rp, ur) => ur.UserId== userId)
+                .GroupBy((p, rp, ur) =>p.PermissionId)
                 .ToList();
             });
             return res;

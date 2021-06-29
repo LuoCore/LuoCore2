@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "ViewModels\Vi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Layui", "Web.Layui\Web.Layui.csproj", "{24E1A68B-4BD2-43DD-8FB1-6A7B90D37D9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumHelper", "EnumHelper\EnumHelper.csproj", "{CE41BEC4-C926-42A5-BC51-A632FE291A9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnumHelper", "EnumHelper\EnumHelper.csproj", "{CE41BEC4-C926-42A5-BC51-A632FE291A9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

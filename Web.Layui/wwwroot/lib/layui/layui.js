@@ -1,15 +1,14 @@
+
 /*!
-
- @Name: layui
- @Description：Classic modular front-end UI framework
- @License：MIT
-
+ * Layui
+ * Classic modular Front-End UI library
+ * MIT Licensed
  */
  
 ;!function(win){
   "use strict";
 
-  var doc = document, config = {
+  var doc = win.document, config = {
     modules: {} //记录模块物理路径
     ,status: {} //记录模块加载状态
     ,timeout: 10 //符合规范的模块请求最长等待秒数
@@ -17,10 +16,13 @@
   }
 
   ,Layui = function(){
-    this.v = '2.6.5'; //版本号
+    this.v = '2.6.8'; // layui 版本号
   }
+  
+  //识别预先可能定义的指定全局对象
+  ,GLOBAL = win.LAYUI_GLOBAL || {}
 
-  //获取layui所在目录
+  //获取 layui 所在目录
   ,getPath = function(){
     var jsPath = doc.currentScript ? doc.currentScript.src : function(){
       var js = doc.scripts
@@ -35,7 +37,7 @@
       return src || js[last].src;
     }();
     
-    return config.dir = jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
+    return config.dir = GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }()
 
   //异常提示
@@ -123,7 +125,7 @@
     }();
     
     //如果页面已经存在 jQuery 1.7+ 库且所定义的模块依赖 jQuery，则不加载内部 jquery 模块
-    if(window.jQuery && jQuery.fn.on){
+    if(win.jQuery && jQuery.fn.on){
       that.each(apps, function(index, item){
         if(item === 'jquery'){
           apps.splice(index, 1);
@@ -444,7 +446,7 @@
       //提取 Hash
       ,hash: that.router(function(){
         return href 
-          ? ((href.match(/#.+/) || [])[0] || '')
+          ? ((href.match(/#.+/) || [])[0] || '/')
         : location.hash;
       }())
     };
@@ -535,24 +537,63 @@
   Layui.prototype.hint = function(){
     return {
       error: error
-    }
+    };
+  };
+  
+  //typeof 类型细分 -> string/number/boolean/undefined/null、object/array/function/…
+  Layui.prototype._typeof = function(operand){
+    if(operand === null) return String(operand);
+    
+    //细分引用类型
+    return (typeof operand === 'object' || typeof operand === 'function') ? function(){
+      var type = Object.prototype.toString.call(operand).match(/\s(.+)\]$/) || [] //匹配类型字符
+      ,classType = 'Function|Array|Date|RegExp|Object|Error|Symbol'; //常见类型字符
+      
+      type = type[1] || 'Object';
+      
+      //除匹配到的类型外，其他对象均返回 object
+      return new RegExp('\\b('+ classType + ')\\b').test(type) 
+        ? type.toLowerCase() 
+      : 'object';
+    }() : typeof operand;
+  };
+  
+  //对象是否具备数组结构（此处为兼容 jQuery 对象）
+  Layui.prototype._isArray = function(obj){
+    var that = this
+    ,len
+    ,type = that._typeof(obj);
+    
+    if(!obj || (typeof obj !== 'object') || obj === win) return false;
+    
+    len = 'length' in obj && obj.length; //兼容 ie
+    return type === 'array' || len === 0 || (
+      typeof len === 'number' && len > 0 && (len - 1) in obj //兼容 jQuery 对象
+    );
   };
 
   //遍历
   Layui.prototype.each = function(obj, fn){
     var key
-    ,that = this;
+    ,that = this
+    ,callFn = function(key, obj){ //回调
+      return fn.call(obj[key], key, obj[key])
+    };
+    
     if(typeof fn !== 'function') return that;
     obj = obj || [];
-    if(obj.constructor === Object){
-      for(key in obj){
-        if(fn.call(obj[key], key, obj[key])) break;
+    
+    //优先处理数组结构
+    if(that._isArray(obj)){
+      for(key = 0; key < obj.length; key++){
+        if(callFn(key, obj)) break;
       }
     } else {
-      for(key = 0; key < obj.length; key++){
-        if(fn.call(obj[key], key, obj[key])) break;
+      for(key in obj){
+        if(callFn(key, obj)) break;
       }
     }
+    
     return that;
   };
 
@@ -564,15 +605,52 @@
     
     if(!key) return clone;
     
-    //如果是数字，按大小排序，如果是非数字，按字典序排序
+    //如果是数字，按大小排序；如果是非数字，则按字典序排序
     clone.sort(function(o1, o2){
-      var isNum = /^-?\d+$/
-      ,v1 = o1[key]
-      ,v2 = o2[key];
+      var v1 = o1[key]
+      ,v2 = o2[key]
+      ,isNum = [
+        !isNaN(v1)
+        ,!isNaN(v2)
+      ];
+
       
-      if(isNum.test(v1)) v1 = parseFloat(v1);
-      if(isNum.test(v2)) v2 = parseFloat(v2);
+      //若为数字比较
+      if(isNum[0] && isNum[1]){
+        if(v1 && (!v2 && v2 !== 0)){ //数字 vs 空
+          return 1;
+        } else if((!v1 && v1 !== 0) && v2){ //空 vs 数字
+          return -1;
+        } else { //数字 vs 数字
+          return v1 - v2;
+        }
+      };
       
+      /**
+       * 字典序排序
+       */
+       
+      //若为非数字比较
+      if(!isNum[0] && !isNum[1]){
+        //字典序比较
+        if(v1 > v2){
+          return 1;
+        } else if (v1 < v2) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      
+      //若为混合比较
+      if(isNum[0] || !isNum[1]){ //数字 vs 非数字
+        return -1;
+      } else if(!isNum[0] || isNum[1]) { //非数字 vs 数字
+        return 1;
+      }
+      
+      /*
+      //老版本
       if(v1 && !v2){
         return 1;
       } else if(!v1 && v2){
@@ -586,6 +664,8 @@
       } else {
         return 0;
       }
+      */
+      
     });
 
     desc && clone.reverse(); //倒序
@@ -599,6 +679,9 @@
       thisEvent.cancelBubble = true;
     }
   };
+  
+  //字符常理
+  var EV_REMOVE = 'LAYUI-EVENT-REMOVE';
 
   //自定义模块事件
   Layui.prototype.onevent = function(modName, events, callback){
@@ -621,7 +704,7 @@
     };
     
     //如果参数传入特定字符，则执行移除事件
-    if(params === 'LAYUI-EVENT-REMOVE'){
+    if(params === EV_REMOVE){
       delete (that.cache.event[eventName] || {})[filterName];
       return that;
     }
@@ -630,7 +713,7 @@
     if(fn){
       config.event[eventName] = config.event[eventName] || {};
 
-      //这里不再对多次事件监听做支持，避免更多麻烦
+      //这里不再对重复事件做支持
       //config.event[eventName][filterName] ? config.event[eventName][filterName].push(fn) : 
       config.event[eventName][filterName] = [fn];
       return this;
@@ -661,10 +744,11 @@
   //移除模块事件
   Layui.prototype.off = function(events, modName){
     var that = this;
-    return that.event.call(that, modName, events, 'LAYUI-EVENT-REMOVE');
+    return that.event.call(that, modName, events, EV_REMOVE);
   };
-
+  
+  //exports layui
   win.layui = new Layui();
   
-}(window);
+}(window); //gulp build: layui-footer
 

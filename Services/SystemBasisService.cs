@@ -90,8 +90,13 @@ namespace Services
         }
 
 
-
-        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string permissionId)
+        /// <summary>
+        /// 内部构造树形菜单递归查询
+        /// </summary>
+        /// <param name="permissionId"></param>
+        /// <param name="roleList"></param>
+        /// <returns></returns>
+        private async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string permissionId, List<Base_RolePermission> roleList)
         {
             ResultVm<List<ViewModels.Layui.TreeVm>> resTree = new ResultVm<List<ViewModels.Layui.TreeVm>>();
             var result = _REPOSITORY3.ReadPermissionByParentId(permissionId);
@@ -105,10 +110,15 @@ namespace Services
                     treeData.disabled = !permission.IsValid;
                     treeData.title = permission.PermissionName;
                     treeData.id = permission.PermissionId;
-                    
-                    var result2 = await GetPermissionTreeBoxAsync(treeData.id);
-                    if (result2.Status)
+                    if (roleList.Where(x => x.PermissionId == treeData.id).Any())
                     {
+                        treeData.@checked = true;
+                    }
+                    var result2 = await GetPermissionTreeBoxAsync(treeData.id, roleList);
+                    if (result2.Status&& result2.Data.Count>0)
+                    {
+                        treeData.@checked = false;
+                        treeData.spread = true;
                         treeData.children = result2.Data;
                     }
 
@@ -118,6 +128,43 @@ namespace Services
             }
             return resTree;
         }
+
+
+        public async Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxByRoleIdAsync(string permissionId,string roleId)
+        {
+            ResultVm<List<ViewModels.Layui.TreeVm>> resTree = new ResultVm<List<ViewModels.Layui.TreeVm>>();
+            var resultRole = _REPOSITORY5.ReadRolePermissionByRoleId(roleId);
+            var result = _REPOSITORY3.ReadPermissionByParentId(permissionId);
+            if (result.Status)
+            {
+                resTree.Data = new List<ViewModels.Layui.TreeVm>();
+
+                foreach (var permission in result.Data)
+                {
+                    ViewModels.Layui.TreeVm treeData = new ViewModels.Layui.TreeVm();
+                    treeData.disabled = !permission.IsValid;
+                    treeData.title = permission.PermissionName;
+                    treeData.id = permission.PermissionId;
+                    if (resultRole.Where(x => x.PermissionId == treeData.id).Any()) 
+                    {
+                        treeData.@checked = true;
+                    }
+                    var result2 = await GetPermissionTreeBoxAsync(treeData.id, resultRole);
+                    if (result2.Status && result2.Data.Count > 0)
+                    {
+                        treeData.@checked = false;
+                        treeData.spread = true;
+                        treeData.children = result2.Data;
+                    }
+                    resTree.Data.Add(treeData);
+                    resTree.Status = true;
+                }
+            }
+            return resTree;
+        }
+
+
+
 
         public  Task<ResultVm<List<EntitysModels.Base_RolePermission>>> GetRolePermissionByRoleIdAsync(string roleId)
         {

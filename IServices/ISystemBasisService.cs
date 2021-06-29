@@ -11,8 +11,8 @@ namespace IServices
     public interface ISystemBasisService
     {
         public  Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetPermissionSelectBoxAsync(string parentId);
-        public  Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxAsync(string permissionId);
         public Task<ResultVm<List<EntitysModels.Base_RolePermission>>> GetRolePermissionByRoleIdAsync(string roleId);
+        public  Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxByRoleIdAsync(string permissionId, string roleId);
         public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestGetPermissionVm req);
         public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req);
         public Task<ViewModels.ResultVm> UpdatePermissionById(RequestUpdatePermissionVm req);

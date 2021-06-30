@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "文章管理";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+<div class="layui-form layui-container layui-form-pane" lay-filter="form-RequestData" id="form-RequestData">
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-block">
+            <input type="text" name="ArticleTitle" lay-verify="required" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" pane>
+        <label class="layui-form-label">是否有效</label>
+        <div class="layui-input-inline">
+            <input name="IsValid" value="true" type="checkbox" lay-filter="switch" lay-skin="switch" lay-text="是|否" checked />
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">文章内容</label>
+        <div class="layui-input-block">
+            <textarea name="ArticleConten" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+
+
+
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="luo-submit" id="luo-submit">提交</button>
+    </div>
+
+</div>
+
+@section scripts{
+
+    <script>
+        function ShowDialog_Load(formobj) {
+            layui.use(['jquery', 'form', 'layedit'], function () {
+                var $ = layui.$,
+                    form = layui.form,
+                    layedit = layui.layedit;
+                layedit.build('ArticleConten');
+                if (formobj != null && formobj != undefined && formobj != "") {
+                    //给表单赋值
+                    form.val("form-RequestData", {
+                        "ArticleTitle": formobj.articleTitle,
+                        "ArticleConten": formobj.articleConten,
+                        "IsValid": formobj.isValid
+                    });
+                }
+            });
+        }
+    </script>
+}

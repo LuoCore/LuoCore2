@@ -1,7 +1,8 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Areas/Admin/Views/Shared/_LayuiLayout.cshtml";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+  
 }
 
 <div id="LAY_app">
@@ -30,10 +31,10 @@
 
 @section scripts{
     <script type="text/javascript">
-            layui.config({
-                base: '/lib/layuiadmin/' //静态资源所在路径
-            }).extend({
-                index: 'lib/index' //主入口模块
-            }).use('index');
+        layui.config({
+            base: '/lib/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use('index');
     </script>
 }

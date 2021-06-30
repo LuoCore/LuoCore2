@@ -55,19 +55,17 @@ namespace Web.Layui.Areas.Admin.Views.TagHelpers
                 var listModel = PermissionsList.Where(x => x.PermissionParentId == m.PermissionId).ToList();
                 if (tagStr.Contains("li"))
                 {
-                    sbHtml.Append("<li data-name='home' class='layui-nav-item'>");
-                    sbHtml.Append("<a href='javascript:; ' lay-tips='" + m.PermissionName + "' lay-direction='2'>");
+                    sbHtml.Append("<li data-name='"+m.PermissionId+"' class='layui-nav-item'>");
+                    sbHtml.Append("<a href='javascript:; ' lay-tips='" + m.PermissionName + "' lay-direction='"+m.ID+"'>");
                     sbHtml.Append("<i class='layui-icon layui-icon-home'></i>");
                     sbHtml.Append("<cite>" + m.PermissionName + "</cite>");
                     sbHtml.Append("</a>");
-                  
                     if (!Equals(null, listModel) && listModel.Count > 0)
                     {
                         sbHtml.Append("<dl class='layui-nav-child'>");
                         StrBuilderHtml(listModel, "dd", sbHtml);
-                        sbHtml.Append("</dl");
+                        sbHtml.Append("</dl>");
                     }
-
                     sbHtml.Append("</li>");
                 }
                 else
@@ -79,7 +77,7 @@ namespace Web.Layui.Areas.Admin.Views.TagHelpers
                     {
                         sbHtml.Append("<dl class='layui-nav-child'>");
                         StrBuilderHtml(listModel, "dd", sbHtml);
-                        sbHtml.Append("</dl");
+                        sbHtml.Append("</dl>");
                     }
                     sbHtml.Append("</dd>");
                 }

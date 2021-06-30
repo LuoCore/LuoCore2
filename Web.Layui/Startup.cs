@@ -132,12 +132,17 @@ namespace Web.Layui
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                 name: "areas",
+                 name: "admin",
+                 pattern: "{area:exists}/{controller=Main}/{action=Index}/{id?}"
+               );
+                endpoints.MapControllerRoute(
+                 name: "blog",
                  pattern: "{area:exists}/{controller=Main}/{action=Index}/{id?}"
                );
                 endpoints.MapControllerRoute(
                    name: "default",
-                   pattern: "{controller=Home}/{action=Index}/{id?}");
+                   pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
 
             });
         }

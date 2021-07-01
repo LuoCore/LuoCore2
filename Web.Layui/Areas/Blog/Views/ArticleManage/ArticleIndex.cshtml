@@ -10,7 +10,7 @@
         <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
         <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
         <button class="layui-btn layui-btn-sm" lay-event="query">查询</button>
-        <button class="layui-btn layui-btn-sm" lay-event="reload2">重载（不保留初始参数）</button>
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
 
     </div>
 </script>
@@ -33,6 +33,7 @@
 @section scripts{
 
     <script>
+       
         layui.use(['table', 'dropdown'], function(){
             var table = layui.table,
                 $ = layui.$,
@@ -97,7 +98,7 @@
                         }, true);
                         break;
                     case 'add':
-                        layer.msg('添加');
+                        ShowDialogAction();
                         break;
                     case 'update':
                         layer.msg('编辑');

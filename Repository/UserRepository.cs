@@ -48,6 +48,34 @@ namespace Repository
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public ResultDto<Base_User> ReadUserByName(string username)
+        {
+            ResultDto<Base_User> res = new ResultDto<Base_User>();
+            try
+            {
+                _FACTORY.GetDbContext((db) =>
+                {
+                    res.Status = true;
+                    res.Data = db.Queryable<Base_User>()
+                    .Where(x => x.UserName.Equals(username)&&x.IsValid==true)
+                    .First();
+                });
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+        }
+
+
+
         public ResultDto<Base_User> ReadUserById(string userId)
         {
             ResultDto<Base_User> res = new ResultDto<Base_User>();
@@ -97,7 +125,11 @@ namespace Repository
                         IsValid = req.IsValid
                     };
                     db.Insertable<Base_User>(userData).IgnoreColumns(ignoreNullColumn: true).ExecuteCommandIdentityIntoEntity();
-                    _REPOSITORY.LogSave<Base_User>(db,CURDEnum.创建, userData,null,req.ActionUserName,req.ActionUserInfo).ExecuteCommand();
+                
+                    _REPOSITORY.SqlTypeCurd<Base_User>(CURDEnum.创建)
+                    .OperationUserInfo(req.ActionUserName, req.ActionUserInfo)
+                    .NowData(userData)
+                    .BuilderSQL(db);
                 });
                 res.Status = true;
             }

@@ -11,6 +11,7 @@ using Common;
 using SqlSugar;
 using EnumHelper;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace Repository
 {
@@ -51,6 +52,53 @@ namespace Repository
             return DbContext.GetDate();
         }
 
+        #region 建造者
+
+
+
+        System_Logs _LOGSMODEL =new System_Logs();
+        List<string> _COLUMNS = new List<string>();
+      
+        public ISystemLogsRepository SqlTypeCurd<T>(EnumHelper.CURDEnum typeEnum) where T : class, new()
+        {
+           
+            Type tableType = typeof(T);
+            _LOGSMODEL.LogId = Guid.NewGuid().ToString();
+            _LOGSMODEL.LogName = tableType.Name;
+            _LOGSMODEL.LogType = typeEnum.EnumToString();
+            _LOGSMODEL.IsValid = true;
+            _COLUMNS.AddRange(new string[] { "LogId", "LogName", "LogType", "IsValid" });
+            return this;
+        }
+        public ISystemLogsRepository OperationUserInfo(string username, string userinfoJson)
+        {
+            _LOGSMODEL.CreateName = username;
+            _LOGSMODEL.OperationUserInfo = username;
+            _COLUMNS.AddRange(new string[] { "CreateName", "OperationUserInfo"});
+          
+            return this;
+        }
+        public ISystemLogsRepository NowData(dynamic nowData)
+        {
+            _LOGSMODEL.LogNewData = Newtonsoft.Json.JsonConvert.SerializeObject(nowData);
+            _COLUMNS.Add("LogNewData");
+            return this;
+        }
+
+        public ISystemLogsRepository OldData(dynamic oldData)
+        {
+            _LOGSMODEL.LogOldData = Newtonsoft.Json.JsonConvert.SerializeObject(oldData);
+            _COLUMNS.Add("LogOldData");
+            return this;
+        }
+
+        public void BuilderSQL(SqlSugar.SqlSugarClient dbClient)
+        {
+            _LOGSMODEL.CreateTime = dbClient.GetDate();
+            _COLUMNS.Add("CreateTime");
+            dbClient.Insertable<System_Logs>(_LOGSMODEL).InsertColumns(_COLUMNS.ToArray()).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
+        }
+        #endregion 建造者
 
     }
 }

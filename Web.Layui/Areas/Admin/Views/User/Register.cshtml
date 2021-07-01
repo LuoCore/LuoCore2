@@ -1,240 +1,239 @@
 ﻿@{
-	Layout = null;
+    Layout = null;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
- <meta charset="utf-8" />
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="renderer" content="webkit">
- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
- <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
- <!--[if lt IE 9]>
-   <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-   <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
- <![endif]-->
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
- <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
- <title>Register</title>
+    <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+    <title>Register</title>
 
- <style>
-
-
-  .flexContainer {
-   width: 500px;
-   position: fixed;
-   top: 50%;
-   left: 50%;
-   -webkit-transform: translateX(-50%) translateY(-50%);
-   box-shadow: 0 3px 18px rgb(100 0 0 / 50%);
-   font-size: 16px;
-  }
+    <style>
 
 
-  .header {
-   background: #FD5353;
-   border-radius: 10px 10px 0px 0px;
-  }
+        .flexContainer {
+            width: 500px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translateX(-50%) translateY(-50%);
+            box-shadow: 0 3px 18px rgb(100 0 0 / 50%);
+            font-size: 16px;
+        }
 
-  form {
-   margin: 10px 15px 15px;
-  }
 
-  .header h1 {
-   color: #FFFFFF;
-  }
+        .header {
+            background: #FD5353;
+            border-radius: 10px 10px 0px 0px;
+        }
 
-  .huoqu {
-   background: #fff;
-   color: #0C0C0C;
-   border: 1px solid #E6E6E6;
-  }
+        form {
+            margin: 10px 15px 15px;
+        }
 
-   .huoqu:hover {
-	color: #0C0C0C;
-   }
+        .header h1 {
+            color: #FFFFFF;
+        }
 
-  .zhuce {
-   width: 100%;
-   background: #FD5353;
-   color: #fff;
-   font-size: 18px;
-   border-radius: 5px;
-  }
+        .huoqu {
+            background: #fff;
+            color: #0C0C0C;
+            border: 1px solid #E6E6E6;
+        }
 
-   .zhuce:hover {
-	opacity: 1;
-   }
+            .huoqu:hover {
+                color: #0C0C0C;
+            }
 
-  .layui-form-checked[lay-skin=primary] i {
-   border-color: #FD5353 !important;
-  }
+        .zhuce {
+            width: 100%;
+            background: #FD5353;
+            color: #fff;
+            font-size: 18px;
+            border-radius: 5px;
+        }
 
-  .layui-form-checked i, .layui-form-checked:hover i {
-   background-color: #FD5353 !important;
-  }
+            .zhuce:hover {
+                opacity: 1;
+            }
 
- </style>
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #FD5353 !important;
+        }
+
+        .layui-form-checked i, .layui-form-checked:hover i {
+            background-color: #FD5353 !important;
+        }
+    </style>
 </head>
 <body>
 
- <div class="layui-row flexContainer">
-  <form action="" class="layui-form layui-form-pane layui-col-xs11" style="display：inline-block">
-   <!-- 第 一 行-->
-   <div class="layui-form-item layui-row header" style="margin-top: 15px;">
-	<h1 class="layui-col-xs6 layui-col-xs-offset3">注册账号</h1>
-   </div>
-   <div class="layui-form-item">
-	<label class="layui-form-label">
-	 <i class="layui-icon layui-icon-username"></i>
-	</label>
-	<div class="layui-input-block">
-	 <input type="text" name="username" lay-verify="username" class="layui-input" placeholder="请输入用户名" />
-	</div>
-   </div>
-   <!-- 第 二 行-->
-   <div class="layui-form-item">
-	<label class="layui-form-label">
-	 <i class="layui-icon layui-icon-cellphone"></i>
-	</label>
-	<div class="layui-input-block">
-		<!-- lay-verify="phone"-->
-	 <input type="tel" name="phone" lay-verify="required" class="layui-input" placeholder="请输入手机号" />
-	</div>
-   </div>
-    <!-- 第 三 行-->
-   <div class="layui-form-item">
-	<label class="layui-form-label">
-	 <i class="layui-icon layui-icon-email"></i>
-	</label>
-	<div class="layui-input-block">
-	 <input type="tel" name="email"  class="layui-input" placeholder="请输邮箱" />
-	</div>
-   </div>
-    <!-- 第 四 行-->
-   <div class="layui-form-item">
-	<label class="layui-form-label">
-	 <i class="layui-icon layui-icon-user"></i>
-	</label>
-	<div class="layui-input-block"> 
-	 <input type="tel" name="realName" lay-verify="required" class="layui-input" placeholder="请输真实名称" />
-	</div>
-   </div>
-   <!-- 第 五 行-->
-   <div class="layui-form-item">
-	<div class="layui-row">
-	 <div class="layui-col-xs8">
-	  <label class="layui-form-label">
-	   <i class="layui-icon layui-icon-vercode"></i>
-	  </label>
-	  <div class="layui-input-block">
-	   <input type="text" name="vercode" lay-verify="required|vercode" class="layui-input" placeholder="请输入验证码" />
-	  </div>
-	 </div>
-	 <div class="layui-col-xs2 layui-col-xs-offset1">
-	  <img src="/Admin/User/RegisterValidateCode" onclick="this.src+='?new Date()'">
-	 </div>
-	</div>
-   </div>
-   <!-- 第 六 行-->
-   <div class="layui-form-item">
-	<label class="layui-form-label">
-	 <i class="layui-icon layui-icon-male"></i>
-	 <i class="layui-icon layui-icon-female"></i>
-	</label>
-	<div class="layui-input-block">
-	 <input type="radio" name="sex" value="1" title="男" checked>
-	 <input type="radio" name="sex" value="2" title="女" >
-	</div>
-   </div>
-   <!-- 第 七 行-->
-   <div class="layui-form-item">
-	<label class="layui-form-label">
-	 <i class="layui-icon layui-icon-password"></i>
-	</label>
-	<div class="layui-input-block">
-	 <input type="password" name="password" lay-verify="required|password" class="layui-input" placeholder="请输入密码" />
-	</div>
-   </div>
-   <!-- 第 八 行-->
-   <div class="layui-form-item">
-	<label class="layui-form-label">
-	 <i class="layui-icon layui-icon-password"></i>
-	</label>
-	<div class="layui-input-block">
-	 <input type="password" id="pwd2" name="password_verify" lay-verify="required|password_verify" class="layui-input" placeholder="请再次输入密码" />
-	</div>
-   </div>
+    <div class="layui-row flexContainer">
+        <form action="" class="layui-form layui-form-pane layui-col-xs11" style="display：inline-block">
+            <!-- 第 一 行-->
+            <div class="layui-form-item layui-row header" style="margin-top: 15px;">
+                <h1 class="layui-col-xs6 layui-col-xs-offset3">注册账号</h1>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-username"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" lay-verify="username" class="layui-input" placeholder="请输入用户名" />
+                </div>
+            </div>
+            <!-- 第 二 行-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-cellphone"></i>
+                </label>
+                <div class="layui-input-block">
+                    <!-- lay-verify="phone"-->
+                    <input type="tel" name="phone" lay-verify="required" class="layui-input" placeholder="请输入手机号" />
+                </div>
+            </div>
+            <!-- 第 三 行-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-email"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="tel" name="email" class="layui-input" placeholder="请输邮箱" />
+                </div>
+            </div>
+            <!-- 第 四 行-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-user"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="tel" name="realName" lay-verify="required" class="layui-input" placeholder="请输真实名称" />
+                </div>
+            </div>
+            <!-- 第 五 行-->
+            <div class="layui-form-item">
+                <div class="layui-row">
+                    <div class="layui-col-xs8">
+                        <label class="layui-form-label">
+                            <i class="layui-icon layui-icon-vercode"></i>
+                        </label>
+                        <div class="layui-input-block">
+                            <input type="text" name="vercode" lay-verify="required|vercode" class="layui-input" placeholder="请输入验证码" />
+                        </div>
+                    </div>
+                    <div class="layui-col-xs2 layui-col-xs-offset1">
+                        <img src="/Admin/User/RegisterValidateCode" onclick="this.src+='?new Date()'">
+                    </div>
+                </div>
+            </div>
+            <!-- 第 六 行-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-male"></i>
+                    <i class="layui-icon layui-icon-female"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="1" title="男" checked>
+                    <input type="radio" name="sex" value="2" title="女">
+                </div>
+            </div>
+            <!-- 第 七 行-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-password"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" lay-verify="required|password" class="layui-input" placeholder="请输入密码" />
+                </div>
+            </div>
+            <!-- 第 八 行-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-password"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="password" id="pwd2" name="password_verify" lay-verify="required|password_verify" class="layui-input" placeholder="请再次输入密码" />
+                </div>
+            </div>
 
-   <div class="layui-form-item">
-	<input type="checkbox" id="key_service" lay-verify="check" name="" title="我已阅读并同意 <a href='#'>《用户协议》</a><a>《隐私政策》</a>" lay-skin="primary">
-   </div>
-   <div class="layui-form-item layui-row ">
-	<button class="layui-btn zhuce" lay-submit lay-filter="formRegister">注册</button>
-   </div>
-   <div class="layui-form-item layui-row">
-	<div class="layui-col-xs4 layui-col-xs-offset4">
-	 <span>已有账号？</span><a href="/Admin/User/Login" class="newlogin">直接登录</a>
-	</div>
-   </div>
-  </form>
- </div>
-
-
-
- <script src="~/lib/layui/layui.js"></script>
- <script>
-  layui.use(['form', 'layer', 'jquery'], function () {
-   var form = layui.form,
-	layer = layui.layer,
-	$ = layui.$
-   $('.close').click(function () {
-	window.history.back(-1);
-   });
-   //监听提交
-   form.on('submit(formRegister)', function (data) {
-
-	var index = layer.load(0, { shade: [0.8, '#393D49'],time: 10 * 1000 });
-
-	$.ajax({
-	 type: "Post",
-	 url: "/Admin/User/Register",
-	 data: {
-   UserName: data.field.username,
-   Phone: data.field.phone,
-   Email: data.field.email,
-   RealName: data.field.realName,
-   Vercode:data.field.vercode,
-   Sex:data.field.sex,
-   Password:data.field.password,
-   PasswordVerify:data.field.password_verify
-	 },
-	 dataType: "json",
-	 success: function (data) {
-   layer.close(index);
-   if (data.status) {
-	layer.alert('注册成功', { icon: 1 }, function (index) {
-	 window.location.replace("/Admin/User/Login");
-	});
-   } else {
-	layer.alert(data.msg, { icon: 2 });
-   }
-	 },
-	 error: function (jqXHR) {
-   layer.close(index);
-   alert("发生错误：" + jqXHR.status);
-	 }
-	});
+            <div class="layui-form-item">
+                <input type="checkbox" id="key_service" lay-verify="check" name="" title="我已阅读并同意 <a href='#'>《用户协议》</a><a>《隐私政策》</a>" lay-skin="primary">
+            </div>
+            <div class="layui-form-item layui-row ">
+                <button class="layui-btn zhuce" lay-submit lay-filter="formRegister">注册</button>
+            </div>
+            <div class="layui-form-item layui-row">
+                <div class="layui-col-xs4 layui-col-xs-offset4">
+                    <span>已有账号？</span><a href="/Admin/User/Login" class="newlogin">直接登录</a>
+                </div>
+            </div>
+        </form>
+    </div>
 
 
 
+    <script src="~/lib/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer', 'jquery'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                $ = layui.$
+            $('.close').click(function () {
+                window.history.back(-1);
+            });
+            //监听提交
+            form.on('submit(formRegister)', function (data) {
 
-	return false;
-   });
-  });
- </script>
+                var index = layer.load(0, { shade: [0.8, '#393D49'], time: 10 * 1000 });
+
+                $.ajax({
+                    type: "Post",
+                    url: "/Admin/User/Register",
+                    data: {
+                        UserName: data.field.username,
+                        Phone: data.field.phone,
+                        Email: data.field.email,
+                        RealName: data.field.realName,
+                        Vercode: data.field.vercode,
+                        Sex: data.field.sex,
+                        Password: data.field.password,
+                        PasswordVerify: data.field.password_verify
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        layer.close(index);
+                        if (data.status) {
+                            layer.alert('注册成功', { icon: 1 }, function (index) {
+                                window.location.replace("/Admin/User/Login");
+                            });
+                        } else {
+                            layer.alert(data.messages, { icon: 2 });
+                        }
+                    },
+                    error: function (jqXHR) {
+                        layer.close(index);
+                        alert("发生错误：" + jqXHR.status);
+                    }
+                });
+
+
+
+
+                return false;
+            });
+        });
+    </script>
 </body>
 </html>

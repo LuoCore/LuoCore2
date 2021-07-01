@@ -19,6 +19,7 @@ namespace IRepository
         /// <param name="req"></param>
         /// <returns></returns>
         public ResultDto<Base_User> ReadUserByLogin(RequsetLoginDto req);
+        public ResultDto<Base_User> ReadUserByName(string username);
         /// <summary>
         /// 创建用户
         /// </summary>

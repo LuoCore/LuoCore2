@@ -72,7 +72,7 @@ namespace Repository
                         IsValid = req.IsValid,
                     };
                     db.Insertable<EntitysModels.Blog_Article>(data).ExecuteCommandIdentityIntoEntity();
-                    _REPOSITORY.LogSave<EntitysModels.Blog_Article>(db, EnumHelper.CURDEnum.创建, data.ToJson(), null, req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
+                    _REPOSITORY.SqlTypeCurd<EntitysModels.Blog_Article>(EnumHelper.CURDEnum.创建).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).NowData(data).BuilderSQL(db);
                 });
                 res.Status = true;
             }
@@ -100,7 +100,12 @@ namespace Repository
                         IsValid = req.IsValid,
                     };
                     db.Updateable<EntitysModels.Blog_Article>(data).Where(x => x.ArticleId.Equals(req.ArticleId)).ExecuteCommandHasChange();
-                    _REPOSITORY.LogSave<EntitysModels.Blog_Article>(db, EnumHelper.CURDEnum.更新, data.ToJson(), udpateData.ToJson(), req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
+                    _REPOSITORY.SqlTypeCurd<EntitysModels.Blog_Article>(EnumHelper.CURDEnum.更新)
+                    .OperationUserInfo(req.ActionUserName, req.ActionUserInfo)
+                    .NowData(data)
+                    .OldData(udpateData)
+                    .BuilderSQL(db);
+                   
                 });
                 res.Status = true;
             }
@@ -119,13 +124,17 @@ namespace Repository
             {
                 _FACTORY.GetDbContextTran((db) =>
                 {
-                    var udpateData = db.Queryable<EntitysModels.Blog_Article>().Where(x => x.ArticleId.Equals(req.ArticleId)).First();
+                    var nowData = db.Queryable<EntitysModels.Blog_Article>().Where(x => x.ArticleId.Equals(req.ArticleId)).First();
                     var data = new
                     {
                         IsValid = false,
                     };
                     db.Updateable<EntitysModels.Blog_Article>(data).Where(x => x.ArticleId.Equals(req.ArticleId)).ExecuteCommandHasChange();
-                    _REPOSITORY.LogSave<EntitysModels.Blog_Article>(db, EnumHelper.CURDEnum.删除, data.ToJson(), udpateData.ToJson(), req.ActionUserName, req.ActionUserInfo).ExecuteCommand();
+                    _REPOSITORY.SqlTypeCurd<EntitysModels.Blog_Article>(EnumHelper.CURDEnum.删除)
+                    .OperationUserInfo(req.ActionUserName, req.ActionUserInfo)
+                    .NowData(data)
+                    .OldData(nowData)
+                    .BuilderSQL(db);
                 });
                 res.Status = true;
             }

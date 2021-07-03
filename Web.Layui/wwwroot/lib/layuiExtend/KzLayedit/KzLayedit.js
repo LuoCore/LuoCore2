@@ -6,7 +6,7 @@
  @License：MIT
  @Version: V21.04.11
  */
-layui.config({ base: '../../lib/layui/' }).extend({ layer: 'modules/layer', form: 'modules/form', code: 'modules/code'});
+
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
 
@@ -25,7 +25,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
         , form = layui.form
         , hint = layui.hint()
         , device = layui.device()
-        , MOD_NAME = 'layedit'
+        , MOD_NAME = 'KzLayedit'
         , THIS = 'layui-this'
         , SHOW = 'layui-show'
         , ABLED = 'layui-disabled'
@@ -131,7 +131,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
             , editor = $(['<div class="' + ELEM + '">'
                 , '<div class="layui-unselect layui-layedit-tool">' + tool.replace("layBkColor_Index", "layBkColor_" + that.index).replace("layFontColor_Index", "layFontColor_" + that.index) + '</div>'
                 , '<div class="layui-layedit-iframe">'
-                , '<iframe  src="empty.html" id="' + name + '" name="' + name + '" textarea="' + id + '" frameborder="0"></iframe>'
+                , '<iframe  src="" id="' + name + '" name="' + name + '" textarea="' + id + '" frameborder="0"></iframe>'
                 , '</div>'
                 , '</div>'].join(''))
 

@@ -7,15 +7,19 @@ using System.Threading.Tasks;
 
 namespace Web.Layui.Areas.Blog.Controllers
 {
-
+   
     [Area("Blog")]
     public abstract class BaseController : Controller
     {
         protected readonly dynamic _SERVICE;
+        protected readonly string _ACTIONUSERINFO;
+        protected readonly string _ACTIONUSERNAME;
 
         public BaseController(dynamic service)
         {
             _SERVICE = service;
+            _ACTIONUSERINFO = User.FindFirst("UserDataInfo").Value;
+            _ACTIONUSERNAME = User.Identity.Name;
         }
         public BaseController()
         {
@@ -28,10 +32,14 @@ namespace Web.Layui.Areas.Blog.Controllers
     public abstract class BaseController<T> : Controller
     {
         protected readonly T _SERVICE;
-       
+        protected readonly string _ACTIONUSERINFO;
+        protected readonly string _ACTIONUSERNAME;
+
         public BaseController(T service)
         {
             _SERVICE = service;
+            _ACTIONUSERINFO = User.FindFirst("UserDataInfo").Value;
+            _ACTIONUSERNAME = User.Identity.Name;
         }
 
     }

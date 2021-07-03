@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewData["Title"] = "LabelsDialog";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+<div class="layui-form layui-container layui-form-pane" lay-filter="form-RequestData" id="form-RequestData">
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">标签名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="LabelName" lay-verify="required" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">标签描述</label>
+        <div class="layui-input-block">
+            <textarea name="LabelDescribe" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否有效</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="IsValid" value="true" type="checkbox" lay-filter="switch" lay-skin="switch" lay-text="是|否" checked />
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="luo-submit" id="luo-submit">提交</button>
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        function ShowDialog_Load(formobj) {
+            layui.use(['jquery', 'form'], function () {
+                var $ = layui.$,
+                    form = layui.form;
+            });
+        }
+    </script>
+}

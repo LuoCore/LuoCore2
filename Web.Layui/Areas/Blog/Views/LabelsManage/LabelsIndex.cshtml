@@ -1,16 +1,13 @@
-﻿@{
-    ViewData["Title"] = "文章管理";
+﻿
+@{
+    ViewData["Title"] = "LabelsIndex";
     Layout = "~/Views/Shared/_LayuiLayout.cshtml";
 }
 
 <script type="text/html" id="toolbarTable">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
-        <button class="layui-btn layui-btn-sm" lay-event="query">查询</button>
-        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-lg" lay-event="query">查询</button>
+        <button class="layui-btn layui-btn-lg" lay-event="add">添加</button>
 
     </div>
 </script>
@@ -29,21 +26,16 @@
 
 <table id="dataTable" lay-filter="dataTable"></table>
 
-
 @section scripts{
 
     <script>
-       
-        layui.use(['table', 'dropdown'], function(){
+        layui.use(['table'], function () {
             var table = layui.table,
-                $ = layui.$,
-                laytpl = layui.laytpl,
-                dropdown = layui.dropdown;
-
-            let queryTableURL = "/Blog/ArticleManage/GetArticleTable";
-            let articleShowDialogURL = "/Blog/ArticleManage/ArticleDialog";
-            let articleCreateURL = "";
-            let articleUpdateURL = "";
+                $ = layui.$;
+            let QueryTableURL = "/Blog/ArticleManage/GetArticleTable";
+            let ShowDialogURL = "/Blog/LabelsManage/LabelsDialog";
+            let CreateURL = "/Blog/LabelsManage/CreateLabels";
+            let UpdateURL = "";
 
             let tableCols = [[
                 { type: 'checkbox', fixed: 'left' },
@@ -51,11 +43,11 @@
                 { field: 'ArticleConten', title: '文章内容', edit: 'text' },
                 { field: 'IsValid', title: '城市', width: 120, templet: '#switchIsValid' },
                 { fixed: 'right', title: '操作', toolbar: '#barTableBtn', width: 150 }
-            ]]
+            ]];
             //渲染表格
             window.ins1 = table.render({
                 elem: '#dataTable',
-                title: '博客文章数据表',
+                title: '博客类型数据表',
                 size: 'lg',
                 autoSort: false, //是否自动排序。如果否，则由服务端排序
                 loading: false,
@@ -73,16 +65,14 @@
                 }
             });
 
-
-
-           //工具栏事件
+            //工具栏事件
             table.on('toolbar(dataTable)', function (obj) {
                 var checkStatus = table.checkStatus(obj.config.id);
                 switch (obj.event) {
                     case 'query':
                         //深度重载
                         table.reload('dataTable', {
-                            url: queryTableURL,
+                            url: QueryTableURL,
                             method: "get",
                             request: {
                                 pageName: 'PageIndex', //页码的参数名称，默认：page
@@ -106,92 +96,47 @@
                     case 'delete':
                         layer.msg('删除');
                         break;
-                    case 'getCheckData':
-                        var data = checkStatus.data;
-                        layer.alert(JSON.stringify(data));
-                        break;
-                    case 'getCheckLength':
-                        var data = checkStatus.data;
-                        layer.msg('选中了：' + data.length + ' 个');
-                        break;
-                    case 'getData':
-                        var getData = table.getData(obj.config.id);
-                        console.log(getData);
-                        layer.alert(JSON.stringify(getData));
-                        break;
-                    case 'isAll':
-                        layer.msg(checkStatus.isAll ? '全选' : '未全选')
-                        break;
-                    case 'LAYTABLE_TIPS':
-                        layer.alert('Table for layui-v' + layui.v);
-                        break;
-
-                    case 'reload2':
-                        //浅重载
-                        table.reload('test', {
-                            where: {
-                                efg: 'sasasas'
-                                //,test: '新的 test2'
-                                //,token: '新的 token2'
-                            }
-                            , cols: [[
-                                { type: 'checkbox', fixed: 'left' }
-                                , { field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：' }
-                                , { field: 'sex', title: '性别', width: 80, edit: 'text', sort: true }
-                                , { field: 'experience', title: '积分', width: 80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>' }
-                                , { field: 'logins', title: '登入次数', width: 100, sort: true, totalRow: true }
-                                , { field: 'joinTime', title: '加入时间', width: 120 }
-                            ]]
-                            //,height: 500
-                        });
-                        break;
                 };
             });
 
             const ShowDialogAction = (formObj) => {
-
-                let ActionUrl = articleCreateURL;
-                let formTitle = "添加";
+                let ActionUrl = CreateURL;
+                let formTitle = "添加权限";
                 let actionType = "POST"
                 let identification = "";
                 if (formObj != null && formObj != undefined) {
                     debugger;
-                    ActionUrl = articleUpdateURL;
-                    formTitle = "编辑"
+                    ActionUrl = UpdateURL;
+                    formTitle = "编辑权限"
                     actionType = "Put"
-                    identification = formObj.articleId;
+                    identification = formObj.roleId;
                 }
 
                 let index = layer.open({
                     type: 2,
                     title: formTitle,
-                    area: ['60%', '80%'],
-                    offset: '5%',
-                    content: articleShowDialogURL,
+                    area: ['atuo','65%'],
+                    offset: '10%',
+                    content: ShowDialogURL,
                     btn: ['确定', '取消'],
                     success: (layero, index) => {
                         var iframe = window['layui-layer-iframe' + index];
                         iframe.ShowDialog_Load(formObj);
-                        //对加载后的iframe进行宽高度自适应
-                        //layer.iframeAuto(index);
                     },
                     yes: function (index, layero) {
                         let iframeWindow = window['layui-layer-iframe' + index]
                             , submit = layero.find('iframe').contents().find("#luo-submit");
-
                         //监听提交
                         iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
 
-                            debugger;
                             let field = data.field; //获取提交的字段
-
                             let requestData = {
-                                RoleId: identification,
-                                RoleName: field.RoleName,
-                                RoleDescription: field.RoleDescription,
+                                LabelId: identification,
+                                LabelName: field.LabelName,
+                                LabelDescribe: field.LabelDescribe,
                                 IsValid: field.IsValid,
                             };
-                            console.log("请求字段;" + requestData);
+
                             //提交 Ajax 成功后，静态更新表格中的数据
                             $.ajax({
                                 type: actionType,
@@ -219,8 +164,7 @@
                 layer.iframeAuto(index);
             };
 
-
         });
     </script>
+}
 
-} 

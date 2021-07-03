@@ -21,7 +21,7 @@
 
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">文章内容</label>
-        <div class="layui-input-block">
+        <div class="layui-input-block" style="background-color: #fff;">
             <textarea id="articleConten" name="ArticleConten" placeholder="请输入内容" class="layui-textarea"></textarea>
         </div>
     </div>
@@ -38,7 +38,7 @@
 @section scripts{
 
     <script>
-        layui.config({ base: '/lib/layuiExtend/' }).extend({ KzLayedit: 'KzLayedit/layedit' });
+        layui.config({ base: '/lib/layuiExtend/' }).extend({ KzLayedit: 'KzLayedit/KzLayedit' });
         function ShowDialog_Load(formobj) {
            
             layui.use(['jquery', 'form', 'KzLayedit'], function () {
@@ -127,7 +127,7 @@
                     },
                     //新增iframe外置样式和js
                     quote: {
-                        style: ['Content/css.css'],
+                        //style: ['Content/css.css'],
                         //js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
                     },
                     //自定义样式-暂只支持video添加
@@ -139,11 +139,11 @@
                     //    }
                     //}
                     //插入自定义链接
-                    customlink: {
-                        title: '插入layui官网',
-                        href: 'https://www.layui.com',
-                        onmouseup: '',
-                    },
+                    //customlink: {
+                    //    title: '插入layui官网',
+                    //    href: 'https://www.layui.com',
+                    //    onmouseup: '',
+                    //},
                     facePath: 'http://knifez.gitee.io/kz.layedit/Content/Layui-KnifeZ/',
                     devmode: true,
                     videoAttr: ' preload="none" ',

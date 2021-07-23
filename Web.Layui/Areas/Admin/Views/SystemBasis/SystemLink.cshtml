@@ -59,7 +59,8 @@
                 page: true
             });
 
-            const [QueryURL,UpdateURL,CreateURL,DeleteURL] = [
+            const [ShowDialogURL,QueryURL,UpdateURL,CreateURL,DeleteURL] = [
+                "/Admin/SystemBasis/SystemLinkDialog",
                 "/Admin/SystemBasis/GetLinkPage",
                 '/Admin/UserBasis/RoleTable',
                 '/Admin/UserBasis/RoleDialog',
@@ -68,7 +69,6 @@
 
             table.on('toolbar(dataTable)', function (obj) {
                 //var checkStatus = table.checkStatus(obj.config.id);
-                debugger;
                 switch (obj.event) {
                     case 'query':
                         //深度重载
@@ -88,9 +88,76 @@
                             }
                         }, true);
                         break;
+                    case 'add':
+                        ShowDialogAction();
+                        break;
+
                
                 };
             });
+
+
+
+            const ShowDialogAction = (formObj) => {
+
+                let [ActionUrl, formTitle, actionType, identification] = [
+                    CreateURL,
+                    "添加",
+                    "POST",
+                    ""
+                ];
+                if (formObj != null && formObj != undefined) {
+                    ActionUrl = UpdateURL;
+                    formTitle = "编辑"
+                    actionType = "Put"
+                    identification = formObj.articleId;
+                }
+
+                const index = layer.open({
+                    type: 2,
+                    title: formTitle,
+                    area: 'auto',
+                    content: ShowDialogURL,
+                    btn: ['确定', '取消'],
+                    success: (layero, index) => {
+                        const iframe = window['layui-layer-iframe' + index];
+                        iframe.ShowDialog_Load(formObj);
+                    },
+                    yes: function (index, layero) {
+                        const iframeWindow = window['layui-layer-iframe' + index]
+                            , submit = layero.find('iframe').contents().find("#luo-submit");
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+                            const field = data.field; //获取提交的字段
+                            console.log("请求字段;" + JSON.stringify(field));
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                type: actionType,
+                                url: ActionUrl,
+                                data: requestData,
+                                dataType: "json",
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.status) {
+                                        table.reload('dataTable');
+                                        layer.close(index); //关闭弹层
+                                    }
+                                    else {
+                                        layer.alert(result.messages);
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert("发生错误：" + jqXHR.status);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+                layer.full(index);
+
+            };
 
         });
     </script>

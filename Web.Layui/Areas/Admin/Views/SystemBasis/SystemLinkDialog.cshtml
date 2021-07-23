@@ -4,5 +4,81 @@
     Layout = "~/Views/Shared/_LayuiLayout.cshtml";
 }
 
-<h1>SystemLinkDialog</h1>
+<div style="margin-top:1.5rem" class="layui-form layui-container layui-form-pane" lay-filter="form-RequestData" id="form-RequestData">
 
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">联系名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="LinkName" lay-verify="required" placeholder="联系方式名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">联系方式</label>
+        <div class="layui-input-block">
+            <input type="text" name="LinkUrl" lay-verify="required" placeholder="联系方式" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系图标</label>
+        <div class="layui-input-inline">
+            <input type="text" id="iconPicker" name="LinkIco">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item" pane>
+        <label class="layui-form-label">是否有效</label>
+        <div class="layui-input-inline" pane>
+            <input name="IsValid" value="true" type="checkbox" lay-filter="switch" lay-skin="switch" lay-text="是|否" checked />
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="luo-submit" id="luo-submit">提交</button>
+    </div>
+
+</div>
+
+@section scripts
+{
+    <script>
+        layui.extend({
+            iconPicker: '/lib/layuiExtend/iconPicker/iconPicker'
+        });
+        function ShowDialog_Load(formobj) {
+            layui.use(['jquery', 'form', 'iconPicker', 'layer'], function () {
+                const iconPicker = layui.iconPicker,
+                    form = layui.form,
+                    layer = layui.layer,
+                    $ = layui.$;
+
+                iconPicker.render({
+                    // 选择器，推荐使用input
+                    elem: '#iconPicker',
+                    // 数据类型：fontClass/unicode，推荐使用fontClass
+                    type: 'unicode',
+                    // 是否开启搜索：true/false，默认true
+                    search: true,
+                    // 是否开启分页：true/false，默认true
+                    page: true,
+                    // 每页显示数量，默认12
+                    limit: 12,
+                    // 点击回调
+                    click: function (data) {
+                        console.log(data);
+                    },
+                    // 渲染成功后的回调
+                    success: function (d) {
+                        console.log(d);
+                    }
+                });
+
+                iconPicker.checkIcon('iconPicker', "&#xe68f;");
+            });
+        };
+    </script>
+
+}

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IServices;
 using ViewModels;
-using ViewModels.SystemBasis.Request;
+using ViewModels.UserBasis.Request;
 
 namespace Web.Layui.Areas.Admin.Controllers
 {

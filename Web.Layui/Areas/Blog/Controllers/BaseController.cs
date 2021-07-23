@@ -32,14 +32,13 @@ namespace Web.Layui.Areas.Blog.Controllers
     public abstract class BaseController<T> : Controller
     {
         protected readonly T _SERVICE;
-        protected readonly string _ACTIONUSERINFO;
-        protected readonly string _ACTIONUSERNAME;
+        protected abstract string _ACTIONUSERINFO {  get; }
+        protected abstract string _ACTIONUSERNAME {  get; }
 
         public BaseController(T service)
         {
             _SERVICE = service;
-            _ACTIONUSERINFO = User.FindFirst("UserDataInfo").Value;
-            _ACTIONUSERNAME = User.Identity.Name;
+           
         }
 
     }

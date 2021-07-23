@@ -35,5 +35,7 @@ namespace EntitysModels
         /// Nullable:True
         /// </summary>           
         public string LabelsId { get; set; }
+
+        public bool IsValid { get; set; }
     }
 }

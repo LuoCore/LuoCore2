@@ -1,0 +1,310 @@
+﻿@{
+    ViewData["Title"] = "角色管理";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+
+            <div class="layui-form-item">
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-event" data-type="query">查询</button>
+                <button class="layui-btn layuiadmin-btn-event layui-btn-danger" data-type="delete">删除</button>
+                <button class="layui-btn layuiadmin-btn-event" data-type="add">添加</button>
+                <button class="layui-btn layuiadmin-btn-event" data-type="editRolePermission">权限编辑</button>
+            </div>
+
+         
+            <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
+
+            <script type="text/html" id="switchIsValid">
+                <input type="checkbox" name="isValid" value="{{d.isValid}}" lay-skin="switch" lay-text="是|否" lay-filter="isValid" {{ d.isValid == true ? 'checked' : '' }}>
+            </script>
+
+            <script type="text/html" id="table-action">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="editRolePermission"><i class="layui-icon layui-icon-edit"></i>编辑权限</a>
+            </script>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+@section scripts{
+<script>
+    layui.use(['jquery', 'table'], function () {
+        let $ = layui.jquery,
+            table = layui.table;
+
+
+        const [SelectBoxURL, TableURL, ShowDialogURL, ShowRolePermissionDialogURL, CreateRolePermissionURL, CreateURL, UpdateURL, DeleteURL] = [
+            "/Admin/UserBasis/PermissionSelectBox",
+            '/Admin/UserBasis/RoleTable',
+            '/Admin/UserBasis/RoleDialog',
+            '/Admin/UserBasis/RolePermissionDialog',
+            '/Admin/UserBasis/AddRolePermission',
+            "/Admin/UserBasis/RoleCreate",
+            "/Admin/UserBasis/RoleUpdateById",
+            '/Admin/UserBasis/RoleDeleteByIds'
+        ];
+
+        // 字段配置
+        const tableCols = [[
+            { type: 'checkbox', fixed: 'left' },
+            { field: 'roleName', title: '角色名称' },
+            { field: 'roleDescription', title: '角色描述' },
+            { field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
+            { title: '操作', width: 'auto', align: 'center', fixed: 'right', toolbar: '#table-action' }
+        ]];
+
+        table.render({
+            elem: '#dataTable',
+            title: '角色数据表',
+            totalRow: true,
+            height: 'full-200',
+            cellMinWidth: 80,
+            cols: tableCols,
+            loading: false,
+            page: true
+        });
+
+
+        //顶部按钮事件 Start
+        $('.layui-btn.layuiadmin-btn-event').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        let active = {
+            query: function () {
+                table.reload('dataTable', {
+                    url: TableURL,
+                    method: "get",
+                    request: {
+                        pageName: 'PageIndex', //页码的参数名称，默认：page
+                        limitName: 'PageSize' //每页数据量的参数名，默认：limit
+                    },
+                    where: {
+                        RoleId: "",
+                        RoleName: "",
+                        IsValid: null,
+                        StartTime: null,
+                        EndTime: null,
+                    }
+                });
+            },
+            delete: function () {
+                let checkData = permissionTable.checkStatus(false);
+                let permissionIds = new Array()
+                for (var i = 0; i < checkData.length; i++) {
+                    permissionIds.push(checkData[i].permissionId);
+                }
+                //执行 Ajax 后重载
+                DeleteAction(permissionIds);
+            },
+            add: function () {
+                ShowDialogAction();
+            },
+            editRolePermission: function () {
+                var checkStatus = table.checkStatus('dataTable')
+                    , checkDatas = checkStatus.data;
+                let roleIdCheckArray = new Array();
+                for (var index in checkDatas) {
+                    roleIdCheckArray.push(checkDatas[index].roleId);
+                }
+
+                ShowDialogRolePermissionAction(roleIdCheckArray);
+            }
+        }
+        //顶部按钮事件 End
+
+        table.on('tool(dataTable)', function (obj) {
+
+            switch (obj.event) {
+                case 'edit':
+                    ShowDialogAction(obj.data);
+                    break;
+                case 'del':
+                    let Ids = new Array([obj.data.roleId]);
+                    DeleteAction(Ids);
+                    break;
+                case 'editRolePermission':
+                    debugger;
+                    let rolepermissionIds = new Array(obj.data.roleId);
+                    ShowDialogRolePermissionAction(rolepermissionIds);
+                    break;
+            };
+        });
+
+
+
+        //角色编辑弹出框
+        const ShowDialogAction = (formObj) => {
+
+            let ActionUrl = CreateURL;
+            let formTitle = "添加权限";
+            let actionType = "POST"
+            let identification = "";
+            if (formObj != null && formObj != undefined) {
+            debugger;
+                ActionUrl = UpdateURL;
+                formTitle = "编辑权限"
+                actionType = "Put"
+                identification = formObj.roleId;
+            }
+
+            let index = layer.open({
+                type: 2,
+                title: formTitle,
+                area: ['auto'],
+                offset: '10%',
+                content: ShowDialogURL,
+                btn: ['确定', '取消'],
+                success: (layero, index) => {
+                    var iframe = window['layui-layer-iframe' + index];
+                    iframe.ShowDialog_Load(formObj);
+                    //对加载后的iframe进行宽高度自适应
+                    layer.iframeAuto(index);
+                },
+                yes: function (index, layero) {
+                    let iframeWindow = window['layui-layer-iframe' + index]
+                        , submit = layero.find('iframe').contents().find("#luo-submit");
+
+                    //监听提交
+                    iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+                        let field = data.field; //获取提交的字段
+
+                        let requestData = {
+                            RoleId: identification,
+                            RoleName: field.RoleName,
+                            RoleDescription: field.RoleDescription,
+                            IsValid: field.IsValid,
+                        };
+                        console.log("请求字段;" + requestData);
+                        //提交 Ajax 成功后，静态更新表格中的数据
+                        $.ajax({
+                            type: actionType,
+                            url: ActionUrl,
+                            data: requestData,
+                            dataType: "json",
+                            success: function (result) {
+                                console.log(result);
+                                if (result.status) {
+                                    table.reload('dataTable');
+                                    layer.close(index); //关闭弹层
+                                }
+                                else {
+                                    layer.alert(result.messages);
+                                }
+                            },
+                            error: function (jqXHR) {
+                                alert("发生错误：" + jqXHR.status);
+                            }
+                        });
+                    });
+                    submit.trigger('click');
+                }
+            });
+            layer.iframeAuto(index);
+        };
+
+        //权限编辑弹出框
+        const ShowDialogRolePermissionAction = (formObj) => {
+            let ActionUrl = CreateRolePermissionURL;
+            let formTitle = "添加角色权限";
+            let actionType = "POST"
+
+
+            let index = layer.open({
+                type: 2,
+                title: formTitle,
+                area: ['auto', '60%'],
+                offset: '10%',
+                content: ShowRolePermissionDialogURL,
+                btn: ['确定', '取消'],
+                success: (layero, index) => {
+                    var iframe = window['layui-layer-iframe' + index];
+                    iframe.ShowDialog_Load(formObj);
+
+                },
+                yes: function (index, layero) {
+                    let iframeWindow = window['layui-layer-iframe' + index]
+                        , submit = layero.find('iframe').contents().find("#luo-submit");
+
+                    //监听提交
+                    iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+
+
+                        function recursionPermissionId(recursDatas, trees) {
+                            for (var index in recursDatas) {
+                                if (recursDatas[index].id != null && recursDatas[index].id != undefined && recursDatas[index].id != "") {
+                                    trees.push(recursDatas[index].id);
+                                }
+                                if (recursDatas[index].children != null && recursDatas[index].children != undefined && recursDatas[index].children != "") {
+                                      if (recursDatas[index].children.length > 0) {
+                                         recursionPermissionId(recursDatas[index].children, trees)
+                                     }
+                                }
+                            }
+                        }
+
+
+                        var checkedDatas = iframeWindow.layui.tree.getChecked('demoId');
+                        debugger;
+                        var treePermissionIds = new Array();
+
+                        recursionPermissionId(checkedDatas, treePermissionIds);
+
+
+
+
+
+                        let requestData = {
+                            RoleIds: formObj,
+                            PermissionIds: treePermissionIds,
+                        };
+                        console.log("请求字段;" + requestData);
+                        //提交 Ajax 成功后，静态更新表格中的数据
+                        $.ajax({
+                            type: actionType,
+                            url: ActionUrl,
+                            data: requestData,
+                            dataType: "json",
+                            success: function (result) {
+                                console.log(result);
+                                if (result.status) {
+                                    table.reload('dataTable');
+                                    layer.close(index); //关闭弹层
+                                }
+                                else {
+                                    layer.alert(result.messages);
+                                }
+                            },
+                            error: function (jqXHR) {
+                                alert("发生错误：" + jqXHR.status);
+                            }
+                        });
+                    });
+                    submit.trigger('click');
+                }
+            });
+            layer.iframeAuto(index);
+        };
+
+
+    })
+</script>
+}
+
+

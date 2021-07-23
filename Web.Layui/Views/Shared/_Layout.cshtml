@@ -1,48 +1,59 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
+    <!-- Viewport-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Web.Layui</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web.Layui</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="LuoCore">
+    <meta name="keywords" content="LuoCore">
+    <meta name="author" content="Luo">
+    <!-- 图标-->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" color="#fe6a6a" href="safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - Web.Layui - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <title>@ViewData["Title"]</title>
+
+    <!-- 样式: 字体图标 插件,等等.-->
+    <link href="~/lib/cartzilla/vendor/simplebar/dist/simplebar.min.css" rel="stylesheet" media="screen" />
+    <link href="~/lib/cartzilla/vendor/tiny-slider/dist/tiny-slider.css" rel="stylesheet" media="screen" />
+    <link href="~/lib/cartzilla/vendor/lightgallery.js/dist/css/lightgallery.min.css" rel="stylesheet" media="screen" />
+    <!-- 主要的样式 + Bootstrap-->
+    <link href="~/lib/cartzilla/css/theme.min.css"  rel="stylesheet" media="screen" />
+
+
+</head>
+<body class="handheld-toolbar-enabled">
+    <header class="bg-light shadow-sm navbar-sticky">
+        <partial name="Components/_TopBar" />
+        <!--删除“navbar sticky”类，使导航栏可以随页面滚动。-->
+        @await Component.InvokeAsync("Navigation")
+
+    </header>
+
+    @RenderBody()
+
+
+    <partial name="Components/_FooterPage" />
+    @await Component.InvokeAsync("HandheldDevicesToolbar")
+    <partial name="Components/_BackToTop" />
+
+
+    <!-- JavaScript: Js库和插件-->
+    <script src="~/lib/cartzilla/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/cartzilla/vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="~/lib/cartzilla/vendor/tiny-slider/dist/min/tiny-slider.js"></script>
+    <script src="~/lib/cartzilla/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <!--主要的JS-->
+    <script src="~/lib/cartzilla/js/theme.min.js"></script>
+
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

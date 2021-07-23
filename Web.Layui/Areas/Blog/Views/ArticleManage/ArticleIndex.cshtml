@@ -5,10 +5,6 @@
 
 <script type="text/html" id="toolbarTable">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
         <button class="layui-btn layui-btn-sm" lay-event="query">查询</button>
         <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
 
@@ -42,14 +38,15 @@
 
             let queryTableURL = "/Blog/ArticleManage/GetArticleTable";
             let articleShowDialogURL = "/Blog/ArticleManage/ArticleDialog";
-            let articleCreateURL = "";
-            let articleUpdateURL = "";
+            let CreateURL = "/Blog/ArticleManage/CreateArticle";
+            let UpdateURL = "/Blog/ArticleManage/UpdateArticle";
+            let DeleteURL = "/Blog/ArticleManage/DeleteArticle";
 
             let tableCols = [[
                 { type: 'checkbox', fixed: 'left' },
-                { field: 'ArticleTitle', title: '文章标题', width: 120, edit: 'text' },
-                { field: 'ArticleConten', title: '文章内容', edit: 'text' },
-                { field: 'IsValid', title: '城市', width: 120, templet: '#switchIsValid' },
+                { field: 'articleTitle', title: '文章标题', width: 120, edit: 'text' },
+                { field: 'articleConten', title: '文章内容' },
+                { field: 'isValid', title: '城市', width: 120, templet: '#switchIsValid' },
                 { fixed: 'right', title: '操作', toolbar: '#barTableBtn', width: 150 }
             ]]
             //渲染表格
@@ -101,62 +98,38 @@
                         ShowDialogAction();
                         break;
                     case 'update':
-                        layer.msg('编辑');
+                       
                         break;
                     case 'delete':
                         layer.msg('删除');
                         break;
-                    case 'getCheckData':
-                        var data = checkStatus.data;
-                        layer.alert(JSON.stringify(data));
-                        break;
-                    case 'getCheckLength':
-                        var data = checkStatus.data;
-                        layer.msg('选中了：' + data.length + ' 个');
-                        break;
-                    case 'getData':
-                        var getData = table.getData(obj.config.id);
-                        console.log(getData);
-                        layer.alert(JSON.stringify(getData));
-                        break;
-                    case 'isAll':
-                        layer.msg(checkStatus.isAll ? '全选' : '未全选')
-                        break;
-                    case 'LAYTABLE_TIPS':
-                        layer.alert('Table for layui-v' + layui.v);
-                        break;
-
-                    case 'reload2':
-                        //浅重载
-                        table.reload('test', {
-                            where: {
-                                efg: 'sasasas'
-                                //,test: '新的 test2'
-                                //,token: '新的 token2'
-                            }
-                            , cols: [[
-                                { type: 'checkbox', fixed: 'left' }
-                                , { field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：' }
-                                , { field: 'sex', title: '性别', width: 80, edit: 'text', sort: true }
-                                , { field: 'experience', title: '积分', width: 80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>' }
-                                , { field: 'logins', title: '登入次数', width: 100, sort: true, totalRow: true }
-                                , { field: 'joinTime', title: '加入时间', width: 120 }
-                            ]]
-                            //,height: 500
-                        });
-                        break;
                 };
             });
+            table.on('tool(dataTable)', function (obj) {
+                switch (obj.event) {
+                    case 'edit':
+                        debugger;
+                        ShowDialogAction(obj.data);
+                        break;
+                    case 'del':
+                        let Ids = new Array([obj.data.articleId]);
+                        layer.msg('删除' + JSON.stringify(Ids));
+                        DeleteAction(Ids);
+                        break;
+
+                };
+            });
+            
 
             const ShowDialogAction = (formObj) => {
 
-                let ActionUrl = articleCreateURL;
+                let ActionUrl = CreateURL;
                 let formTitle = "添加";
                 let actionType = "POST"
                 let identification = "";
                 if (formObj != null && formObj != undefined) {
                     debugger;
-                    ActionUrl = articleUpdateURL;
+                    ActionUrl = UpdateURL;
                     formTitle = "编辑"
                     actionType = "Put"
                     identification = formObj.articleId;
@@ -165,8 +138,7 @@
                 let index = layer.open({
                     type: 2,
                     title: formTitle,
-                    area: ['60%', '80%'],
-                    offset: '5%',
+                    area: 'auto',
                     content: articleShowDialogURL,
                     btn: ['确定', '取消'],
                     success: (layero, index) => {
@@ -181,17 +153,20 @@
 
                         //监听提交
                         iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
-
                             debugger;
+                            var wangHtml = iframeWindow.GetWangEditorHtml();
+                           
                             let field = data.field; //获取提交的字段
 
+                          
                             let requestData = {
-                                RoleId: identification,
-                                RoleName: field.RoleName,
-                                RoleDescription: field.RoleDescription,
+                                ArticleId: identification,
+                                ArticleTitle: field.ArticleTitle,
+                                ArticleConten: wangHtml,
                                 IsValid: field.IsValid,
+                                LabelsIds:field.LabelsSelectBox
                             };
-                            console.log("请求字段;" + requestData);
+                            console.log("请求字段;" + JSON.stringify(requestData));
                             //提交 Ajax 成功后，静态更新表格中的数据
                             $.ajax({
                                 type: actionType,
@@ -216,10 +191,41 @@
                         submit.trigger('click');
                     }
                 });
-                layer.iframeAuto(index);
+                layer.full(index);
+              
             };
 
+            const DeleteAction = (Ids) => {
 
+                if (Ids.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+
+                   
+                    debugger;
+                    $.ajax({
+                        type: 'Delete',
+                        url: DeleteURL,
+                        /* contentType: 'application/json',*/
+                        data: { ArticleIds: Ids },
+                        dataType: 'json',
+                        headers: {},
+                        success: function (result) {
+                            if (result.status) {
+                                table.reload('dataTable');
+                                layer.msg(result.messages);
+                            }
+                            else {
+                                layer.alert(result.messages);
+                            }
+                        },
+                        error: function (e, msg) {
+                            alert('数据接口请求异常：' + msg);
+                        }
+                    });
+                });
+            };
         });
     </script>
 

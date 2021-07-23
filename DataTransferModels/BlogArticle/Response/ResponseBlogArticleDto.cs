@@ -9,6 +9,7 @@ namespace DataTransferModels.BlogArticle.Response
    public class ResponseBlogArticleDto
     {
         public string UserId { get; set; }
+        public string ArticleId { get; set; }
         public string ArticleTitle { get; set; }
         public string ArticleConten { get; set; }
         public bool IsValid { get; set; }

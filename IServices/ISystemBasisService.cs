@@ -8,22 +8,11 @@ using ViewModels.SystemBasis.Request;
 
 namespace IServices
 {
-    public interface ISystemBasisService
-    {
-        public  Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetPermissionSelectBoxAsync(string parentId);
-        public Task<ResultVm<List<EntitysModels.Base_RolePermission>>> GetRolePermissionByRoleIdAsync(string roleId);
-        public  Task<ResultVm<List<ViewModels.Layui.TreeVm>>> GetPermissionTreeBoxByRoleIdAsync(string permissionId, string roleId);
-        public Task<ViewModels.Layui.TableVm> GetPermissionTable(RequestGetPermissionVm req);
-        public Task<ViewModels.ResultVm> AddPermission(RequestAddPermissionVm req);
-        public Task<ViewModels.ResultVm> UpdatePermissionById(RequestUpdatePermissionVm req);
-        public Task<ViewModels.ResultVm> DeletePermissionByIds(RequestDeletePermissionVm req);
-        public Task<ViewModels.Layui.TableVm> GetRoleTable(RequestGetRoleVm req);
-        public Task<ResultVm> AddRole(RequestAddRoleVm req);
-        public Task<ResultVm> UpdateRoleById(RequestUpdateRoleVm req);
-        public Task<ResultVm> AddRolePermission(RequestAddRolePermissionVm req);
-        public Task<ViewModels.Layui.TableVm> GetUserTable(RequestGetUserVm req);
-        public Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> GetRoleSelectBox(string userId);
-        public Task<ResultVm> UserCreate(RequestAddUserVm req);
-        public Task<ResultVm> UserUpdateById(RequestUpdateUserVm req);
-    }
+     public interface ISystemBasisService
+     {
+          public Task<ViewModels.Layui.TableVm> QueryLinkPage(RequestLinkQueryPageVm req);
+          public ResultVm CreateLink(RequestLinkCreateVm req);
+          public ResultVm UpdateLink(RequestLinkUpdateVm req);
+          public ResultVm DeleteLink(RequestLinkDeleteVm req);
+     }
 }

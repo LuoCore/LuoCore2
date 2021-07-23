@@ -8,7 +8,6 @@ namespace ViewModels.Blog.Request
 {
     public class RequestCreateBlogLabelVm:RequestBaseVm
     {
-        public Guid LabelId { get; set; }
         public string LabelName { get; set; }
         public string LabelDescribe { get; set; }
         public bool IsValid { get; set; }

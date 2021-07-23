@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "LabelsIndex";
     Layout = "~/Views/Shared/_LayuiLayout.cshtml";
 }
@@ -14,7 +13,7 @@
 
 <script type="text/html" id="barTableBtn">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" style="{{ d.isValid == true ? '' : 'display: none' }}" lay-event="del">删除</a>
 </script>
 
 <script type="text/html" id="switchIsValid">
@@ -32,16 +31,17 @@
         layui.use(['table'], function () {
             var table = layui.table,
                 $ = layui.$;
-            let QueryTableURL = "/Blog/ArticleManage/GetArticleTable";
-            let ShowDialogURL = "/Blog/LabelsManage/LabelsDialog";
-            let CreateURL = "/Blog/LabelsManage/CreateLabels";
-            let UpdateURL = "";
+            const QueryTableURL = "/Blog/LabelsManage/GetLabelsPage";
+            const ShowDialogURL = "/Blog/LabelsManage/LabelsDialog";
+            const CreateURL = "/Blog/LabelsManage/CreateLabels";
+            const UpdateURL = "/Blog/LabelsManage/UpdateLabels";
+            const DeleteURL = "/Blog/LabelsManage/DeleteLabels";
 
             let tableCols = [[
                 { type: 'checkbox', fixed: 'left' },
-                { field: 'ArticleTitle', title: '文章标题', width: 120, edit: 'text' },
-                { field: 'ArticleConten', title: '文章内容', edit: 'text' },
-                { field: 'IsValid', title: '城市', width: 120, templet: '#switchIsValid' },
+                { field: 'labelName', title: '分类名称', width: 120, edit: 'text' },
+                { field: 'labelDescribe', title: '分类描述', edit: 'text' },
+                { field: 'isValid', title: '是否有效', width: 120, templet: '#switchIsValid' },
                 { fixed: 'right', title: '操作', toolbar: '#barTableBtn', width: 150 }
             ]];
             //渲染表格
@@ -99,6 +99,20 @@
                 };
             });
 
+            table.on('tool(dataTable)', function (obj) {
+                switch (obj.event) {
+                    case 'edit':
+                        layer.msg('编辑');
+                        break;
+                    case 'del':
+                        let Ids = new Array([obj.data.labelId]);
+                        layer.msg('删除');
+                        DeleteAction(Ids);
+                        break;
+                  
+                };
+            });
+
             const ShowDialogAction = (formObj) => {
                 let ActionUrl = CreateURL;
                 let formTitle = "添加权限";
@@ -115,7 +129,7 @@
                 let index = layer.open({
                     type: 2,
                     title: formTitle,
-                    area: ['atuo','65%'],
+                    area: ['atuo', '80%'],
                     offset: '10%',
                     content: ShowDialogURL,
                     btn: ['确定', '取消'],
@@ -129,6 +143,7 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
 
+                            debugger
                             let field = data.field; //获取提交的字段
                             let requestData = {
                                 LabelId: identification,
@@ -150,7 +165,14 @@
                                         layer.close(index); //关闭弹层
                                     }
                                     else {
-                                        layer.alert(result.messages);
+                                        if (result.messages == "" || result.messages == undefined || result.messages == null) {
+                                            layer.alert("保存失败！");
+                                        }
+                                        else
+                                        {
+                                            layer.alert(result.messages);
+                                        }
+                                       
                                     }
                                 },
                                 error: function (jqXHR) {
@@ -163,7 +185,36 @@
                 });
                 layer.iframeAuto(index);
             };
+            const DeleteAction = (ids)=>
+            {
 
+                if (ids.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+
+                    $.ajax({
+                        type: 'Delete',
+                        url: DeleteURL,
+                        /* contentType: 'application/json',*/
+                        data: { ids },
+                        dataType: 'json',
+                        headers: {},
+                        success: function (result) {
+                            if (result.status) {
+                                table.reload('dataTable');
+                                layer.msg(result.messages);
+                            }
+                            else {
+                                layer.alert(result.messages);
+                            }
+                        },
+                        error: function (e, msg) {
+                            alert('数据接口请求异常：' + msg);
+                        }
+                    });
+                });
+            }；
         });
     </script>
 }

@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Utility.Factory;
 using Utility.Repository;
-using ViewModels.SystemBasis.Request;
+using ViewModels.UserBasis.Request;
 
 namespace Services
 {

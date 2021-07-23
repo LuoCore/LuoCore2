@@ -1,8 +1,239 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<partial name="Components/_PageTitle" />
+<div class="container pb-5">
+    <section class="bg-accent bg-position-center bg-size-cover py-3 py-sm-5" style="background-image: url(img/intro/intro-hero.jpg);">
+        <div class="container py-5">
+            <div class="row pt-md-5 pb-lg-5 justify-content-center">
+                <div class="col-xl-7 col-lg-8 col-md-10 text-center py-xl-3">
+                    <h1 class="text-light pb-sm-3">
+                        <span class='fw-light'>Multipurpose</span> Bootstrap 5<br>E-Commerce
+                        <span class='fw-light'>Template</span>
+                    </h1>
+                    <span class="d-inline-block h5 text-light fw-light mx-2 opacity-70">单身的 / 多-小贩</span>
+                    <span class="d-inline-block h3 text-light fw-light mx-2">市场</span>
+                    <span class="d-inline-block h4 text-light fw-light mx-2 opacity-70">时尚</span>
+                    <span class="d-inline-block h3 text-light fw-light mx-2 opacity-90">电子产品</span>
+                    <span class="d-inline-block h6 text-light fw-light mx-2 opacity-60">大车</span>
+                    <span class="d-inline-block h3 text-light fw-light mx-2">杂货店</span>
+                    <span class="d-inline-block h5 text-light fw-light mx-2 opacity-80">查看</span>
+                    <span class="d-inline-block h4 text-light fw-light mx-2">Food Delivery</span>
+                    <span class="d-inline-block fs-lg text-light fw-light mx-2 opacity-60">帐户 / 抄写板</span>
+                    <div class="py-4 py-sm-5"><a class="btn btn-primary btn-lg" href="#demos" data-scroll>看法 演示<i class="ci-arrow-down-circle ms-2"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <section class="container pt-5 pb-3 pb-lg-5" id="demos">
+        <div class="text-center pt-md-4 pb-2">
+            <h2><span class='fw-light'>Explore</span> Cartzilla 演示</h2>
+            <p class="text-muted">探索仔细构建主页的集合。更多来来很快!</p>
+        </div>
+        <div class="row pt-4">
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb border">
+                        <div class="product-card-actions">
+                            <a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="home-fashion-store-v1.html">
+                                <i class="ci-eye"></i>
+                            </a>
+                            <a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="https://themes.getbootstrap.com/product/cartzilla-bootstrap-e-commerce-template-ui-kit/" target="_blank" rel="noopener"><i class="ci-cart"></i></a>
+                        </div><a class="product-thumb-overlay" href="home-fashion-store-v1.html"></a><img src="img/home/preview/01.jpg" alt="Fashion Store v.1">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="product-title fs-lg pt-2"><a href="home-fashion-store-v1.html">时尚 店铺 v.1</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb border">
+                        <div class="product-card-actions">
+                            <a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="home-electronics-store.html">
+                                <i class="ci-eye"></i>
+                            </a><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="https://themes.getbootstrap.com/product/cartzilla-bootstrap-e-commerce-template-ui-kit/" target=" blank" rel="noopener"><i class="ci-cart"></i></a>
+                        </div>
+                        <a class="product-thumb-overlay" href="home-electronics-store.html"></a><img src="img/home/preview/03.jpg" alt="Electronics Store">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="product-title fs-lg pt-2"><a href="home-electronics-store.html">电子产品 店铺</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb border">
+                        <div class="product-card-actions"><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="home-food-delivery.html"><i class="ci-eye"></i></a><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="https://themes.getbootstrap.com/product/cartzilla-bootstrap-e-commerce-template-ui-kit/" target="_blank" rel="noopener"><i class="ci-cart"></i></a></div><a class="product-thumb-overlay" href="home-food-delivery.html"></a><img src="img/home/preview/07.jpg" alt="Food Delivery Service">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="product-title fs-lg pt-2"><a href="home-food-delivery.html">食物 交货 服务</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb border">
+                        <div class="product-card-actions"><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="home-marketplace.html"><i class="ci-eye"></i></a><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="https://themes.getbootstrap.com/product/cartzilla-bootstrap-e-commerce-template-ui-kit/" target="_blank" rel="noopener"><i class="ci-cart"></i></a></div><a class="product-thumb-overlay" href="home-marketplace.html"></a><img src="img/home/preview/04.jpg" alt="Multi-vendor Marketplace">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="product-title fs-lg pt-2"><a href="home-marketplace.html">多-小贩 市场</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb border">
+                        <div class="product-card-actions">
+                            <a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="home-grocery-store.html"><i class="ci-eye"></i></a>
+                            <a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="https://themes.getbootstrap.com/product/cartzilla-bootstrap-e-commerce-template-ui-kit/" target="_blank" rel="noopener">
+                                <i class="ci-cart"></i>
+                            </a>
+                        </div>
+                        <a class="product-thumb-overlay" href="home-grocery-store.html"></a><img src="img/home/preview/06.jpg" alt="Grocery Store">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="product-title fs-lg pt-2"><a href="home-grocery-store.html">杂货店 店铺</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb border">
+                        <div class="product-card-actions">
+                            <a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="home-fashion-store-v2.html">
+                                <i class="ci-eye"></i>
+                            </a>
+                            <a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="https://themes.getbootstrap.com/product/cartzilla-bootstrap-e-commerce-template-ui-kit/" target="_blank" rel="noopener"><i class="ci-cart"></i></a>
+                        </div><a class="product-thumb-overlay" href="home-fashion-store-v2.html"></a><img src="img/home/preview/02.jpg" alt="Fashion Store v.2">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="product-title fs-lg pt-2"><a href="home-fashion-store-v2.html">时尚 店铺 v.2</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb border">
+                        <div class="product-card-actions"><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="home-single-store.html"><i class="ci-eye"></i></a><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="https://themes.getbootstrap.com/product/cartzilla-bootstrap-e-commerce-template-ui-kit/" target="_blank" rel="noopener"><i class="ci-cart"></i></a></div><a class="product-thumb-overlay" href="home-single-store.html"></a><img src="img/home/preview/05.jpg" alt="Single Product / Brand Store">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="product-title fs-lg pt-2"><a href="home-single-store.html">单身的 产品 / 牌 店铺</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+                <div class="card product-card-alt">
+                    <div class="product-thumb"><img src="img/home/preview/coming.png" alt="Coming Soon"></div>
+                    <div class="card-body text-center">
+                        <h3 class="fs-lg pt-2">未来 很快</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-dark py-5">
+        <div class="container py-3 py-lg-4">
+            <div class="row align-items-center">
+                <div class="col-xl-4 col-lg-5 pb-4 pb-lg-0">
+                    <h2 class="text-light"><span class='fw-light'>Complete</span> E-商业 正面-结尾 <span class='fw-light'>解决方案</span></h2>
+                    <p class="text-light opacity-70">您所需要的所有电子商务项目</p>
+                    <ul class="text-light list-unstyled pt-3">
+                        <li><i class="ci-check-circle text-success me-2"></i>商店网格/列表布局选项</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>多个产品页面变体</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>完成订单工作流程：购物车+结帐</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>商店客户帐户页面</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>多供应商市场的供应商仪表板</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>准备好任何内容：时尚，电子，数字（可下载）产品，等等.</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>博客页面：博客布局+单个帖子</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>帮助中心/支持页面</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>辅助页面：关于，联系人，404等.</li>
+                        <li><i class="ci-check-circle text-success me-2"></i>40多个柔性组件</li>
+                    </ul>
+                </div>
+                <div class="col-lg-7 offset-xl-1"><img src="img/intro/pages-showcase.jpg" alt="Cartzilla pages"></div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-secondary py-4">
+        <div class="container pt-4 pt-md-0">
+            <div class="row align-items-center">
+                <div class="col-xl-4 offset-xl-1 col-lg-5 offset-lg-1 col-md-6 text-center text-md-left">
+                    <span class="badge badge-info fs-sm mb-4">From v1.2</span>
+                    <h2><span class='fw-light'>甚至 更多的</span> 移动的 友谊赛 <span class='fw-light'>界面</span></h2>
+                    <p class="text-muted pb-2">新的 <span class='fw-medium'>工具栏</span> 专为手持设备而设计，以进一步提高用户体验.</p>
+                    <p class="fs-sm">扫描下面的QR码在您的设备上测试:</p><img src="img/intro/qrcode.png" width="150" alt="QR code">
+                </div>
+                <div class="col-md-6"><img class="d-block mx-auto" src="img/intro/handheld-toolbar.jpg" alt="Toolbar"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container py-3 py-lg-4">
+            <h2 class="text-center mb-4">Cartzilla功能 <span class='fw-light'>强调</span></h2>
+            <div class="row text-center pt-4">
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/01.png" width="90" alt="Gulp icon">
+                    <h6>Kick-start Your Development</h6>
+                    <p class="fs-ms text-muted mb-0">使用Node.js和Gulp Setup快速轻松启动您的开发过程。配置文件包含在下载包中。完整的任务自动化.</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/02.png" width="90" alt="Sass icon">
+                    <h6>易于使用sass自定义</h6>
+                    <p class="fs-ms text-muted mb-0">Cartzilla使用Sass建造。轻松改变颜色，排版等等。它是世界上最成熟，稳定，强大的CSS扩展语言。</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/03.png" width="90" alt="Pug icon">
+                    <h6>帕格 - 节点模板引擎</h6>
+                    <p class="fs-ms text-muted mb-0">如果您不想，无需编写大量的HTML。 Pug提供普通的HTML等功能，如变量，包括，Mixins，功能等.</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/04.png" width="90" alt="Bootstrap icon">
+                    <h6>建造 Bootstrap 5</h6>
+                    <p class="fs-ms text-muted mb-0">Cartzilla是基于Bootstrap 5的强大的电子商务前端解决方案 - 世界上最受欢迎的响应，移动式前端组件库.</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/05.png" width="90" alt="Web Components icon">
+                    <h6>40多个柔性组件</h6>
+                    <p class="fs-ms text-muted mb-0">除了造型的所有默认引导拖车5个组件Cartzilla推出您可以在本网站上使用的许多新的灵活性，可自定义和可重复使用的元素.</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/06.png" width="90" alt="Mobile Friendly icon">
+                    <h6>移动友好界面</h6>
+                    <p class="fs-ms text-muted mb-0">现在，现在使用他们的移动设备在线购物超过70％的用户并不令人惊讶。 Cartzilla响应100％100％，针对小型触摸屏进行了优化。</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/07.png" width="90" alt="Google Fonts icon">
+                    <h6>谷歌字体</h6>
+                    <p class="fs-ms text-muted mb-0">Cartzilla使用免费，快速加载和非常高的谷歌字体。目前谷歌字体库包括870多个字体系列可供选择.</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/08.png" width="90" alt="Touch icon">
+                    <h6>启用触摸的滑块</h6>
+                    <p class="fs-ms text-muted mb-0">在触摸屏时代，重要的是确保在手持设备上提供极大的用户体验，特别是当涉及滑块的经常使用的接口组件时.</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/09.png" width="90" alt="Vector icon">
+                    <h6>Vector Based HD Ready Icons</h6>
+                    <p class="fs-ms text-muted mb-0">Cartzilla配有基于字体的图标包，以确保信息图表和接口图标在任何带有任何屏幕分辨率和像素密度的设备上都会锐利。</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/10.png" width="90" alt="HTML5 icon">
+                    <h6>W3C 有效的 HTML Code</h6>
+                    <p class="fs-ms text-muted mb-0">通过W3C验证器检查所有HTML文件，以确保100％有效代码。正如您可能知道无效的HTML限制创新，但Cartzilla在其核心创新.</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/11.png" width="90" alt="JavaScript icon">
+                    <h6>未来证明 JavaScript</h6>
+                    <p class="fs-ms text-muted mb-0">Cartzilla核心脚本以及所有依赖项都在Vanilla JS中编写。现在使用Bootstrap 5，我们最终删除了J查询并使用ES6模块。</p>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter pb-2">
+                    <img class="inline-block mb-3" src="img/intro/features/12.png" width="90" alt="Documentation icon">
+                    <h6>详细文档</h6>
+                    <p class="fs-ms text-muted mb-0">下载包包含在线文档的链接。它涵盖了有关如何开始，自定义模板和组件使用情况的所有关键信息。</p>
+                </div>
+            </div>
+            <h6 class="text-center">以及更多...</h6>
+        </div>
+    </section>
 </div>

@@ -58,18 +58,18 @@ namespace Web.Layui
                 options.Cookie.IsEssential = true;
             });
 
+               //客户首页验证
+               services.AddAuthentication(CustomerAuthorizeAttribute.CustomerAuthenticationScheme)
+                       .AddCookie(CustomerAuthorizeAttribute.CustomerAuthenticationScheme, options =>
+                       {
 
-            services.AddAuthentication(CustomerAuthorizeAttribute.CustomerAuthenticationScheme)
-                    .AddCookie(CustomerAuthorizeAttribute.CustomerAuthenticationScheme, options =>
-                    {
-                        
-                        options.LoginPath = new PathString("/Admin");
-                        options.AccessDeniedPath = new PathString("/Home/Error");
-                    });
-                   
-               
+                            options.LoginPath = new PathString("/Home");
+                            options.AccessDeniedPath = new PathString("/Home/Error");
+                       });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+
+
+               services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddScheme<AuthenticationSchemeOptions, ApiAuthHandler>("Api", o => { })
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                     {
@@ -82,8 +82,7 @@ namespace Web.Layui
                         options.LoginPath = new PathString("/Admin/User/Login");
                         options.AccessDeniedPath = new PathString("/Home/Error");
                     });
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                ;
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 
 
 

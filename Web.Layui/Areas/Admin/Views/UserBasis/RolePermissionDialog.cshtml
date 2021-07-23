@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "RolePermissionDialog";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+
+
+<div class="layui-form layui-container layui-form-pane" lay-filter="form-RequestData" id="form-RequestData">
+
+
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form-item layui-form-text">
+                <div class="layui-input-block">
+                    <div id="test12" class="demo-tree-more"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="luo-submit" id="luo-submit">提交</button>
+    </div>
+
+</div>
+
+@section scripts{
+
+    <script>
+
+        function ShowDialog_Load(formobj) {
+
+            layui.use(['tree', 'util','jquery'], function () {
+                var tree = layui.tree,
+                    layer = layui.layer,
+                    $=layui.jquery,
+                    util = layui.util;
+                console.log("进来了开始加载");
+
+
+
+                //基本演示
+                tree.render({
+                    elem: '#test12',
+                    showCheckbox: true,  //是否显示复选框
+                    id: 'demoId',
+                    isJump: true, //是否允许点击节点时弹出新窗口跳转
+                    click: function (obj) {
+                        var data = obj.data;  //获取当前点击的节点数据
+                        layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+                    }
+                });
+
+                let _roleId = "";
+                if (formobj.length == 1) {
+                    _roleId = formobj[0];
+                }
+
+                $.ajax({
+                    type: "get",
+                    url: "/Admin/UserBasis/GetPermissionTree",
+                    data: { roleId: _roleId },
+                    dataType: "json",
+                    async: false,
+                    success: function (resultData) {
+
+                        //可以重载所有基础参数
+                        tree.reload('demoId', {
+                            data: resultData
+                        });
+                    },
+                    error: function (jqXHR) {
+                        alert("发生错误：" + jqXHR.status);
+                    }
+                });
+
+                
+                //if (formobj.length == 1)
+                //{
+                //    debugger;
+                //    $.ajax({
+                //        type: "get",
+                //        url: "/Admin/UserBasis/GetRolePermission",
+                //        data: { roleId: formobj[0] },
+                //        dataType: "json",
+                //        async: false,
+                //        success: function (resultData) {
+                //            if (resultData.status)
+                //            {
+                //            debugger;
+                //                for (var index in resultData.data) {
+                //                    tree.setChecked('demoId', resultData.data[index]);
+                //                }
+                //            }
+                //        },
+                //        error: function (jqXHR) {
+                //            alert("发生错误：" + jqXHR.status);
+                //        }
+                //    });
+                //}
+
+              
+
+               
+                
+
+
+
+               
+
+
+            });
+
+        };
+
+    </script>
+
+}
+

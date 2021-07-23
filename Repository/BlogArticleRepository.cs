@@ -34,6 +34,7 @@ namespace Repository
 
                     var selectSql = sqlExe.Select(x => new DataTransferModels.BlogArticle.Response.ResponseBlogArticleDto()
                     {
+                        ArticleId=x.ArticleId,
                         ArticleTitle = x.ArticleTitle,
                         ArticleConten = x.ArticleConten,
                         IsValid = x.IsValid,
@@ -62,6 +63,8 @@ namespace Repository
             {
                 _FACTORY.GetDbContextTran((db) =>
                 {
+                    
+                   
                     var data = new
                     {
                         ArticleId = Guid.NewGuid(),
@@ -70,9 +73,28 @@ namespace Repository
                         ArticleConten = req.ArticleConten,
                         CreateName = req.ActionUserName,
                         IsValid = req.IsValid,
+                        CreateTime=req.CreateTime
                     };
-                    db.Insertable<EntitysModels.Blog_Article>(data).ExecuteCommandIdentityIntoEntity();
+                 var  articleId=  db.Insertable<EntitysModels.Blog_Article>(data).ExecuteReturnIdentity();
+                    List<EntitysModels.Blog_ArticleLabels> dataArticleLabels= new List<EntitysModels.Blog_ArticleLabels>();
+                    foreach (string s in req.LabelsIds)
+                    {
+                        dataArticleLabels.Add(new EntitysModels.Blog_ArticleLabels()
+                        {
+                            ArticleLabelsId = Guid.NewGuid().ToString(),
+                            ArticleId = data.ArticleId.ToString(),
+                            LabelsId = s,
+                            IsValid = true
+                        });
+                    }
+                    
+                    db.Insertable(dataArticleLabels)
+                    .InsertColumns(x => new { x.ArticleLabelsId, x.ArticleId, x.LabelsId,x.IsValid })
+                    .ExecuteCommand();
+
                     _REPOSITORY.SqlTypeCurd<EntitysModels.Blog_Article>(EnumHelper.CURDEnum.创建).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).NowData(data).BuilderSQL(db);
+
+
                 });
                 res.Status = true;
             }
@@ -100,6 +122,30 @@ namespace Repository
                         IsValid = req.IsValid,
                     };
                     db.Updateable<EntitysModels.Blog_Article>(data).Where(x => x.ArticleId.Equals(req.ArticleId)).ExecuteCommandHasChange();
+
+
+                    db.Updateable<EntitysModels.Blog_ArticleLabels>()
+                    .SetColumns(it => it.IsValid == false)
+                    .Where(x => x.ArticleId == req.ArticleId)
+                    .ExecuteCommand();
+
+                    List<EntitysModels.Blog_ArticleLabels> dataArticleLabels = new List<EntitysModels.Blog_ArticleLabels>();
+                    foreach (string s in req.LabelsIds)
+                    {
+                        dataArticleLabels.Add(new EntitysModels.Blog_ArticleLabels()
+                        {
+                            ArticleLabelsId = Guid.NewGuid().ToString(),
+                            ArticleId = req.ArticleId,
+                            LabelsId = s,
+                            IsValid=true
+                        });
+                    }
+
+                    db.Insertable(dataArticleLabels)
+                    .InsertColumns(x => new { x.ArticleLabelsId, x.ArticleId, x.LabelsId,x.IsValid })
+                    .ExecuteCommand();
+
+
                     _REPOSITORY.SqlTypeCurd<EntitysModels.Blog_Article>(EnumHelper.CURDEnum.更新)
                     .OperationUserInfo(req.ActionUserName, req.ActionUserInfo)
                     .NowData(data)
@@ -130,6 +176,12 @@ namespace Repository
                         IsValid = false,
                     };
                     db.Updateable<EntitysModels.Blog_Article>(data).Where(x => x.ArticleId.Equals(req.ArticleId)).ExecuteCommandHasChange();
+
+                    db.Updateable<EntitysModels.Blog_ArticleLabels>()
+                   .SetColumns(it => it.IsValid == false)
+                   .Where(x => x.ArticleId == req.ArticleId)
+                   .ExecuteCommand();
+
                     _REPOSITORY.SqlTypeCurd<EntitysModels.Blog_Article>(EnumHelper.CURDEnum.删除)
                     .OperationUserInfo(req.ActionUserName, req.ActionUserInfo)
                     .NowData(data)

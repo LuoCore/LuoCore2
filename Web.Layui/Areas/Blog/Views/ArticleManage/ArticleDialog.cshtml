@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "文章管理";
     Layout = "~/Views/Shared/_LayuiLayout.cshtml";
 }
@@ -12,6 +11,14 @@
             <input type="text" name="ArticleTitle" lay-verify="required" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
         </div>
     </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">选择分类</label>
+        <div class="layui-input-block">
+            <div id="LabelsSelectBox"  class="xm-select-demo"></div>
+        </div>
+    </div>
+
+
     <div class="layui-form-item" pane>
         <label class="layui-form-label">是否有效</label>
         <div class="layui-input-inline">
@@ -22,7 +29,7 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">文章内容</label>
         <div class="layui-input-block" style="background-color: #fff;">
-            <textarea id="articleConten" name="ArticleConten" placeholder="请输入内容" class="layui-textarea"></textarea>
+            <div id="articleConten" name="ArticleConten"></div>
         </div>
     </div>
 
@@ -36,179 +43,88 @@
 </div>
 
 @section scripts{
-
+    <script src="~/lib/wangeditor/dist475/wangEditor.js"></script>
     <script>
-        layui.config({ base: '/lib/layuiExtend/' }).extend({ KzLayedit: 'KzLayedit/KzLayedit' });
+        layui.extend({
+            xmSelect: '/lib/layuiExtend/xm-select/xm-select'
+        });
+        const wangE = new window.wangEditor('#articleConten');
         function ShowDialog_Load(formobj) {
-           
-            layui.use(['jquery', 'form', 'KzLayedit'], function () {
+
+            debugger;
+            layui.use(['jquery', 'form',  'xmSelect'], function () {
                 var $ = layui.$,
                     form = layui.form,
-                    KzLayedit = layui.KzLayedit;
+                    xmSelect = layui.xmSelect;
 
-                KzLayedit.set({
-                    uploadImage: {//暴露layupload参数设置接口 --详细查看layupload参数说明
-                        url: 'your url',
-                        accept: 'image',
-                        acceptMime: 'image/*',
-                        exts: 'jpg|png|gif|bmp|jpeg|gif|jfif',
-                        size: 1024 * 10,
-                        data: {
-                            name: '测试参数',
-                            age: 99,
-                        },
-                        done: function (data) {
-                            console.log(data)
-                        },
+                
+
+
+
+                var LablesSelectBox = xmSelect.render({
+                    el: '#LabelsSelectBox',
+                    name: "LabelsSelectBox",
+                    model: { label: { type: 'text' } },
+                    tree: {
+                        //是否显示树状结构
+                        show: true,
+                        //是否展示三角图标
+                        showFolderIcon: true,
+                        //是否显示虚线
+                        showLine: true,
+                        //间距
+                        indent: 10,
+                        //默认展开节点的数组, 为 true 时, 展开所有节点
+                        expandedKeys: true,
+                        //是否严格遵守父子模式
+                        strict: false,
+                        //是否开启极简模式
+                        simple: false,
+                        //点击节点是否展开
+                        clickExpand: true,
+                        //点击节点是否选中
+                        clickCheck: true
                     },
-                    uploadVideo: {
-                        url: 'your url',
-                        accept: 'video',
-                        acceptMime: 'video/*',
-                        exts: 'mp4|flv|avi|rm|rmvb',
-                        size: 1024 * 10 * 2,
-                        done: function (data) {
-                            console.log(data)
-                        },
+                    height: 'auto'
+                });
+                //选择父级权限
+                $.ajax({
+                    type: "get",
+                    url: "/Blog/ArticleManage/GetBlogLabelsSelectBox",
+                    data: { ArticleId: formobj.articleId},
+                    dataType: "json",
+                    async: false,
+                    success: function (result) {
+                        LablesSelectBox.update({
+                            data: result,
+                            autoRow: true,
+                        });
                     },
-                    uploadFiles: {
-                        url: 'your url',
-                        accept: 'file',
-                        acceptMime: 'file/*',
-                        size: '20480',
-                        autoInsert: true, //自动插入编辑器设置
-                        done: function (data) {
-                            console.log(data)
-                        },
-                    },
-                    //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
-                    //传递参数：
-                    //图片： imgpath --图片路径
-                    //视频： filepath --视频路径 imgpath --封面路径
-                    //附件： filepath --附件路径
-                    calldel: {
-                        url: 'your url',
-                        done: function (data) {
-                            console.log(data)
-                        },
-                    },
-                    rightBtn: {
-                        type: 'layBtn', //default|layBtn|custom  浏览器默认/layedit右键面板/自定义菜单 default和layBtn无需配置customEvent
-                        customEvent: function (targetName, event) {
-                            //根据tagName分类型设置
-                            switch (targetName) {
-                                case 'img':
-                                    alert('this is img')
-                                    break
-                                default:
-                                    alert('hello world')
-                                    break
-                            }
-                            //或者直接统一设定
-                            //alert("all in one");
-                        },
-                    },
-                    //测试参数
-                    backDelImg: true,
-                    //开发者模式 --默认为false
-                    devmode: true,
-                    //是否自动同步到textarea
-                    autoSync: true,
-                    //内容改变监听事件
-                    onchange: function (content) {
-                        console.log(content)
-                    },
-                    //插入代码设置 --hide:false 等同于不配置codeConfig
-                    codeConfig: {
-                        hide: true, //是否隐藏编码语言选择框
-                        default: 'javascript', //hide为true时的默认语言格式
-                        encode: true, //是否转义
-                        class: 'layui-code', //默认样式
-                    },
-                    //新增iframe外置样式和js
-                    quote: {
-                        //style: ['Content/css.css'],
-                        //js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
-                    },
-                    //自定义样式-暂只支持video添加
-                    //, customTheme: {
-                    //    video: {
-                    //        title: ['原版', 'custom_1', 'custom_2']
-                    //        , content: ['', 'theme1', 'theme2']
-                    //        , preview: ['', '/images/prive.jpg', '/images/prive2.jpg']
-                    //    }
-                    //}
-                    //插入自定义链接
-                    //customlink: {
-                    //    title: '插入layui官网',
-                    //    href: 'https://www.layui.com',
-                    //    onmouseup: '',
-                    //},
-                    facePath: 'http://knifez.gitee.io/kz.layedit/Content/Layui-KnifeZ/',
-                    devmode: true,
-                    videoAttr: ' preload="none" ',
-                    //预览样式设置，等同layer的offset和area规则，暂时只支持offset ,area两个参数
-                    //默认为 offset:['r'],area:['50%','100%']
-                    //, previewAttr: {
-                    //    offset: 'r'
-                    //    ,area:['50%','100%']
-                    //}
-                    tool: [
-                        'html',
-                        'undo',
-                        'redo',
-                        'code',
-                        'strong',
-                        'italic',
-                        'underline',
-                        'del',
-                        'addhr',
-                        '|',
-                        'removeformat',
-                        'fontFomatt',
-                        'fontfamily',
-                        'fontSize',
-                        'lineHeight',
-                        'fontBackColor',
-                        'colorpicker',
-                        'face',
-                        '|',
-                        'left',
-                        'center',
-                        'right',
-                        '|',
-                        'link',
-                        'unlink',
-                        'images',
-                        'image_alt',
-                        'video',
-                        'attachment',
-                        'anchors',
-                        '|',
-                        'table',
-                        'customlink',
-                        'fullScreen',
-                        'preview',
-                    ],
-                    height: 'auto',
+                    error: function (jqXHR) {
+                        alert("发生错误：" + jqXHR.status);
+                    }
                 });
 
-                var ieditor = KzLayedit.build('articleConten');
-                //设置编辑器内容
-                KzLayedit.setContent(ieditor,
-                    '<h1>hello layedit</h1><p>对layui.layedit的拓展，基于layui v2.4.3.增加了HTML源码模式、插入table、批量上传图片、图片插入、超链接插入功能优化、视频插入功能、全屏功能、段落、字体颜色、背景色设置、锚点设置等功能。</p><br><br><div>by KnifeZ </div>',
-                    false
-                );
-                KzLayedit.setContent(ieditor, '<h2>追加模式</h2>', true)
+
+                
+                wangE.config.uploadImgServer = '/Blog/ArticleManage/UploadImage';
+                
+                wangE.config.uploadVideoServer = '/api/upload-video';
+                wangE.create();
+
                 if (formobj != null && formobj != undefined && formobj != "") {
                     //给表单赋值
                     form.val("form-RequestData", {
                         "ArticleTitle": formobj.articleTitle,
-                        "ArticleConten": formobj.articleConten,
                         "IsValid": formobj.isValid
                     });
+                    wangE.txt.html(formobj.articleConten)
                 }
+
             });
+        }
+        function GetWangEditorHtml() {
+            return wangE.txt.html();
         }
     </script>
 }

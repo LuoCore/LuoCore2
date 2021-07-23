@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "SystemLink";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+<div class="layui-container">
+    <script type="text/html" id="toolbarTable">
+        <div class="layui-btn-container">
+            <button class="layui-btn layuiadmin-btn-event" lay-event="query">查询</button>
+            <button class="layui-btn layuiadmin-btn-event layui-btn-danger" lay-event="delete">删除</button>
+            <button class="layui-btn layuiadmin-btn-event" lay-event="add">添加</button>
+        </div>
+    </script>
+
+
+
+
+    <script type="text/html" id="switchIsValid">
+        <input type="checkbox" name="isValid" value="{{d.isValid}}" lay-skin="switch" lay-text="是|否" lay-filter="isValid" {{ d.isValid == true ? 'checked' : '' }}>
+    </script>
+
+    <script type="text/html" id="table-action">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+            <i class="layui-icon layui-icon-edit"></i>编辑
+        </a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    </script>
+
+    <table id="dataTable" lay-filter="dataTable"></table>
+</div>
+
+@section scripts
+{
+ 
+    <script>
+        layui.use(['jquery', 'table'], function () {
+            const $ = layui.jquery,
+                table = layui.table;
+            // 字段配置
+            const tableCols = [[
+                { type: 'checkbox', fixed: 'left' },
+                { field: 'LinkName', title: '联系方式名称' },
+                { field: 'LinkUrl', title: '联系方式' },
+                { field: 'LinkIco', title: '联系方式图标' },
+                { field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
+                { title: '操作', width: 'auto', align: 'center', fixed: 'right', toolbar: '#table-action' }
+            ]];
+
+            table.render({
+                elem: '#dataTable',
+                title: '系统联系方式',
+                toolbar: '#toolbarTable',
+                totalRow: true,
+                height: 'full-20',
+                cellMinWidth: 80,
+                cols: tableCols,
+                loading: false,
+                page: true
+            });
+
+            const [QueryURL,UpdateURL,CreateURL,DeleteURL] = [
+                "/Admin/SystemBasis/GetLinkPage",
+                '/Admin/UserBasis/RoleTable',
+                '/Admin/UserBasis/RoleDialog',
+                '/Admin/UserBasis/RoleDialog'
+            ];
+
+            table.on('toolbar(dataTable)', function (obj) {
+                //var checkStatus = table.checkStatus(obj.config.id);
+                debugger;
+                switch (obj.event) {
+                    case 'query':
+                        //深度重载
+                        table.reload('dataTable', {
+                            url: QueryURL,
+                            method: "get",
+                            request: {
+                                pageName: 'PageIndex', //页码的参数名称，默认：page
+                                limitName: 'PageSize' //每页数据量的参数名，默认：limit
+                            },
+                            where: {
+                                ID: "",
+                                LinkName: "",
+                                IsValid: null,
+                                StartTime: null,
+                                EndTime: null,
+                            }
+                        }, true);
+                        break;
+               
+                };
+            });
+
+        });
+    </script>
+}

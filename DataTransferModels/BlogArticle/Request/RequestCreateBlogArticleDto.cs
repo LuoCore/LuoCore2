@@ -8,7 +8,7 @@ namespace DataTransferModels.BlogArticle.Request
 {
     public class RequestCreateBlogArticleDto:RequestBaseDto
     {
-        public RequestCreateBlogArticleDto(string userId, string articleTitle, string articleConten, bool isValid, DateTime createTime,string[] labelsIds, string actionUserInfo,string actionUsername)
+        public RequestCreateBlogArticleDto(string userId, string articleTitle, string articleConten, bool isValid, DateTime createTime,string[] labelsIds, string actionUserInfo, string actionUserName) : base(actionUserName, actionUserInfo)
         {
             UserId = userId;
             ArticleTitle = articleTitle;
@@ -16,8 +16,6 @@ namespace DataTransferModels.BlogArticle.Request
             IsValid = isValid;
             CreateTime = createTime;
             LabelsIds = labelsIds;
-            this.ActionUserInfo = actionUserInfo;
-            this.ActionUserName = actionUsername;
         }
 
         public string UserId { get; protected set; }

@@ -49,6 +49,33 @@ namespace Repository
 
           }
 
+          public ResultDto<ResponseLinksDto> ReadList(RequestReadLinkDto req)
+          {
+               ResultDto<ResponseLinksDto> res = new ResultDto<ResponseLinksDto>();
+               try
+               {
+
+
+                    _FACTORY.GetDbContext((db) =>
+                    {
+                         var sqlExecute = db.Queryable<System_Link>().Where(x=>x.IsValid==true);
+                         sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                         sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.LinkName), x => x.LinkName.Contains(x.LinkName));
+
+                         res.Data = new ResponseLinksDto(sqlExecute.ToList());
+                         res.Status = true;
+                    });
+               }
+               catch (Exception ex)
+               {
+
+                    res.Status = false;
+                    res.Messages = ex.Message;
+               }
+               return res;
+
+          }
+
           public ResultDto Create(RequestCreateDto req)
           {
                ResultDto res = new ResultDto();

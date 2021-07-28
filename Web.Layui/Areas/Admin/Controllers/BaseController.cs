@@ -40,7 +40,8 @@ namespace Web.Layui.Areas.Admin.Controllers
      public abstract class BaseAuthorizeController<T> : Controller
      {
           protected readonly T _SERVICE;
-
+          protected abstract string _ACTIONUSERINFO { get; }
+          protected abstract string _ACTIONUSERNAME { get; }
           public BaseAuthorizeController(T service)
           {
                _SERVICE = service;

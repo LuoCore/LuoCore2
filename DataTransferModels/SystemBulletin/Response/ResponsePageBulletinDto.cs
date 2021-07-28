@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataTransferModels.SystemBulletin.Response
 {
-     public class ResponsePageDto
+     public class ResponsePageBulletinDto
      {
-          public ResponsePageDto(List<System_Bulletin> pageDatas, int pageCount)
+          public ResponsePageBulletinDto(List<System_Bulletin> pageDatas, int pageCount)
           {
                PageDatas = pageDatas;
                PageCount = pageCount;

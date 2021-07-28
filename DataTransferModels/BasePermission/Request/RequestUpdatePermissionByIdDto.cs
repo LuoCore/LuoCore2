@@ -8,10 +8,8 @@ namespace DataTransferModels.BasePermission.Request
 {
     public class RequestUpdatePermissionByIdDto:RequestBaseDto
     {
-        public RequestUpdatePermissionByIdDto(string userName,string userInfo, string permissionName, int permissionType, string permissionAction, string permissionParentId, bool isValid)
+        public RequestUpdatePermissionByIdDto(string actionUserName, string actionUserInfo, string permissionName, int permissionType, string permissionAction, string permissionParentId, bool isValid) : base(actionUserName, actionUserInfo)
         {
-            ActionUserName = userName;
-            ActionUserInfo = userInfo;
             PermissionName = permissionName;
             PermissionType = permissionType;
             PermissionAction = permissionAction;

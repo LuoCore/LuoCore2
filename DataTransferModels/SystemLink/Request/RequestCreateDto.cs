@@ -8,14 +8,12 @@ namespace DataTransferModels.SystemLink.Request
 {
      public class RequestCreateDto:RequestBaseDto
      {
-          public RequestCreateDto(string linkName, string linkUrl, string linkIco, bool isValid,string actionUserName, string actionUserInfo)
-          {
+          public RequestCreateDto(string linkName, string linkUrl, string linkIco, bool isValid,string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
+        {
                LinkName = linkName;
                LinkUrl = linkUrl;
                LinkIco = linkIco;
                IsValid = isValid;
-               this.ActionUserInfo = actionUserInfo;
-               this.ActionUserName = actionUserName;
           }
 
           public string LinkName { get;protected set; }

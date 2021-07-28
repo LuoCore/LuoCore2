@@ -9,4 +9,8 @@
     <ProjectReference Include="..\EnumHelper\EnumHelper.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="WebSite\Response\" />
+  </ItemGroup>
+
 </Project>

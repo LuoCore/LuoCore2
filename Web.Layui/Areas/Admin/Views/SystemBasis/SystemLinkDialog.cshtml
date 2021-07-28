@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_LayuiLayout.cshtml";
 }
 
-<div style="margin-top:1.5rem" class="layui-form layui-container layui-form-pane" lay-filter="form-RequestData" id="form-RequestData">
+<div style="margin-top:1.5rem" class="layui-form board layui-form-pane" lay-filter="form-RequestData" id="form-RequestData">
 
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">联系名称</label>
@@ -22,9 +22,10 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">联系图标</label>
-        <div class="layui-input-inline">
-            <input type="text" id="iconPicker" name="LinkIco">
+        <div class="layui-input-block">
+            <input type="text" name="LinkIco" value="layui-icon layui-icon-username" placeholder="请选择" maxlength="16" autocomplete="off" class="layui-input" id="LinkIco" />
         </div>
+     
     </div>
 
 
@@ -46,37 +47,32 @@
 {
     <script>
         layui.extend({
-            iconPicker: '/lib/layuiExtend/iconPicker/iconPicker'
+            iconSelected: '/lib/layuiExtend/iconSelected/js/iconSelected'
         });
         function ShowDialog_Load(formobj) {
-            layui.use(['jquery', 'form', 'iconPicker', 'layer'], function () {
-                const iconPicker = layui.iconPicker,
+            layui.use(['jquery', 'form', 'iconSelected', 'layer'], function () {
+                const iconSelected = layui.iconSelected,
                     form = layui.form,
                     layer = layui.layer,
                     $ = layui.$;
 
-                iconPicker.render({
-                    // 选择器，推荐使用input
-                    elem: '#iconPicker',
-                    // 数据类型：fontClass/unicode，推荐使用fontClass
-                    type: 'unicode',
-                    // 是否开启搜索：true/false，默认true
-                    search: true,
-                    // 是否开启分页：true/false，默认true
-                    page: true,
-                    // 每页显示数量，默认12
-                    limit: 12,
-                    // 点击回调
-                    click: function (data) {
-                        console.log(data);
-                    },
-                    // 渲染成功后的回调
-                    success: function (d) {
-                        console.log(d);
-                    }
+                //给表单赋值
+                form.val("form-RequestData", {
+                    "LinkName": formobj.linkName,
+                    "LinkUrl": formobj.linkUrl,
+                    "LinkIco": formobj.linkIco,
+                    "IsValid": formobj.isValid
                 });
-
-                iconPicker.checkIcon('iconPicker', "&#xe68f;");
+                iconSelected.init("#LinkIco", {
+                    event: {
+                        select(event, data) {
+                            debugger;
+                            console.log("选中的图标数据", { event, data });
+                        },
+                    },
+                });
+                
+              
             });
         };
     </script>

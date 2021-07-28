@@ -8,15 +8,13 @@ namespace DataTransferModels.BsaeRole.Request
 {
     public class RequestCreateRoleDto:RequestBaseDto
     {
-        public RequestCreateRoleDto(Guid roleId, string roleName,string roleDescription, bool isValid, DateTime createTime,string username,string userinfo)
+        public RequestCreateRoleDto(Guid roleId, string roleName,string roleDescription, bool isValid, DateTime createTime,string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
             RoleId = roleId;
             RoleName = roleName;
             this.RoleDescription = roleDescription;
             IsValid = isValid;
             CreateTime = createTime;
-            ActionUserName = username;
-            ActionUserInfo = userinfo;
         }
 
         public Guid RoleId { get; protected set; }

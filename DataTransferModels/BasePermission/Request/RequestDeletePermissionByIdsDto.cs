@@ -8,10 +8,9 @@ namespace DataTransferModels.BasePermission.Request
 {
     public class RequestDeletePermissionByIdsDto : RequestBaseDto
     {
-        public RequestDeletePermissionByIdsDto(string username,string userInfo,List<string> permissionIds)
+        public RequestDeletePermissionByIdsDto(string actionUserName, string actionUserInfo, List<string> permissionIds) : base(actionUserName, actionUserInfo)
         {
-            this.ActionUserName = username;
-            this.ActionUserInfo = userInfo;
+
             PermissionIds = permissionIds;
 
         }

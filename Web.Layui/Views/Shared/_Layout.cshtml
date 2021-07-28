@@ -14,23 +14,26 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
     <link rel="mask-icon" color="#fe6a6a" href="safari-pinned-tab.svg">
+    <!--Windows 8 磁贴图标-->
     <meta name="msapplication-TileColor" content="#ffffff">
+    <!--浏览器地址栏变色-->
     <meta name="theme-color" content="#ffffff">
 
     <title>@ViewData["Title"]</title>
 
+    <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
     <!-- 样式: 字体图标 插件,等等.-->
     <link href="~/lib/cartzilla/vendor/simplebar/dist/simplebar.min.css" rel="stylesheet" media="screen" />
     <link href="~/lib/cartzilla/vendor/tiny-slider/dist/tiny-slider.css" rel="stylesheet" media="screen" />
     <link href="~/lib/cartzilla/vendor/lightgallery.js/dist/css/lightgallery.min.css" rel="stylesheet" media="screen" />
     <!-- 主要的样式 + Bootstrap-->
-    <link href="~/lib/cartzilla/css/theme.min.css"  rel="stylesheet" media="screen" />
+    <link href="~/lib/cartzilla/css/theme.min.css" rel="stylesheet" media="screen" />
 
 
 </head>
 <body class="handheld-toolbar-enabled">
     <header class="bg-light shadow-sm navbar-sticky">
-        <partial name="Components/_TopBar" />
+        @await Component.InvokeAsync("TopBar")
         <!--删除“navbar sticky”类，使导航栏可以随页面滚动。-->
         @await Component.InvokeAsync("Navigation")
 

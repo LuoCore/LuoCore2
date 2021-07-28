@@ -8,6 +8,12 @@ namespace DataTransferModels
 {
     public class RequestBaseDto
     {
+        public RequestBaseDto(string actionUserName, string actionUserInfo)
+        {
+            ActionUserName = actionUserName;
+            ActionUserInfo = actionUserInfo;
+        }
+
         public string ActionUserName { get; protected set; }
         public string ActionUserInfo { get; protected set; }
     }

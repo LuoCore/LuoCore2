@@ -20,9 +20,9 @@ namespace Repository
 
 
 
-          public ResultDto<ResponsePageDto> ReadPage(RequestReadPageDto req)
+          public ResultDto<ResponsePageBulletinDto> ReadBulletinPage(RequestReadPageBulletinDto req)
           {
-               ResultDto<ResponsePageDto> res = new ResultDto<ResponsePageDto>();
+               ResultDto<ResponsePageBulletinDto> res = new ResultDto<ResponsePageBulletinDto>();
                try
                {
 
@@ -35,7 +35,7 @@ namespace Repository
                          sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.BulletinName), x => x.BulletinName.Contains(x.BulletinName));
                          int pagecount = 0;
                          var sqlResult = sqlExecute.ToPageList(req.PageIndex, req.PageSize, ref pagecount);
-                         res.Data = new ResponsePageDto(sqlResult, pagecount);
+                         res.Data = new ResponsePageBulletinDto(sqlResult, pagecount);
                          res.Status = true;
                     });
                }
@@ -49,7 +49,32 @@ namespace Repository
 
           }
 
-          public ResultDto Create(RequestCreateDto req)
+        public ResultListDto<EntitysModels.System_Bulletin> ReadBulletinList(RequestReadBulletinDto req)
+        {
+            ResultListDto<EntitysModels.System_Bulletin> res = new ResultListDto<EntitysModels.System_Bulletin>();
+            try
+            {
+                _FACTORY.GetDbContext((db) =>
+                {
+                    var sqlExecute = db.Queryable<System_Bulletin>();
+                    sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                    sqlExecute.WhereIF(req != null && req.IsValid != null, x => x.IsValid.Equals(req.IsValid));
+                    sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.BulletinName), x => x.BulletinName.Contains(x.BulletinName));
+                    res.Datas = new List<System_Bulletin>();
+                    res.Datas = sqlExecute.ToList();
+                    res.Status = true;
+                });
+            }
+            catch (Exception ex)
+            {
+                res.Status = false;
+                res.Messages = ex.Message;
+            }
+            return res;
+
+        }
+
+        public ResultDto CreateBulletin(RequestCreateBulletinDto req)
           {
                ResultDto res = new ResultDto();
                try
@@ -79,7 +104,7 @@ namespace Repository
           }
 
 
-          public ResultDto Update(RequestUpdateDto req)
+          public ResultDto UpdateBulletin(RequestUpdateBulletinDto req)
           {
                ResultDto res = new ResultDto();
                try
@@ -89,8 +114,8 @@ namespace Repository
                          var oldData = db.Queryable<System_Bulletin>().Where(x => x.ID == req.ID).First();
                          var nowData = new
                          {
-                              LinkName = req.BulletinName,
-                              LinkUrl = req.BulletinConten,
+                             BulletinName = req.BulletinName,
+                             BulletinConten = req.BulletinConten,
                               IsValid = req.IsValid
                          };
                          db.Updateable<System_Bulletin>(nowData).Where(x => x.ID == req.ID).ExecuteCommand();
@@ -109,7 +134,7 @@ namespace Repository
 
           }
 
-          public ResultDto Delete(RequestDeleteDto req)
+          public ResultDto DeleteBulletin(RequestDeleteBulletinDto req)
           {
                ResultDto res = new ResultDto();
                try

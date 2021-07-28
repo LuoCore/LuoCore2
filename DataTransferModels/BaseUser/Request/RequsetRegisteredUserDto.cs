@@ -8,7 +8,7 @@ namespace DataTransferModels.BaseUser.Request
 {
    public class RequsetRegisteredUserDto:RequestBaseDto
     {
-        public RequsetRegisteredUserDto(Guid userId, string userName, string userRealName, string password, string email, string phone, int sex, DateTime createTime, bool isValid, string actionUserName, string actionUserInfo)
+        public RequsetRegisteredUserDto(Guid userId, string userName, string userRealName, string password, string email, string phone, int sex, DateTime createTime, bool isValid, string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
             UserId = userId;
             UserName = userName;
@@ -18,8 +18,6 @@ namespace DataTransferModels.BaseUser.Request
             Phone = phone;
             Sex = sex;
             CreateTime = createTime;
-            ActionUserName = actionUserName;
-            ActionUserInfo = actionUserInfo;
             IsValid = isValid;
         }
         

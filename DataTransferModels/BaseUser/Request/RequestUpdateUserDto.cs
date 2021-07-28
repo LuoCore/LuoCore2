@@ -8,7 +8,7 @@ namespace DataTransferModels.BaseUser.Request
 {
     public class RequestUpdateUserDto:RequestBaseDto
     {
-        public RequestUpdateUserDto(string userId, string userName, string userRealName, string password, string email, string phone, int sex,  bool isValid,string actionUserName,string actionUserInfo)
+        public RequestUpdateUserDto(string userId, string userName, string userRealName, string password, string email, string phone, int sex,  bool isValid,string actionUserName,string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
             UserId = userId;
             UserName = userName;
@@ -18,8 +18,6 @@ namespace DataTransferModels.BaseUser.Request
             Phone = phone;
             Sex = sex;
             IsValid = isValid;
-            this.ActionUserName = actionUserName;
-            this.ActionUserInfo = actionUserInfo;
         }
 
         public string UserId { get; protected set; }

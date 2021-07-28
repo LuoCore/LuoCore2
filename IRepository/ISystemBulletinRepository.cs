@@ -11,13 +11,14 @@ namespace IRepository
 {
      public interface ISystemBulletinRepository : Utility.Repository.ISqlSugarRepository
      {
-          public ResultDto<ResponsePageDto> ReadPage(RequestReadPageDto req);
+          public ResultDto<ResponsePageBulletinDto> ReadBulletinPage(RequestReadPageBulletinDto req);
+        public ResultListDto<EntitysModels.System_Bulletin> ReadBulletinList(RequestReadBulletinDto req);
 
-          public ResultDto Create(RequestCreateDto req);
+          public ResultDto CreateBulletin(RequestCreateBulletinDto req);
 
 
-          public ResultDto Update(RequestUpdateDto req);
+          public ResultDto UpdateBulletin(RequestUpdateBulletinDto req);
 
-          public ResultDto Delete(RequestDeleteDto req);
+          public ResultDto DeleteBulletin(RequestDeleteBulletinDto req);
      }
 }

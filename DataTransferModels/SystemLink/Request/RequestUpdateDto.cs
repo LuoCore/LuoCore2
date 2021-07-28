@@ -8,18 +8,16 @@ namespace DataTransferModels.SystemLink.Request
 {
      public class RequestUpdateDto : RequestBaseDto
      {
-          public RequestUpdateDto(int iD, string linkName, string linkUrl, string linkIco, bool isValid,string actionUserName,string actionUserInfo)
-          {
-               ID = iD;
+          public RequestUpdateDto(int linkID, string linkName, string linkUrl, string linkIco, bool isValid,string actionUserName,string actionUserInfo) : base(actionUserName, actionUserInfo)
+        {
+            LinkID = linkID;
                LinkName = linkName;
                LinkUrl = linkUrl;
                LinkIco = linkIco;
                IsValid = isValid;
-               ActionUserName = actionUserName;
-               ActionUserInfo = actionUserInfo;
           }
 
-          public int ID { get; protected set; }
+          public int LinkID { get; protected set; }
           public string LinkName { get; protected set; }
           public string LinkUrl { get; protected set; }
           public string LinkIco { get; protected set; }

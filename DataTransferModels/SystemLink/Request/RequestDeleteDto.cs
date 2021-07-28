@@ -8,14 +8,12 @@ namespace DataTransferModels.SystemLink.Request
 {
      public class RequestDeleteDto : RequestBaseDto
      {
-          public RequestDeleteDto(int linkId,string actionUserName, string actionUserInfo)
-          {
-               ID = linkId;
-               this.ActionUserInfo = actionUserInfo;
-               this.ActionUserName = actionUserName;
+          public RequestDeleteDto(int linkId,string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
+        {
+            LinkID = linkId;
           }
 
-          public int ID { get;protected set; }
+          public int LinkID { get;protected set; }
         
      }
 }

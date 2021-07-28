@@ -12,7 +12,13 @@ namespace ViewModels
         public string Messages { get; set; }
         public T Data { get; set; }
     }
-    public class ResultVm
+     public class ResultListVm<T>
+     {
+          public bool Status { get; set; }
+          public string Messages { get; set; }
+          public List<T> Datas { get; set; }
+     }
+     public class ResultVm
     {
         public bool Status { get; set; }
         public string Messages { get; set; }

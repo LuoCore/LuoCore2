@@ -1,14 +1,32 @@
 ﻿
+@model List<Web.Layui.Models.PageTitleViewModel>
 <div class="bg-secondary py-4">
     <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
         <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
-                    <li class="breadcrumb-item"><a class="text-nowrap" href="index.html"><i class="ci-home"></i>@ViewData["Title"]</a></li>
-                    <li class="breadcrumb-item text-nowrap">
-                        <a href="#">@ViewData["Title"]</a>
-                    </li>
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page">Single post</li>
+                    @foreach (var m in Model)
+                    {
+                        <li class="breadcrumb-item">
+                            @if (!string.IsNullOrWhiteSpace(m.pageTitleUrl))
+                            {
+                                <a class="text-nowrap" href="@m.pageTitleUrl">
+                                    @if (!string.IsNullOrWhiteSpace(m.pageTitleIcon))
+                                    {
+                                        <i class="@m.pageTitleIcon"></i>
+                                    }
+                                    @m.pageTitleName
+                                </a>
+                            }
+                            else
+                            {
+                                @m.pageTitleName
+                            }
+                        </li>
+                    }
+
+
+                   
                 </ol>
             </nav>
         </div>

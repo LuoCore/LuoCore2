@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 
 namespace DataTransferModels.SystemBulletin.Request
 {
-     public class RequestUpdateDto : RequestBaseDto
+     public class RequestUpdateBulletinDto : RequestBaseDto
      {
-          public RequestUpdateDto(int iD, string bulletinName, string bulletinConten, bool isValid, string actionUserName, string actionUserInfo)
-          {
-               ID = iD;
+          public RequestUpdateBulletinDto(int bulletinID, string bulletinName, string bulletinConten, bool isValid, string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
+        {
+            BulletinID = bulletinID;
                BulletinName = bulletinName;
                BulletinConten = bulletinConten;
                IsValid = isValid;
-               ActionUserName = actionUserName;
-               ActionUserInfo = actionUserInfo;
           }
 
-          public int ID { get; protected set; }
+          public int BulletinID { get; protected set; }
           public string BulletinName { get; protected set; }
           public string BulletinConten { get; protected set; }
           public bool IsValid { get; protected set; }

@@ -8,14 +8,12 @@ namespace DataTransferModels.BsaeRole.Request
 {
     public class RequestUpdateRoleDto:RequestBaseDto
     {
-        public RequestUpdateRoleDto(string roleId, string roleName, string roleDescription, bool isValid, string username, string userinfo)
+        public RequestUpdateRoleDto(string roleId, string roleName, string roleDescription, bool isValid, string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
             RoleId = roleId;
             RoleName = roleName;
             RoleDescription = roleDescription;
             IsValid = isValid;
-            ActionUserName = username;
-            ActionUserInfo = userinfo;
         }
 
         public string RoleId { get; protected set; }

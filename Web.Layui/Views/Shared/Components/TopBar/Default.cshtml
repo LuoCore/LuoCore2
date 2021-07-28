@@ -1,0 +1,89 @@
+﻿@model Web.Layui.Models.TopBarViewModel
+<div class="topbar topbar-dark bg-dark">
+    <div class="container">
+        <div class="topbar-text dropdown d-md-none">
+            <a class="topbar-link dropdown-toggle" href="#" data-bs-toggle="dropdown">联系方式</a>
+            <ul class="dropdown-menu">
+                @{ if (Model != null && Model.SystemLink != null && Model.SystemLink.Status)
+                    {
+                        foreach (var m in Model.SystemLink.Datas)
+                        {
+        <li>
+            <a class="dropdown-item" href="@m.LinkUrl">
+                <i class="@m.LinkIco"></i> @m.LinkName : @m.LinkUrl
+            </a>
+        </li>
+ }
+} }
+
+
+
+            </ul>
+        </div>
+        <div class="topbar-text text-nowrap d-none d-md-inline-block dropdown">
+            <i class="ci-support"></i>
+            <span class="text-muted dropdown-toggle me-1" data-bs-toggle="dropdown">联系方式</span>
+            <ul class="dropdown-menu">
+                @{ if (Model != null && Model.SystemLink != null && Model.SystemLink.Status)
+                    {
+                        foreach (var m in Model.SystemLink.Datas)
+                        {
+        <li>
+            <a class="dropdown-item" href="@m.LinkUrl">
+                <i class="@m.LinkIco"></i> @m.LinkName : @m.LinkUrl
+            </a>
+        </li> }
+                    } }
+            </ul>
+        </div>
+
+
+        @*<div class="tns-carousel tns-controls-static d-none d-md-block">
+            <div class="tns-carousel-inner">
+                @{ if (Model != null && Model.SystemBulletin != null && Model.SystemBulletin.Status)
+                    {
+                        foreach (var m in Model.SystemBulletin.Datas)
+                        {
+        <a href="/Home/BulletinIndex/?bulletinId=@m.ID"></a> <div class="topbar-text">@m.BulletinName</div> }
+                    } }
+            </div>
+        </div>*@
+
+        @if (Model != null && Model.SystemBulletin != null && Model.SystemBulletin.Status)
+        {
+            <div class="tns-carousel tns-controls-static d-none d-md-block">
+                <div class="tns-carousel-inner" data-carousel-options="{&quot;mode&quot;:   &quot;gallery&quot;,  &quot;nav&quot;: false}">
+
+                    @foreach (var m in Model.SystemBulletin.Datas)
+                    {
+                         <a class="topbar-text" href="/Home/BulletinIndex/?bulletinId=@m.ID">@m.BulletinName</a>
+                    }
+
+
+                    
+                </div>
+            </div>      
+        }
+
+        <div class="ms-3 text-nowrap">
+
+            <div class="topbar-text dropdown disable-autohide">
+                <a class="topbar-link dropdown-toggle" href="#" data-bs-toggle="dropdown">中文</a>
+                <ul class="dropdown-menu dropdown-menu-end">
+
+                    @{ if (Model != null && Model.SystemLanguage != null && Model.SystemLanguage.Status)
+                        {
+                            foreach (var m in Model.SystemLanguage.Datas)
+                            {
+            <li>
+                <a class="dropdown-item pb-1" href="#">
+                    @m.LanguageName
+                </a>
+            </li>
+ }
+    } }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

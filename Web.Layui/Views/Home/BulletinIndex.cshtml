@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "BulletinIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model ViewModels.ResultListVm<EntitysModels.System_Bulletin>
+
+@{
+    List<Web.Layui.Models.PageTitleViewModel> pageModel = new List<Web.Layui.Models.PageTitleViewModel>();
+    pageModel.Add(new PageTitleViewModel() { pageTitleName = "首页", pageTitleUrl = "/Home/Index",pageTitleIcon= "ci-home" });
+    pageModel.Add(new PageTitleViewModel() { pageTitleName = "公告" });
+    <partial name="Components/_PageTitle" model= "@pageModel" />
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            @{
+                if (Model != null && Model.Status && Model.Datas != null && Model.Datas.Count > 0)
+                {
+                    <div class="alert alert-secondary py-5 px-lg-5 text-center mb-5">
+                        @Html.Raw(Model.Datas[0].BulletinConten)
+                    </div>
+                }
+            }
+
+
+        </div>
+    </div>
+</div>

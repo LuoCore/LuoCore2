@@ -8,7 +8,7 @@ namespace DataTransferModels.BlogLabels.Request
 {
     public class RequestCreateBlogLabelDto : RequestBaseDto
     {
-        public RequestCreateBlogLabelDto(Guid  labelId, string labelName, string labelDescribe, bool isValid, DateTime createTime,string actionUserName,string actionUserInfo)
+        public RequestCreateBlogLabelDto(Guid  labelId, string labelName, string labelDescribe, bool isValid, DateTime createTime,string actionUserName,string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
           
             LabelId = labelId;
@@ -16,8 +16,6 @@ namespace DataTransferModels.BlogLabels.Request
             LabelDescribe = labelDescribe;
             IsValid = isValid;
             CreateTime = createTime;
-            this.ActionUserName = actionUserName;
-            this.ActionUserInfo = actionUserInfo;
         }
 
 

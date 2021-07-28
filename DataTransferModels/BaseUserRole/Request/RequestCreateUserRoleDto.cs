@@ -8,12 +8,10 @@ namespace DataTransferModels.BaseUserRole.Request
 {
     public class RequestCreateUserRoleDto:RequestBaseDto
     {
-        public RequestCreateUserRoleDto(string userId, List<string> roleIds,string actionUserName,string actionUserInfo)
+        public RequestCreateUserRoleDto(string userId, List<string> roleIds,string actionUserName,string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
             UserId = userId;
             RoleIds = roleIds;
-            this.ActionUserName = actionUserName;
-            this.ActionUserInfo = actionUserInfo;
         }
 
         public string UserId { get;protected set; }

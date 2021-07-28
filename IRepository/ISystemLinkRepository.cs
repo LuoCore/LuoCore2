@@ -13,6 +13,7 @@ namespace IRepository
      public interface ISystemLinkRepository : ISqlSugarRepository
      {
           public ResultDto<ResponsePageDto> ReadPage(RequestReadPageDto req);
+          public ResultDto<ResponseLinksDto> ReadList(RequestReadLinkDto req);
 
           public ResultDto Create(RequestCreateDto req);
 

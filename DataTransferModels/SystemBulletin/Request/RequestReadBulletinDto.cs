@@ -6,21 +6,17 @@ using System.Threading.Tasks;
 
 namespace DataTransferModels.SystemBulletin.Request
 {
-     public class RequestReadPageDto
-     {
-          public RequestReadPageDto(int iD, string bulletinName, bool? isValid, int pageIndex, int pageSize)
+     public class RequestReadBulletinDto
+    {
+          public RequestReadBulletinDto(int iD, string bulletinName, bool? isValid)
           {
                ID = iD;
                BulletinName = bulletinName;
                IsValid = isValid;
-               PageIndex = pageIndex;
-               PageSize = pageSize;
           }
 
           public int ID { get;protected set; }
           public string BulletinName { get; protected set; }
           public bool? IsValid { get; protected set; }
-          public int PageIndex { get; protected set; }
-          public int PageSize { get; protected set; }
      }
 }

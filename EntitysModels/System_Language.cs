@@ -15,7 +15,7 @@ namespace EntitysModels
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public int ID {get;set;}
+           public int LanguageID {get;set;}
 
            /// <summary>
            /// Desc:

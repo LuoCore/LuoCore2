@@ -20,6 +20,11 @@
         <input type="checkbox" name="isValid" value="{{d.isValid}}" lay-skin="switch" lay-text="是|否" lay-filter="isValid" {{ d.isValid == true ? 'checked' : '' }}>
     </script>
 
+    <script type="text/html" id="iconLink">
+        <i class="{{d.linkIco}}" style="font-size: 30px;"></i>
+       
+    </script>
+
     <script type="text/html" id="table-action">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
             <i class="layui-icon layui-icon-edit"></i>编辑
@@ -40,9 +45,9 @@
             // 字段配置
             const tableCols = [[
                 { type: 'checkbox', fixed: 'left' },
-                { field: 'LinkName', title: '联系方式名称' },
-                { field: 'LinkUrl', title: '联系方式' },
-                { field: 'LinkIco', title: '联系方式图标' },
+                { field: 'linkName', title: '联系方式名称' },
+                { field: 'linkUrl', title: '联系方式' },
+                { field: 'linkIco', title: '联系方式图标',templet: '#iconLink' },
                 { field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
                 { title: '操作', width: 'auto', align: 'center', fixed: 'right', toolbar: '#table-action' }
             ]];
@@ -59,12 +64,12 @@
                 page: true
             });
 
-            const [ShowDialogURL,QueryURL,UpdateURL,CreateURL,DeleteURL] = [
+            const [ShowDialogURL, QueryURL, CreateURL,UpdateURL,DeleteURL] = [
                 "/Admin/SystemBasis/SystemLinkDialog",
                 "/Admin/SystemBasis/GetLinkPage",
-                '/Admin/UserBasis/RoleTable',
-                '/Admin/UserBasis/RoleDialog',
-                '/Admin/UserBasis/RoleDialog'
+                '/Admin/SystemBasis/CreateLink',
+                '/Admin/SystemBasis/UpdateLink',
+                '/Admin/SystemBasis/DeleteLink'
             ];
 
             table.on('toolbar(dataTable)', function (obj) {
@@ -96,6 +101,20 @@
                 };
             });
 
+            table.on('tool(dataTable)', function (obj) {
+                switch (obj.event) {
+                    case 'edit':
+                        debugger;
+                        ShowDialogAction(obj.data);
+                        break;
+                    case 'del':
+                        let Ids = new Array([obj.data.id]);
+                        layer.msg('删除' + JSON.stringify(Ids));
+                        DeleteAction(Ids);
+                        break;
+
+                };
+            });
 
 
             const ShowDialogAction = (formObj) => {
@@ -110,7 +129,7 @@
                     ActionUrl = UpdateURL;
                     formTitle = "编辑"
                     actionType = "Put"
-                    identification = formObj.articleId;
+                    identification = formObj.id;
                 }
 
                 const index = layer.open({
@@ -131,6 +150,14 @@
 
                             const field = data.field; //获取提交的字段
                             console.log("请求字段;" + JSON.stringify(field));
+                            const requestData =
+                            {
+                                ID: identification,
+                                LinkName: field.LinkName,
+                                LinkUrl: field.LinkUrl,
+                                LinkIco: field.LinkIco,
+                                IsValid: field.IsValid
+                            };
                             //提交 Ajax 成功后，静态更新表格中的数据
                             $.ajax({
                                 type: actionType,
@@ -158,7 +185,35 @@
                 layer.full(index);
 
             };
+            const DeleteAction = (Ids) => {
 
+                if (Ids.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+
+                    $.ajax({
+                        type: 'Delete',
+                        url: DeleteURL,
+                        /* contentType: 'application/json',*/
+                        data: { IDs: Ids },
+                        dataType: 'json',
+                        headers: {},
+                        success: function (result) {
+                            if (result.status) {
+                                table.reload('dataTable');
+                                layer.msg(result.messages);
+                            }
+                            else {
+                                layer.alert(result.messages);
+                            }
+                        },
+                        error: function (e, msg) {
+                            alert('数据接口请求异常：' + msg);
+                        }
+                    });
+                });
+            };
         });
     </script>
 }

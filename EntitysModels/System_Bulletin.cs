@@ -15,7 +15,7 @@ namespace EntitysModels
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public int ID {get;set;}
+           public int BulletinID {get;set;}
 
            /// <summary>
            /// Desc:

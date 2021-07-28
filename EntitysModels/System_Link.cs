@@ -15,7 +15,7 @@ namespace EntitysModels
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public int ID {get;set;}
+           public int LinkID {get;set;}
 
            /// <summary>
            /// Desc:

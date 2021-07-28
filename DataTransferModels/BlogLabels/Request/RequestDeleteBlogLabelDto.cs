@@ -10,11 +10,9 @@ namespace DataTransferModels.BlogLabels.Request
     {
         public string LabelId { get; set; }
 
-        public RequestDeleteBlogLabelDto(string labelId,string actionUserName,string actionUserInfo)
+        public RequestDeleteBlogLabelDto(string labelId,string actionUserName,string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
             LabelId = labelId;
-            this.ActionUserName = actionUserName;
-            this.ActionUserInfo = actionUserInfo;
         }
     }
 }

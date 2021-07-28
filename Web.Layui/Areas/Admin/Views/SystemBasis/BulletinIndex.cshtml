@@ -1,0 +1,216 @@
+﻿
+@{
+    ViewData["Title"] = "BulletinIndex";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+<div class="layui-container">
+    <script type="text/html" id="toolbarTable">
+        <div class="layui-btn-container">
+            <button class="layui-btn layuiadmin-btn-event" lay-event="query">查询</button>
+            <button class="layui-btn layuiadmin-btn-event layui-btn-danger" lay-event="delete">删除</button>
+            <button class="layui-btn layuiadmin-btn-event" lay-event="add">添加</button>
+        </div>
+    </script>
+
+    <script type="text/html" id="switchIsValid">
+        <input type="checkbox" name="isValid" value="{{d.isValid}}" lay-skin="switch" lay-text="是|否" lay-filter="isValid" {{ d.isValid == true ? 'checked' : '' }}>
+    </script>
+
+
+
+    <script type="text/html" id="table-action">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+            <i class="layui-icon layui-icon-edit"></i>编辑
+        </a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    </script>
+
+    <table id="dataTable" lay-filter="dataTable"></table>
+</div>
+
+@section scripts
+{
+
+    <script>
+        layui.use(['jquery', 'table'], function () {
+            const $ = layui.jquery,
+                table = layui.table;
+            // 字段配置
+            const tableCols = [[
+                { type: 'checkbox', fixed: 'left' },
+                { field: 'bulletinName', title: '公告标题' },
+                { field: 'bulletinConten', title: '公告内容' },
+                { field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
+                { title: '操作', width: 'auto', align: 'center', fixed: 'right', toolbar: '#table-action' }
+            ]];
+            table.render({
+                elem: '#dataTable',
+                title: '公告',
+                toolbar: '#toolbarTable',
+                totalRow: true,
+                height: 'full-20',
+                cellMinWidth: 80,
+                cols: tableCols,
+                loading: false,
+                page: true
+            });
+
+            const [ShowDialogURL, QueryURL, CreateURL, UpdateURL, DeleteURL] = [
+                "/Admin/SystemBasis/BulletinDialog",
+                "/Admin/SystemBasis/GetBulletinPage",
+                '/Admin/SystemBasis/CreateBulletin',
+                '/Admin/SystemBasis/UpdateBulletin',
+                '/Admin/SystemBasis/DeleteBulletin'
+            ];
+
+            table.on('toolbar(dataTable)', function (obj) {
+                //var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'query':
+                        //深度重载
+                        table.reload('dataTable', {
+                            url: QueryURL,
+                            method: "get",
+                            request: {
+                                pageName: 'PageIndex', //页码的参数名称，默认：page
+                                limitName: 'PageSize' //每页数据量的参数名，默认：limit
+                            },
+                            where: {
+                                ID: "",
+                                BulletinName: "",
+                                IsValid: null,
+                                StartTime: null,
+                                EndTime: null,
+                            }
+                        }, true);
+                        break;
+                    case 'add':
+                        ShowDialogAction();
+                        break;
+                };
+            });
+
+            table.on('tool(dataTable)', function (obj) {
+                switch (obj.event) {
+                    case 'edit':
+                        debugger;
+                        ShowDialogAction(obj.data);
+                        break;
+                    case 'del':
+                        let Ids = new Array([obj.data.id]);
+                        layer.msg('删除' + JSON.stringify(Ids));
+                        DeleteAction(Ids);
+                        break;
+
+                };
+            });
+
+
+            const ShowDialogAction = (formObj) => {
+
+                let [ActionUrl, formTitle, actionType, identification] = [
+                    CreateURL,
+                    "添加",
+                    "POST",
+                    ""
+                ];
+                if (formObj != null && formObj != undefined) {
+                    ActionUrl = UpdateURL;
+                    formTitle = "编辑"
+                    actionType = "Put"
+                    identification = formObj.id;
+                }
+
+                const index = layer.open({
+                    type: 2,
+                    title: formTitle,
+                    area: 'auto',
+                    content: ShowDialogURL,
+                    btn: ['确定', '取消'],
+                    success: (layero, index) => {
+                        const iframe = window['layui-layer-iframe' + index];
+                        iframe.ShowDialog_Load(formObj);
+                    },
+                    yes: function (index, layero) {
+                        const iframeWindow = window['layui-layer-iframe' + index]
+                            , submit = layero.find('iframe').contents().find("#luo-submit");
+
+                        debugger;
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+                            const field = data.field; //获取提交的字段
+                            console.log("请求字段;" + JSON.stringify(field));
+                            const wangHtml = iframeWindow.GetWangEditorHtml();
+                            const requestData =
+                            {
+                                ID: identification,
+                                BulletinName: field.BulletinName,
+                                BulletinConten: wangHtml,
+                                IsValid: field.IsValid
+                            };
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                type: actionType,
+                                url: ActionUrl,
+                                data: requestData,
+                                dataType: "json",
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.status) {
+                                        table.reload('dataTable');
+                                        layer.close(index); //关闭弹层
+                                    }
+                                    else {
+                                        layer.alert(result.messages);
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert("发生错误：" + jqXHR.status);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+                layer.full(index);
+
+            };
+            const DeleteAction = (Ids) => {
+
+                if (Ids.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+
+                    $.ajax({
+                        type: 'Delete',
+                        url: DeleteURL,
+                        /* contentType: 'application/json',*/
+                        data: { IDs: Ids },
+                        dataType: 'json',
+                        headers: {},
+                        success: function (result) {
+                            if (result.status) {
+                                table.reload('dataTable');
+                                layer.msg(result.messages);
+                            }
+                            else {
+                                layer.alert(result.messages);
+                            }
+                        },
+                        error: function (e, msg) {
+                            alert('数据接口请求异常：' + msg);
+                        }
+                    });
+                });
+            };
+
+
+        });
+
+    </script>
+}
+

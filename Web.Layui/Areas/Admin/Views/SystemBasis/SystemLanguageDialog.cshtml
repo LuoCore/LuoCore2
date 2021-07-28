@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewData["Title"] = "SystemLanguageDialog";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+<div style="margin-top:1.5rem" class="layui-form board layui-form-pane" lay-filter="form-RequestData" id="form-RequestData">
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">语言名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="LanguageName" lay-verify="required" placeholder="语言名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item" pane>
+        <label class="layui-form-label">是否有效</label>
+        <div class="layui-input-inline" pane>
+            <input name="IsValid" value="true" type="checkbox" lay-filter="switch" lay-skin="switch" lay-text="是|否" checked />
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">语言值</label>
+        <div class="layui-input-block">
+            <script type="text/html" id="toolbarTable">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layuiadmin-btn-event" lay-event="addTable">增加</button>
+                    <button class="layui-btn layuiadmin-btn-event layui-btn-danger" lay-event="deleteTable">删除</button>
+                </div>
+            </script>
+        
+            <table id="dataTable" lay-filter="dataTable"></table>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="luo-submit" id="luo-submit">提交</button>
+    </div>
+
+</div>
+
+@section scripts
+{
+    <script>
+        function ShowDialog_Load(formobj) {
+            layui.use(['jquery', 'form', 'table', 'layer'], function () {
+                const table = layui.table,
+                    form = layui.form,
+                    layer = layui.layer,
+                    $ = layui.$;
+
+                if (formobj != null && formobj != undefined && formobj != "") {
+                    //给表单赋值
+                    form.val("form-RequestData", {
+                        "LanguageName": formobj.languageName,
+                        "IsValid": formobj.isValid
+                    });
+                }
+
+
+                const tableCols = [[
+                    { type: 'checkbox', fixed: 'left' },
+                    { field: 'rowIndex', title: 'ID', width: 50, fixed: 'left', unresize: true, sort: true, templet: '#rowIndex'  },
+                    { field: 'languageZhCn', title: '中文', edit: 'text' },
+                    { field: 'languageValue', title: '语言值', edit: 'text' }
+                ]];
+                table.render({
+                    elem: '#dataTable',
+                    title: '多语言',
+                    toolbar: '#toolbarTable',
+                    cols: tableCols,
+                    loading: false,
+                    page: true
+                });
+
+                let dataBak = [];
+                if (formobj != null && formobj != undefined && formobj != "") {
+                    debugger;   
+                    $.ajax({
+                        type: 'get',
+                        url: '/Admin/SystemBasis/GetLanguageJsonToDateTable',
+                        data: {
+                            jsonValue: formobj.languageJson
+                        },
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            if (result.code == 0)
+                            {
+                               
+                                dataBak = result.data;
+
+                            }
+                            
+                        },
+                        error: function (jqXHR) {
+                            alert("发生错误：" + jqXHR.status);
+                        }
+                    });
+                
+                }
+                else {
+                    
+                    dataBak.push({
+                        "rowIndex":"1",
+                        "languageZhCn": "",
+                        "languageValue": ""
+                    });
+                }
+                table.reload("dataTable", {
+                    data: dataBak   // 将新数据重新载入表格
+                })
+                
+
+                table.on('toolbar(dataTable)', function (obj) {
+                   
+                    switch (obj.event) {
+                        case 'addTable':
+                            dataBak = obj.config.data;
+
+                            dataBak.push({
+                                "rowIndex": (dataBak.length+1),
+                                "languageZhCn": "",
+                                "languageValue": ""
+                            });
+
+                            table.reload("dataTable", {
+                                data: dataBak   // 将新数据重新载入表格
+                            },false)
+
+                            break;
+                        case 'deleteTable':
+                            var checkStatus = table.checkStatus(obj.config.id);
+                            dataBak = obj.config.data;
+                            dataBak.splice(dataBak.findIndex(item => item.rowIndex === checkStatus.rowIndex), 1)
+                            table.reload("dataTable", {
+                                data: dataBak   // 将新数据重新载入表格
+                            }, false)
+                            break;
+                    };
+                });
+
+
+
+
+
+            });
+        };
+
+
+    </script>
+
+}

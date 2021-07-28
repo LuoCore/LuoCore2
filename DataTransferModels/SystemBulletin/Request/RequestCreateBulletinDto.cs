@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace DataTransferModels.SystemBulletin.Request
 {
-     public class RequestCreateDto:RequestBaseDto
+     public class RequestCreateBulletinDto:RequestBaseDto
      {
-          public RequestCreateDto(string bulletinName, string bulletinConten,bool isValid, string actionUserName, string actionUserInfo)
-          {
+   
+
+        public RequestCreateBulletinDto(string bulletinName, string bulletinConten,bool isValid, string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
+        {
               
                IsValid = isValid;
-               this.ActionUserInfo = actionUserInfo;
-               this.ActionUserName = actionUserName;
                BulletinName = bulletinName;
                BulletinConten = bulletinConten;
           }

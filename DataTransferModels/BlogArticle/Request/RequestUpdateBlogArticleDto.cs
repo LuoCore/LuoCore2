@@ -8,15 +8,13 @@ namespace DataTransferModels.BlogArticle.Request
 {
     public class RequestUpdateBlogArticleDto : RequestBaseDto
     {
-        public RequestUpdateBlogArticleDto(string articleId, string articleTitle, string articleConten, bool isValid,string[] labelsIds,  string actionUserInfo, string actionUsername)
+        public RequestUpdateBlogArticleDto(string articleId, string articleTitle, string articleConten, bool isValid,string[] labelsIds,  string actionUserInfo, string actionUserName) : base(actionUserName, actionUserInfo)
         {
             ArticleId = articleId;
             ArticleTitle = articleTitle;
             ArticleConten = articleConten;
             IsValid = isValid;
             LabelsIds = labelsIds;
-            this.ActionUserInfo = actionUserInfo;
-            this.ActionUserName = actionUsername;
         }
 
         public string ArticleId { get; protected set; }

@@ -30,7 +30,7 @@ namespace Repository
                     _FACTORY.GetDbContext((db) =>
                     {
                          var sqlExecute = db.Queryable<System_Bulletin>();
-                         sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                         sqlExecute.WhereIF(req != null && req.ID > 0, x => x.BulletinID.Equals(req.ID));
                          sqlExecute.WhereIF(req != null && req.IsValid != null, x => x.IsValid.Equals(req.IsValid));
                          sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.BulletinName), x => x.BulletinName.Contains(x.BulletinName));
                          int pagecount = 0;
@@ -57,7 +57,7 @@ namespace Repository
                 _FACTORY.GetDbContext((db) =>
                 {
                     var sqlExecute = db.Queryable<System_Bulletin>();
-                    sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                    sqlExecute.WhereIF(req != null && req.ID > 0, x => x.BulletinID.Equals(req.ID));
                     sqlExecute.WhereIF(req != null && req.IsValid != null, x => x.IsValid.Equals(req.IsValid));
                     sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.BulletinName), x => x.BulletinName.Contains(x.BulletinName));
                     res.Datas = new List<System_Bulletin>();
@@ -111,14 +111,14 @@ namespace Repository
                {
                     _FACTORY.GetDbContextTran((db) =>
                     {
-                         var oldData = db.Queryable<System_Bulletin>().Where(x => x.ID == req.ID).First();
+                         var oldData = db.Queryable<System_Bulletin>().Where(x => x.BulletinID == req.BulletinID).First();
                          var nowData = new
                          {
                              BulletinName = req.BulletinName,
                              BulletinConten = req.BulletinConten,
                               IsValid = req.IsValid
                          };
-                         db.Updateable<System_Bulletin>(nowData).Where(x => x.ID == req.ID).ExecuteCommand();
+                         db.Updateable<System_Bulletin>(nowData).Where(x => x.BulletinID == req.BulletinID).ExecuteCommand();
 
                          _REPOSITORY.SqlTypeCurd<System_Bulletin>(EnumHelper.CURDEnum.更新).NowData(nowData).OldData(oldData).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).BuilderSQL(db);
                          res.Status = true;
@@ -141,13 +141,13 @@ namespace Repository
                {
                     _FACTORY.GetDbContextTran((db) =>
                     {
-                         var oldData = db.Queryable<System_Bulletin>().Where(x => x.ID == req.ID).First();
+                         var oldData = db.Queryable<System_Bulletin>().Where(x => x.BulletinID == req.BulletinID).First();
                          var nowData = new
                          {
 
                               IsValid = false
                          };
-                         db.Updateable<System_Bulletin>(nowData).Where(x => x.ID == req.ID).ExecuteCommand();
+                         db.Updateable<System_Bulletin>(nowData).Where(x => x.BulletinID == req.BulletinID).ExecuteCommand();
 
                          _REPOSITORY.SqlTypeCurd<System_Bulletin>(EnumHelper.CURDEnum.删除).NowData(nowData).OldData(oldData).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).BuilderSQL(db);
                          res.Status = true;

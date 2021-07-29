@@ -6,15 +6,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Web.Layui.Areas.Admin.Controllers
 {
-    public class SystemBasisController : BaseAuthorizeController<IServices.ISystemBasisService>
+    public class SystemBasisController : BaseAuthorizeController<ISystemBasisService>
     {
-        protected override string _ACTIONUSERINFO => User.FindFirst("UserDataInfo").Value;
-
-        protected override string _ACTIONUSERNAME => User.Identity.Name;
-
+        
         public SystemBasisController(ISystemBasisService service) : base(service)
         {
         }

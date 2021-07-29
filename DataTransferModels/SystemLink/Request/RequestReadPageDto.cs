@@ -8,16 +8,16 @@ namespace DataTransferModels.SystemLink.Request
 {
      public class RequestReadPageDto
      {
-          public RequestReadPageDto(int iD, string linkName, bool? isValid, int pageIndex, int pageSize)
+          public RequestReadPageDto(int linkID, string linkName, bool? isValid, int pageIndex, int pageSize)
           {
-               ID = iD;
+            LinkID = linkID;
                LinkName = linkName;
                IsValid = isValid;
                PageIndex = pageIndex;
                PageSize = pageSize;
           }
 
-          public int ID { get;protected set; }
+          public int LinkID { get;protected set; }
           public string LinkName { get; protected set; }
           public bool? IsValid { get; protected set; }
           public int PageIndex { get; protected set; }

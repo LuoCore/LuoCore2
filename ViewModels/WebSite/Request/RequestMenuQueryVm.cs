@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ViewModels.WebSite.Request
 {
-    public class RequestMuneQueryVm
+    public class RequestMenuQueryVm
     {
         public int MenuID { get;  set; }
         public string MenuName { get;  set; }
 
-        public int MenuPid { get;  set; }
+        public int? MenuPid { get;  set; }
         public bool? IsValid { get;  set; }
     }
 }

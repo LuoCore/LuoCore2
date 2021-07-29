@@ -8,6 +8,6 @@ namespace ViewModels.WebSite.Request
 {
     public class RequestMenuDeleteVm:RequestBaseVm
     {
-        public int MenuID { get; set; }
+        public int[] MenuIDs { get; set; }
     }
 }

@@ -8,6 +8,7 @@
     <Folder Include="BaseRolePermission\Response\" />
     <Folder Include="BaseUserRole\Response\" />
     <Folder Include="CreateEntity\Response\" />
+    <Folder Include="WebSiteImages\Response\" />
     <Folder Include="WebSiteMenu\Response\" />
   </ItemGroup>
 

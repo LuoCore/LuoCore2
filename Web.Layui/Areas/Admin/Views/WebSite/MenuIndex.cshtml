@@ -1,0 +1,224 @@
+﻿
+@{
+    ViewData["Title"] = "MenuIndex";
+    Layout = "~/Views/Shared/_LayuiLayout.cshtml";
+}
+
+<div class="layui-fluid">
+
+
+
+    <script type="text/html" id="toolbarTable">
+        <div class="layui-btn-container">
+            <button class="layui-btn layuiadmin-btn-event" lay-event="query">查询</button>
+            <button class="layui-btn layuiadmin-btn-event layui-btn-danger" lay-event="delete">删除</button>
+            <button class="layui-btn layuiadmin-btn-event" lay-event="add">添加</button>
+        </div>
+    </script>
+
+    <script type="text/html" id="switchIsValid">
+        <input type="checkbox" name="isValid" value="{{d.isValid}}" lay-skin="switch" lay-text="是|否" lay-filter="isValid" {{ d.isValid == true ? 'checked' : '' }}>
+    </script>
+
+
+
+    <script type="text/html" id="table-action">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+            <i class="layui-icon layui-icon-edit"></i>编辑
+        </a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    </script>
+
+    <table id="dataTable" lay-filter="dataTable"></table>
+</div>
+
+@section scripts
+{
+    <script>
+        layui.config({
+            base: '/lib/layuiExtend/' //假设这是你存放拓展模块的根目录
+        }).extend({ //设定模块别名
+            treeTable: 'treetable-lay/treeTable', //如果 mymod.js 是在根目录，也可以不用设定别名
+            xmSelect: 'xm-select/xm-select'
+        });
+        layui.use(['jquery', 'treeTable', 'xmSelect'], function () {
+            const $ = layui.jquery,
+                treeTable = layui.treeTable,
+                xmSelect = layui.xmSelect;
+            // 字段配置
+            const tableCols = [[
+                { type: 'checkbox', fixed: 'left' },
+                { field: 'menuName', title: '菜单名称' },
+                { field: 'menuUrl', title: '菜单链接' },
+                { field: 'menuPidName', title: '菜单父级' },
+                { field: 'isValid', title: '是否有效', templet: '#switchIsValid' },
+                { title: '操作', width: 200, align: 'center', fixed: 'right', toolbar: '#table-action' }
+            ]];
+
+            // 渲染树形表格
+            const TableObject = treeTable.render({
+                elem: '#dataTable',
+                toolbar: '#toolbarTable',
+                tree: {
+                    iconIndex: 1,           // 折叠图标显示在第几列
+                    isPidData: true,        // 是否是id、pid形式数据
+                    idName: 'menuID',  // id字段名称
+                    pidName: 'menuPid' // pid字段名称
+                },
+                page: true,
+                cols: tableCols
+            });
+           
+
+            const [ShowDialogURL, QueryURL, CreateURL, UpdateURL, DeleteURL] = [
+                "/Admin/WebSite/MenuDialog",
+                "/Admin/WebSite/MenuGetTreeTable",
+                '/Admin/WebSite/MenuCreate',
+                '/Admin/WebSite/MenuUpdate',
+                '/Admin/WebSite/MenuDelete'
+            ];
+
+            treeTable.on('toolbar(dataTable)', function (obj) {
+                //var checkStatus = table.checkStatus(obj.config.id);
+                debugger;
+                switch (obj.event) {
+                   
+                    case 'query':
+                        treeTable.reload('dataTable', {
+                            url: QueryURL,
+                            where: {
+
+                            }
+                        });
+                        break;
+                    case 'add':
+                        ShowDialogAction();
+                        break;
+                };
+            });
+
+            treeTable.on('tool(dataTable)', function (obj) {
+                switch (obj.event) {
+                    case 'edit':
+                        debugger;
+                        ShowDialogAction(obj.data);
+                        break;
+                    case 'del':
+                        let Ids = new Array([obj.data.menuID]);
+                        layer.msg('删除' + JSON.stringify(Ids));
+                        DeleteAction(Ids);
+                        break;
+
+                };
+            });
+
+
+            const ShowDialogAction = (formObj) => {
+
+                debugger;
+                let [ActionUrl, formTitle, actionType, identification] = [
+                    CreateURL,
+                    "添加",
+                    "POST",
+                    ""
+                ];
+                if (formObj != null && formObj != undefined) {
+                    ActionUrl = UpdateURL;
+                    formTitle = "编辑"
+                    actionType = "Put"
+                    identification = formObj.menuID;
+                }
+
+                const index = layer.open({
+                    type: 2,
+                    title: formTitle,
+                    area: 'auto',
+                    content: ShowDialogURL,
+                    btn: ['确定', '取消'],
+                    success: (layero, index) => {
+                        const iframe = window['layui-layer-iframe' + index];
+                        iframe.ShowDialog_Load(formObj);
+                    },
+                    yes: function (index, layero) {
+                        const iframeWindow = window['layui-layer-iframe' + index]
+                            , submit = layero.find('iframe').contents().find("#luo-submit");
+
+                       
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(luo-submit)', function (data) {
+
+                            const field = data.field; //获取提交的字段
+                            console.log("请求字段;" + JSON.stringify(field));
+                            const requestData =
+                            {
+                                MenuID: identification,
+                                MenuName: field.MenuName,
+                                MenuUrl: field.MenuUrl,
+                                MenuPid: field.MenuPid,
+                                IsValid: field.IsValid
+                            };
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                type: actionType,
+                                url: ActionUrl,
+                                data: requestData,
+                                dataType: "json",
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.status) {
+                                        treeTable.reload('dataTable');
+                                        layer.close(index); //关闭弹层
+                                    }
+                                    else {
+                                        layer.alert(result.messages);
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    alert("发生错误：" + jqXHR.status);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+                layer.full(index);
+
+            };
+            const DeleteAction = (Ids) => {
+
+                debugger;
+                if (Ids.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+
+                    $.ajax({
+                        type: 'Delete',
+                        url: DeleteURL,
+                        /* contentType: 'application/json',*/
+                        data: { MenuIDs: Ids },
+                        dataType: 'json',
+                        headers: {},
+                        success: function (result) {
+                            if (result.status) {
+                                treeTable.reload('dataTable');
+                                layer.msg(result.messages);
+                            }
+                            else {
+                                layer.alert(result.messages);
+                            }
+                        },
+                        error: function (e, msg) {
+                            alert('数据接口请求异常：' + msg);
+                        }
+                    });
+                });
+            };
+
+
+        });
+
+    </script>
+
+}

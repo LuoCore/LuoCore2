@@ -11,10 +11,12 @@ namespace IServices
 {
     public interface IWebSiteService
     {
-        public ResultListVm<WebSite_Menu> MenuQueryPage(RequestMuneQueryPageVm req);
-        public ResultListVm<WebSite_Menu> MenuQueryList(RequestMuneQueryVm req);
-        public ResultVm MenuCreate(RequestMenuCreateVm req);
-        public ResultVm MenuUpdate(RequestMenuUpdateVm req);
-        public ResultVm MenuDelete(RequestMenuDeleteVm req);
+        public Task<ViewModels.Layui.TableVm> MenuQueryPage(RequestMenuQueryPageVm req);
+        public Task<ResultListVm<WebSite_Menu>> MenuQueryList(RequestMenuQueryVm req);
+        public  Task<ResultVm<List<ViewModels.Layui.SelectBoxVm>>> MenuQuerySelectBoxAsync(int parentId);
+        public Task<ViewModels.Layui.TableVm> MenuQueryTreeTable(RequestMenuQueryVm req);
+        public Task<ResultVm> MenuCreate(RequestMenuCreateVm req);
+        public Task<ResultVm> MenuUpdate(RequestMenuUpdateVm req);
+        public Task<ResultVm> MenuDelete(RequestMenuDeleteVm req);
     }
 }

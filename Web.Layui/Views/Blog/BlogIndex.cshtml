@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = "博客";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<Web.Layui.Models.PageTitleViewModel> pageModel = new List<Web.Layui.Models.PageTitleViewModel>();
+    pageModel.Add(new PageTitleViewModel() { pageTitleName = "首页", pageTitleUrl = "/Home/Index", pageTitleIcon = "ci-home" });
+    pageModel.Add(new PageTitleViewModel() { pageTitleName = "博客" });
+    <partial name="Components/_PageTitle" model="@pageModel" />
+}
+
+<h1>Index</h1>
+

@@ -30,7 +30,7 @@ namespace Repository
                     _FACTORY.GetDbContext((db) =>
                     {
                          var sqlExecute = db.Queryable<System_Link>();
-                         sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                         sqlExecute.WhereIF(req != null && req.LinkID > 0, x => x.LinkID.Equals(req.LinkID));
                          sqlExecute.WhereIF(req != null && req.IsValid != null, x => x.IsValid.Equals(req.IsValid));
                          sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.LinkName), x => x.LinkName.Contains(x.LinkName));
                          int pagecount = 0;
@@ -59,7 +59,7 @@ namespace Repository
                     _FACTORY.GetDbContext((db) =>
                     {
                          var sqlExecute = db.Queryable<System_Link>().Where(x=>x.IsValid==true);
-                         sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                         sqlExecute.WhereIF(req != null && req.LinkID > 0, x => x.LinkID.Equals(req.LinkID));
                          sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.LinkName), x => x.LinkName.Contains(x.LinkName));
 
                          res.Data = new ResponseLinksDto(sqlExecute.ToList());
@@ -114,7 +114,7 @@ namespace Repository
                {
                     _FACTORY.GetDbContextTran((db) =>
                     {
-                         var oldData = db.Queryable<System_Link>().Where(x => x.ID == req.ID).First();
+                         var oldData = db.Queryable<System_Link>().Where(x => x.LinkID == req.LinkID).First();
                          var nowData = new
                          {
                               LinkName = req.LinkName,
@@ -122,7 +122,7 @@ namespace Repository
                               LinkIco = req.LinkIco,
                               IsValid = req.IsValid
                          };
-                         db.Updateable<System_Link>(nowData).Where(x => x.ID == req.ID).ExecuteCommand();
+                         db.Updateable<System_Link>(nowData).Where(x => x.LinkID == req.LinkID).ExecuteCommand();
 
                          _REPOSITORY.SqlTypeCurd<System_Link>(EnumHelper.CURDEnum.更新).NowData(nowData).OldData(oldData).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).BuilderSQL(db);
                          res.Status = true;
@@ -145,13 +145,13 @@ namespace Repository
                {
                     _FACTORY.GetDbContextTran((db) =>
                     {
-                         var oldData = db.Queryable<System_Link>().Where(x => x.ID == req.ID).First();
+                         var oldData = db.Queryable<System_Link>().Where(x => x.LinkID == req.LinkID).First();
                          var nowData = new
                          {
                              
                               IsValid = false
                          };
-                         db.Updateable<System_Link>(nowData).Where(x => x.ID == req.ID).ExecuteCommand();
+                         db.Updateable<System_Link>(nowData).Where(x => x.LinkID == req.LinkID).ExecuteCommand();
 
                          _REPOSITORY.SqlTypeCurd<System_Link>(EnumHelper.CURDEnum.删除).NowData(nowData).OldData(oldData).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).BuilderSQL(db);
                          res.Status = true;

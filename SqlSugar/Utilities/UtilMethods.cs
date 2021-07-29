@@ -251,7 +251,7 @@ namespace SqlSugar
         }
         internal static string GetMD5(string myString)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
+            MD5 md5 =  MD5.Create();
             byte[] fromData = System.Text.Encoding.Unicode.GetBytes(myString);
             byte[] targetData = md5.ComputeHash(fromData);
             string byte2String = null;

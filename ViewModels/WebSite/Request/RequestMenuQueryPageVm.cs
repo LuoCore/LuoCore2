@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ViewModels.WebSite.Request
 {
-    public class RequestMuneQueryPageVm : RequestMuneQueryVm
+    public class RequestMenuQueryPageVm : RequestMenuQueryVm
     {
         public int PageIndex { get; set; }
         public int PageSize { get; set; }

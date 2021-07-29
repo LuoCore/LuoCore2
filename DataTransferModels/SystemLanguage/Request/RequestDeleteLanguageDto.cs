@@ -8,12 +8,12 @@ namespace DataTransferModels.SystemLanguage.Request
 {
      public class RequestDeleteLanguageDto : RequestBaseDto
      {
-          public RequestDeleteLanguageDto(int linkId,string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
+          public RequestDeleteLanguageDto(int languageId, string actionUserName, string actionUserInfo) : base(actionUserName, actionUserInfo)
         {
-            LinkID = linkId;
+            LanguageID = languageId;
           }
 
-          public int LinkID { get;protected set; }
+          public int LanguageID { get;protected set; }
         
      }
 }

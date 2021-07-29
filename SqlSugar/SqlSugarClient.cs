@@ -900,6 +900,7 @@ namespace SqlSugar
 
         private bool IsNoSameThreadAndShard()
         {
+            
             return CurrentConnectionConfig.IsShardSameThread && _ThreadId != Thread.CurrentThread.ManagedThreadId.ToString();
         }
 

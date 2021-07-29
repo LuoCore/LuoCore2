@@ -8,7 +8,7 @@ namespace DataTransferModels.SystemLanguage.Request
 {
      public class RequestReadPageLanguageDto:RequestReadLanguageDto
     {
-        public RequestReadPageLanguageDto(int iD, string languageName, string languageJson, bool? isValid,int pageIndex,int pageSize) : base(iD, languageName, languageJson, isValid)
+        public RequestReadPageLanguageDto(int languageID, string languageName, string languageJson, bool? isValid,int pageIndex,int pageSize) : base(languageID, languageName, languageJson, isValid)
         {
             this.PageIndex = pageIndex;
             this.PageSize = pageSize;

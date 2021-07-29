@@ -28,7 +28,7 @@ namespace Repository
                     _FACTORY.GetDbContext((db) =>
                     {
                          var sqlExecute = db.Queryable<System_Language>();
-                         sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                         sqlExecute.WhereIF(req != null && req.LanguageID > 0, x => x.LanguageID.Equals(req.LanguageID));
                          sqlExecute.WhereIF(req != null && req.IsValid != null, x => x.IsValid.Equals(req.IsValid));
                          sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.LanguageName), x => x.LanguageName.Contains(x.LanguageName));
                          int pagecount = 0;
@@ -57,7 +57,7 @@ namespace Repository
                 _FACTORY.GetDbContext((db) =>
                 {
                     var sqlExecute = db.Queryable<System_Language>();
-                    sqlExecute.WhereIF(req != null && req.ID > 0, x => x.ID.Equals(req.ID));
+                    sqlExecute.WhereIF(req != null && req.LanguageID > 0, x => x.LanguageID.Equals(req.LanguageID));
                     sqlExecute.WhereIF(req != null && req.IsValid != null, x => x.IsValid.Equals(req.IsValid));
                     sqlExecute.WhereIF(req != null && !string.IsNullOrWhiteSpace(req.LanguageName), x => x.LanguageName.Contains(x.LanguageName));
 
@@ -113,14 +113,14 @@ namespace Repository
                {
                     _FACTORY.GetDbContextTran((db) =>
                     {
-                         var oldData = db.Queryable<System_Language>().Where(x => x.ID == req.ID).First();
+                         var oldData = db.Queryable<System_Language>().Where(x => x.LanguageID == req.LanguageID).First();
                          var nowData = new
                          {
                               LanguageName = req.LanguageName,
                               LanguageJson = req.LanguageJson,
                               IsValid = req.IsValid
                          };
-                         db.Updateable<System_Language>(nowData).Where(x => x.ID == req.ID).ExecuteCommand();
+                         db.Updateable<System_Language>(nowData).Where(x => x.LanguageID == req.LanguageID).ExecuteCommand();
 
                          _REPOSITORY.SqlTypeCurd<System_Language>(EnumHelper.CURDEnum.更新).NowData(nowData).OldData(oldData).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).BuilderSQL(db);
                          res.Status = true;
@@ -143,13 +143,13 @@ namespace Repository
                {
                     _FACTORY.GetDbContextTran((db) =>
                     {
-                         var oldData = db.Queryable<System_Language>().Where(x => x.ID == req.ID).First();
+                         var oldData = db.Queryable<System_Language>().Where(x => x.LanguageID == req.LanguageID).First();
                          var nowData = new
                          {
                              
                               IsValid = false
                          };
-                         db.Updateable<System_Language>(nowData).Where(x => x.ID == req.ID).ExecuteCommand();
+                         db.Updateable<System_Language>(nowData).Where(x => x.LanguageID == req.LanguageID).ExecuteCommand();
 
                          _REPOSITORY.SqlTypeCurd<System_Language>(EnumHelper.CURDEnum.删除).NowData(nowData).OldData(oldData).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).BuilderSQL(db);
                          res.Status = true;

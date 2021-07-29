@@ -57,7 +57,7 @@ namespace Repository
                     var sqlExecute = db.Queryable<WebSite_Menu>();
                     sqlExecute.WhereIF(req.MenuID > 0, x => x.MenuID == req.MenuID);
                     sqlExecute.WhereIF(!string.IsNullOrWhiteSpace(req.MenuName), x => x.MenuName == req.MenuName);
-                    sqlExecute.WhereIF(req.MenuPid > 0, x => x.MenuPid == req.MenuPid);
+                    sqlExecute.WhereIF(req.MenuPid!=null, x => x.MenuPid == req.MenuPid);
                     sqlExecute.WhereIF(req.IsValid != null, x => x.IsValid == req.IsValid);
                     res.Datas = new List<WebSite_Menu>();
                     res.Datas = sqlExecute.ToList();
@@ -142,7 +142,7 @@ namespace Repository
                         IsValid = false
                     };
                     db.Updateable<WebSite_Menu>(nowData).Where(x => x.MenuID == req.MenuID).ExecuteCommand();
-                    _REPOSITORY.SqlTypeCurd<WebSite_Menu>(EnumHelper.CURDEnum.删除).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).OldData(oldData).BuilderSQL(db);
+                    _REPOSITORY.SqlTypeCurd<WebSite_Menu>(EnumHelper.CURDEnum.删除).OperationUserInfo(req.ActionUserName, req.ActionUserInfo).NowData(oldData).BuilderSQL(db);
                     res.Status = true;
                 });
             }

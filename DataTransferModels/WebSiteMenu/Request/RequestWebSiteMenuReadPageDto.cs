@@ -8,7 +8,7 @@ namespace DataTransferModels.WebSiteMenu.Request
 {
     public class RequestWebSiteMenuReadPageDto : RequestWebSiteMenuReadDto
     {
-        public RequestWebSiteMenuReadPageDto(int menuID, string menuName, int menuPid, bool? isVail,int pageIndex,int pageSize) : base(menuID, menuName, menuPid, isVail)
+        public RequestWebSiteMenuReadPageDto(int menuID, string menuName, int? menuPid, bool? isVail,int pageIndex,int pageSize) : base(menuID, menuName, menuPid, isVail)
         {
             this.PageIndex = pageIndex;
             this.PageSize = PageSize;

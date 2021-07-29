@@ -8,13 +8,13 @@ namespace DataTransferModels.SystemLink.Request
 {
      public class RequestReadLinkDto
      {
-          public RequestReadLinkDto(int iD, string linkName)
+          public RequestReadLinkDto(int linkID, string linkName)
           {
-               ID = iD;
+            LinkID = linkID;
                LinkName = linkName;
           }
 
-          public int ID { get;protected set; }
+          public int LinkID { get;protected set; }
           public string LinkName { get; protected set; }
      }
 }

@@ -8,7 +8,7 @@ namespace DataTransferModels.WebSiteMenu.Request
 {
     public class RequestWebSiteMenuReadDto
     {
-        public RequestWebSiteMenuReadDto(int menuID, string menuName, int menuPid, bool? isvalid)
+        public RequestWebSiteMenuReadDto(int menuID, string menuName, int? menuPid, bool? isvalid)
         {
             MenuID = menuID;
             MenuName = menuName;
@@ -19,7 +19,7 @@ namespace DataTransferModels.WebSiteMenu.Request
         public int MenuID { get; protected set; }
         public string MenuName { get; protected set; }
       
-        public int MenuPid { get; protected set; }
+        public int? MenuPid { get; protected set; }
         public bool? IsValid { get; protected set; }
     }
 }
